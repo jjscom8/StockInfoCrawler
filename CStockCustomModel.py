@@ -8,13 +8,17 @@ class CStockCustomtData:
 
         self.__nDomNetProfPredQ = math.nan
         self.__nRoePredQ = math.nan
-
+        self.__nRoePredY = math.nan # 가중평균
 
 
 class CStockCustomModel:
+
     def __init__(self, stockCode ):
         self.__sStockCode = stockCode
         self.__Data = CStockCustomtData(stockCode)
+
+    def Data(self):
+        return self.__Data
 
     def UpdateStockCustomData(self, fnguideData):
         return True
@@ -38,6 +42,47 @@ class CStockCustomModel:
 
         dRoePredQ = nDomNetProfFromQ / nDomCapLastQ * 100
         return dRoePredQ
+
+
+    def RoePredY(self, dRoe_y1, dRoe_y2, dRoe_y3):
+        if math.isnan(dRoe_y1) or math.isnan(dRoe_y2) or math.isnan(dRoe_y3):
+            return math.nan
+
+        dRoePredY = math.nan
+        if self.HasRoeTrend(dRoe_y1, dRoe_y2, dRoe_y3):
+            dRoePredY = dRoe_y3
+        else:
+            dTotalRoe = 0
+            weight = 0
+            for index, val in enumerate([dRoe_y3, dRoe_y2, dRoe_y1]):
+                dTotalRoe = dTotalRoe + val * (index + 1)
+                weight = weight + (index + 1)
+
+            dRoePredY = dTotalRoe / weight
+
+        return dRoePredY
+
+    def SRim(self, nDomCapLastQ, dRoeRate, dBondRate, w):
+        if math.isnan(nDomCapLastQ) or math.isnan(dRoeRate) or math.isnan(dBondRate):
+            return math.nan
+
+        dSrim = nDomCapLastQ \
+                + (nDomCapLastQ * (dRoeRate - dBondRate)) \
+                * w / (1 + dBondRate - w)
+
+        return dSrim
+
+    ### Util Function ###
+    def HasRoeTrend(self, dRoe_y1, dRoe_y2, dRoe_y3):
+        # 증가 추세이거나 감소추세일때 변화폭 확인
+        if math.isnan(dRoe_y1) or math.isnan(dRoe_y2) or math.isnan(dRoe_y3):
+            return False
+
+        if (dRoe_y1 > dRoe_y2 and dRoe_y2 > dRoe_y3) \
+                or (dRoe_y1 < dRoe_y2 and dRoe_y2 < dRoe_y3):
+            return True
+
+        return False
 
     def QuarterNum(self, sLastQ):
         re1q = re.compile(self.__sTagRegQurter1)

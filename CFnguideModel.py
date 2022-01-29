@@ -13,7 +13,8 @@ class CFnguideData:
 
         ### Snapshot ###
         self.__dRoe_y1 = math.nan
-        self.__dRoeLastQ = math.nan
+        self.__dRoe_y2 = math.nan
+        self.__dRoe_y3 = math.nan
         self.__dRoeConsen = math.nan
         self.__nLastPrice = math.nan
         self.__nMarketCap = math.nan
@@ -63,8 +64,11 @@ class CFnguideData:
     def SetRoe_y1(self, dRoe_y1):
         self.__dRoe_y1 = dRoe_y1
 
-    def SetRoeLastQ(self, dRoeLastQ):
-        self.__dRoeLastQ = dRoeLastQ
+    def SetRoe_y2(self, dRoe_y2):
+        self.__dRoe_y2 = dRoe_y2
+
+    def SetRoe_y3(self, dRoe_y3):
+        self.__dRoe_y3 = dRoe_y3
 
     def SetRoeConsen(self, dRoeConsen):
         self.__dRoeConsen = dRoeConsen
@@ -100,8 +104,11 @@ class CFnguideData:
     def Roe_y1(self):
         return self.__dRoe_y1
 
-    def RoeLastQ(self):
-        return self.__dRoeLastQ
+    def Roe_y2(self):
+        return self.__dRoe_y2
+
+    def Roe_y3(self):
+        return self.__dRoe_y3
 
     def RoeConsen(self):
         return self.__dRoeConsen
@@ -326,17 +333,21 @@ class CFnguideModel:
 
             # Column Name
             fhDf.set_index(fhDf.columns[0], inplace=True)
-            sFhDfCol_y1 = fhDf.columns[1]
-            sFhDfColLastQ = fhDf.columns[2]
+
+            sFhDfCol_y3 = fhDf.columns[0]
+            sFhDfCol_y2 = fhDf.columns[1]
+            sFhDfCol_y1 = fhDf.columns[2]
             sFhDfColConsen = fhDf.columns[3]
 
             # Get/Set Data
             dRoe_y1 = fhDf.loc[self.__sTagRoe, sFhDfCol_y1]
-            dRoeLastQ = fhDf.loc[self.__sTagRoe, sFhDfColLastQ]
+            dRoe_y2 = fhDf.loc[self.__sTagRoe, sFhDfCol_y2]
+            dRoe_y3 = fhDf.loc[self.__sTagRoe, sFhDfCol_y3]
             dRoeConsen = fhDf.loc[self.__sTagRoe, sFhDfColConsen]
 
             self.__Data.SetRoe_y1(dRoe_y1)
-            self.__Data.SetRoeLastQ(dRoeLastQ)
+            self.__Data.SetRoe_y2(dRoe_y2)
+            self.__Data.SetRoe_y3(dRoe_y3)
             self.__Data.SetRoeConsen(dRoeConsen)
 
 
@@ -428,6 +439,7 @@ class CFnguideModel:
         except IndexError:
             print("         # IndexError : {}".format(self.__stockCode))
             return False
+
 
     def CrawlFinStat(self):
         print(" >>> Crawling Financial Statements  ...")
@@ -630,10 +642,6 @@ class CFnguideModel:
             print("         # IndexError : {}".format(self.__stockCode))
             return False
 
-
-
-    def FnguideData(self):
-        return self.m_Data
 
     def ToDictionary(self):
         retDict = { self.m_Data.m_TagStockCode : self.m_Data.StockCode(),
