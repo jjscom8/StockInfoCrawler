@@ -13,52 +13,29 @@ from CStockResultModel import  CStockResultModel
 if __name__ == '__main__':
     print(' <<< STOCK CRAWLER >>>')
 
-    # KisRate
-
+    # KisRate Crawl
     kisModel = CKisRatingModel()
-    kisModel.CrawlBondBBBRate()
+    if not kisModel.CrawlBondBBBRate():
+        print( " - Fail :: CrawlBondBBBRate ")
     kisData = kisModel.Data()
-    print( kisData.BondBBB_5Rate() )
 
     # Fnguide Crawling
     fnModel = CFnguideModel('005930') # 삼성전자
-    fnModel.CrawlSnapshot()
-    fnModel.CrawlFinStat()
-    fnModel.CrawlFinRate()
+    if not fnModel.CrawlSnapshot() :
+        print( " - Fail :: CrawlSnapshot ")
+    if not fnModel.CrawlFinStat() :
+        print(" - Fail :: CrawlFinStat ")
+    if not fnModel.CrawlFinRate() :
+        print(" - Fail :: CrawlFinRate ")
     fnData = fnModel.Data()
 
     # Update Custom Data
     customModel = CStockCustomModel('005930')
+    if not customModel.UpdateStockCustomData(fnData,kisData):
+        print(" - Fail :: UpdateStockCustomData ")
     customData = customModel.Data()
 
-    nQuarterNum = customModel.QuarterNum(fnData.LastQ())
-    nDomNetProfPredQ = customModel.DomNetProfPredQ(fnData.LastQ(),
-                                                   fnData.DomNetProf_y1(),
-                                                   fnData.DomNetProfLastQ(),
-                                                   fnData.DomNetProfLastQ_y1())
-    dRoePredQ = customModel.RoePredQ(nDomNetProfPredQ, fnData.DomCapLastQ())
 
-    print(dRoePredQ)
-
-    dRoePredY = customModel.RoePredY(fnData.Roe_y1(),
-                                     fnData.Roe_y2(),
-                                     fnData.Roe_y3())
-    print(dRoePredY)
-
-    nSRimConsen80 = customModel.SRim(fnData.DomCapLastQ(),
-                                     fnData.RoeConsen(),
-                                     kisData.BondBBB_5Rate(),
-                                     0.9)
-    nSRimPredQ80 = customModel.SRim(fnData.DomCapLastQ(),
-                                     dRoePredQ,
-                                    kisData.BondBBB_5Rate(),
-                                     0.9)
-    nSRimPredY80 = customModel.SRim(fnData.DomCapLastQ(),
-                                    dRoePredY,
-                                    kisData.BondBBB_5Rate(),
-                                    0.9)
-
-    print( nSRimConsen80, nSRimPredQ80, nSRimPredY80)
 
 
 
