@@ -45,6 +45,7 @@ class CFnguideData:
         self.__nCapTotalLastQ = math.nan
         self.__nCapOrgLastQ = math.nan
         self.__nDomCapLastQ = math.nan
+        self.__nDomCap_y1 = math.nan
         self.__nAssetLastQ = math.nan
         self.__nDebtLastQ = math.nan
 
@@ -196,6 +197,9 @@ class CFnguideData:
     def SetDomCapLastQ(self, nDomCapLastQ):
         self.__nDomCapLastQ = nDomCapLastQ
 
+    def SetDomCap_y1(self, nDomCap_y1):
+        self.__nDomCap_y1 = nDomCap_y1
+
     def SetAssetLastQ(self, nAssetLastQ):
         self.__nAssetLastQ = nAssetLastQ
 
@@ -256,6 +260,9 @@ class CFnguideData:
 
     def DomCapLastQ(self):
         return self.__nDomCapLastQ
+
+    def DomCap_y1(self):
+        return self.__nDomCap_y1
 
     def AssetLastQ(self):
         return self.__nAssetLastQ
@@ -545,6 +552,7 @@ class CFnguideModel:
             finStatDf.set_index(finStatDf.columns[0], inplace=True)
 
             # Column Name
+            sFinStatCol_y1 = finStatDf.columns[2]
             sFinStatColLastQ = finStatDf.columns[3]
 
             # Get/Set Data
@@ -556,6 +564,9 @@ class CFnguideModel:
 
             nDomCapLastQ = finStatDf.loc[self.__sTagDomCap, sFinStatColLastQ]
             self.__Data.SetDomCapLastQ(nDomCapLastQ)
+
+            nDomCap_y1 = finStatDf.loc[self.__sTagDomCap, sFinStatCol_y1]
+            self.__Data.SetDomCap_y1(nDomCap_y1)
 
             nAssetLastQ = finStatDf.loc[self.__sTagAsset, sFinStatColLastQ]
             self.__Data.SetAssetLastQ(nAssetLastQ)

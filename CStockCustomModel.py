@@ -23,54 +23,89 @@ class CStockCustomtData:
         # ROE
         self.__dRoePredQ = math.nan
         self.__dRoePredY = math.nan # 가중평균
+        self.__dRoeBsProfPredQ = math.nan # 영업이익으로 계산한 ROE
+        self.__dRoeBsProf_y1 = math.nan # 영업이익으로 계산한 ROE
+
+        # EPS
+        self.__dEpsPredQ = math.nan
+        self.__dEpsBsProf_y1 = math.nan # 영업이익으로 계산한 ROE
+        self.__dEpsBsProfPredQ = math.nan # 영업이익으로 계산한 EPS
 
         # SRIM
-        self.__nSRimConsen80 = math.nan
-        self.__nSRimPredQ80 = math.nan
-        self.__nSRimPredY80 = math.nan
-        self.__nSRim_y180 = math.nan
+        self.__nSRim80Consen = math.nan
+        self.__nSRim80PredQ = math.nan
+        self.__nSRim80PredY = math.nan
+        self.__nSRim80_y1 = math.nan
 
-        self.__nSRimConsen90 = math.nan
-        self.__nSRimPredQ90 = math.nan
-        self.__nSRimPredY90 = math.nan
-        self.__nSRim_y190 = math.nan
+        self.__nSRim90Consen = math.nan
+        self.__nSRim90PredQ = math.nan
+        self.__nSRim90PredY = math.nan
+        self.__nSRim90_y1 = math.nan
 
-        self.__nSRimConsen100 = math.nan
-        self.__nSRimPredQ100 = math.nan
-        self.__nSRimPredY100 = math.nan
-        self.__nSRim_y1100 = math.nan
+        self.__nSRim100Consen = math.nan
+        self.__nSRim100PredQ = math.nan
+        self.__nSRim100PredY = math.nan
+        self.__nSRim100_y1 = math.nan
 
         # SRIM 적정주가
-        self.__nSRimConsenPrice80 = math.nan
-        self.__nSRimPredQPrice80 = math.nan
-        self.__nSRimPredYPrice80 = math.nan
-        self.__nSRim_y1Price80 = math.nan
+        self.__nSRimPrice80Consen = math.nan
+        self.__nSRimPrice80PredQ = math.nan
+        self.__nSRimPrice80PredY = math.nan
+        self.__nSRimPrice80_y1 = math.nan
 
-        self.__nSRimConsenPrice90 = math.nan
-        self.__nSRimPredQPrice90 = math.nan
-        self.__nSRimPredYPrice90 = math.nan
-        self.__nSRim_y1Price90 = math.nan
+        self.__nSRimPrice90Consen = math.nan
+        self.__nSRimPrice90PredQ = math.nan
+        self.__nSRimPrice90PredY = math.nan
+        self.__nSRimPrice90_y1 = math.nan
 
-        self.__nSRimConsenPrice100 = math.nan
-        self.__nSRimPredQPrice100 = math.nan
-        self.__nSRimPredYPrice100 = math.nan
-        self.__nSRim_y1Price100 = math.nan
+        self.__nSRimPrice100Consen = math.nan
+        self.__nSRimPrice100PredQ = math.nan
+        self.__nSRimPrice100PredY = math.nan
+        self.__nSRimPrice100_y1 = math.nan
 
         # SRIM 기대수익률
-        self.__dSRimConsenExpRate80 = math.nan
-        self.__dSRimPredQExpRate80 = math.nan
-        self.__dSRimPredYExpRate80 = math.nan
-        self.__dSRim_y1ExpRate80 = math.nan
+        self.__dSRimExpRate80Consen = math.nan
+        self.__dSRimExpRate80PredQ = math.nan
+        self.__dSRimExpRate80PredY = math.nan
+        self.__dSRimExpRate80_y1 = math.nan
 
-        self.__dSRimConsenExpRate90 = math.nan
-        self.__dSRimPredQExpRate90 = math.nan
-        self.__dSRimPredYExpRate90 = math.nan
-        self.__dSRim_y1ExpRate90 = math.nan
+        self.__dSRimExpRate90Consen = math.nan
+        self.__dSRimExpRate90PredQ = math.nan
+        self.__dSRimExpRate90PredY = math.nan
+        self.__dSRimExpRate90_y1 = math.nan
 
-        self.__dSRimConsenExpRate100 = math.nan
-        self.__dSRimPredQExpRate100 = math.nan
-        self.__dSRimPredYExpRate100 = math.nan
-        self.__dSRim_y1ExpRate100 = math.nan
+        self.__dSRimExpRate100Consen = math.nan
+        self.__dSRimExpRate100PredQ = math.nan
+        self.__dSRimExpRate100PredY = math.nan
+        self.__dSRimExpRate100_y1 = math.nan
+
+        # 영업현금흐름 - 영업이익
+        self.__nCfBsProfDiff_y1 = math.nan
+        self.__nCfBsProfDiffLastQ = math.nan
+
+        # 현금흐름패턴
+        self.__sCfPattern_y1 = ""
+        self.__sCfPatternLastQ = ""
+
+        # PEGR
+        self.__dPegr = math.nan
+
+        # 자본잠식
+        self.__sCortaxCond = ""
+
+        # KPRICE
+        self.__nKPriceBsProf_y1 = math.nan
+        self.__nKPriceBsProfPredQ = math.nan
+        self.__nKPriceNetProf_y1 = math.nan
+        self.__nKPriceNetProfPredQ = math.nan
+
+        # KPRICE 기대수익률
+        self.__nKPriceBsProfExpRate_y1= math.nan
+        self.__nKPriceBsProfExpRatePredQ = math.nan
+        self.__nKPriceNetProfExpRate_y1 = math.nan
+        self.__nKPriceNetProfExpRatePredQ = math.nan
+
+
 
     # 지배주주순이익
     def SetDomNetProfPredQ(self, nDomNetProfPredQ):
@@ -92,229 +127,257 @@ class CStockCustomtData:
     def RoePredY(self):
         return self.__dRoePredY
 
+    def SetRoeBsProfPredQ(self, dRoeBsProfPredQ):
+        self.__dRoeBsProfPredQ = dRoeBsProfPredQ
+
+    def RoeBsProfPredQ(self):
+        return self.__dRoeBsProfPredQ
+
+    def SetRoeBsProf_y1(self, dRoeBsProf_y1):
+        self.__dRoeBsProf_y1 = dRoeBsProf_y1
+
+    # EPS
+    def SetEpsPredQ(self, dEpsPredQ):
+        self.__dEpsPredQ = dEpsPredQ
+
+    def EpsPredQ(self):
+        return self.__dEpsPredQ
+
+    def SetEpsBsProfPredQ(self, dEpsBsProfPredQ):
+        self.__dEpsBsProfPredQ = dEpsBsProfPredQ
+
+    def EpsBsProfPredQ(self):
+        return self.__dEpsBsProfPredQ
+
+    def SetEpsBsProf_y1(self, dEpsBsProf_y1):
+        self.__dEpsBsProf_y1 = dEpsBsProf_y1
+
+    def EpsBsProf_y1(self):
+        return self.__dEpsBsProf_y1
+
     # SRIM
-    def SetSRimConsen80(self, nSRimConsen80):
-        self.__nSRimConsen80 = nSRimConsen80
+    def SetSRim80Consen(self, nSRim80Consen):
+        self.__nSRim80Consen = nSRim80Consen
 
-    def SRimConsen80(self):
-        return self.__nSRimConsen80
+    def SRim80Consen(self):
+        return self.__nSRim80Consen
 
-    def SetSRimPredQ80(self, nSRimPredQ80):
-        self.__nSRimPredQ80 = nSRimPredQ80
+    def SetSRim80PredQ(self, nSRim80PredQ):
+        self.__nSRim80PredQ = nSRim80PredQ
 
-    def SRimPredQ80(self):
-        return self.__nSRimPredQ80
+    def SRim80PredQ(self):
+        return self.__nSRim80PredQ
 
-    def SetSRimPredY80(self, nSRimPredY80):
-        self.__nSRimPredY80= nSRimPredY80
+    def SetSRim80PredY(self, nSRim80PredY):
+        self.__nSRim80PredY= nSRim80PredY
 
-    def SRimPredY80(self):
-        return self.__nSRimPredY80
+    def SRim80PredY(self):
+        return self.__nSRim80PredY
 
-    def SetSRim_y180(self, nSRim_y180):
-        self.__nSRim_y180 = nSRim_y180
+    def SetSRim80_y1(self, nSRim80_y1):
+        self.__nSRim80_y1 = nSRim80_y1
 
-    def SRim_y180(self):
-        return self.__nSRim_y180
+    def SRim80_y1(self):
+        return self.__nSRim80_y1
 
-    def SetSRimConsen90(self, nSRimConsen90):
-        self.__nSRimConsen90 = nSRimConsen90
+    def SetSRim90Consen(self, nSRim90Consen):
+        self.__nSRim90Consen = nSRim90Consen
 
-    def SRimConsen90(self):
-        return self.__nSRimConsen90
+    def SRim90Consen(self):
+        return self.__nSRim90Consen
 
-    def SetSRimPredQ90(self, nSRimPredQ90):
-        self.__nSRimPredQ90 = nSRimPredQ90
+    def SetSRim90PredQ(self, nSRim90PredQ):
+        self.__nSRim90PredQ = nSRim90PredQ
 
-    def SRimPredQ90(self):
-        return self.__nSRimPredQ90
+    def SRim90PredQ(self):
+        return self.__nSRim90PredQ
 
-    def SetSRimPredY90(self, nSRimPredY90):
-        self.__nSRimPredY90= nSRimPredY90
+    def SetSRim90PredY(self, nSRim90PredY):
+        self.__nSRim90PredY= nSRim90PredY
 
-    def SRimPredY90(self):
-        return self.__nSRimPredY90
+    def SRim90PredY(self):
+        return self.__nSRim90PredY
 
-    def SetSRim_y190(self, nSRim_y190):
-        self.__nSRim_y190 = nSRim_y190
+    def SetSRim90_y1(self, nSRim90_y1):
+        self.__nSRim90_y1 = nSRim90_y1
 
-    def SRim_y190(self):
-        return self.__nSRim_y190
+    def SRim90_y1(self):
+        return self.__nSRim90_y1
 
 
-    def SetSRimConsen100(self, nSRimConsen100):
-        self.__nSRimConsen100 = nSRimConsen100
+    def SetSRim100Consen(self, nSRim100Consen):
+        self.__nSRim100Consen = nSRim100Consen
 
-    def SRimConsen100(self):
-        return self.__nSRimConsen100
+    def SRim100Consen(self):
+        return self.__nSRim100Consen
 
-    def SetSRimPredQ100(self, nSRimPredQ100):
-        self.__nSRimPredQ100 = nSRimPredQ100
+    def SetSRim100PredQ(self, nSRim100PredQ):
+        self.__nSRim100PredQ = nSRim100PredQ
 
-    def SRimPredQ100(self):
-        return self.__nSRimPredQ100
+    def SRim100PredQ(self):
+        return self.__nSRim100PredQ
 
-    def SetSRimPredY100(self, nSRimPredY100):
-        self.__nSRimPredY100= nSRimPredY100
+    def SetSRim100PredY(self, nSRim100PredY):
+        self.__nSRim100PredY= nSRim100PredY
 
-    def SRimPredY100(self):
-        return self.__nSRimPredY100
+    def SRim100PredY(self):
+        return self.__nSRim100PredY
 
-    def SetSRim_y1100(self, nSRim_y1100):
-        self.__nSRim_y1100 = nSRim_y1100
+    def SetSRim100_y1(self, nSRim100_y1):
+        self.__nSRim100_y1 = nSRim100_y1
 
-    def SRim_y1100(self):
-        return self.__nSRim_y1100
+    def SRim100_y1(self):
+        return self.__nSRim100_y1
 
     # SRIM 적정주가
-    def SetSRimConsenPrice80(self, nSRimConsenPrice80):
-        self.__nSRimConsenPrice80 = nSRimConsenPrice80
+    def SetSRimPrice80Consen(self, nSRimPrice80Consen):
+        self.__nSRimPrice80Consen = nSRimPrice80Consen
 
-    def SRimConsenPrice80(self):
-        return self.__nSRimConsenPrice80
+    def SRimPrice80Consen(self):
+        return self.__nSRimPrice80Consen
 
-    def SetSRimPredQPrice80(self, nSRimPredQPrice80):
-        self.__nSRimPredQPrice80 = nSRimPredQPrice80
+    def SetSRimPrice80PredQ(self, nSRimPrice80PredQ):
+        self.__nSRimPrice80PredQ = nSRimPrice80PredQ
 
-    def SRimPredQPrice80(self):
-        return self.__nSRimPredQPrice80
+    def SRimPrice80PredQ(self):
+        return self.__nSRimPrice80PredQ
 
-    def SetSRimPredYPrice80(self, nSRimPredYPrice80):
-        self.__nSRimPredYPrice80 = nSRimPredYPrice80
+    def SetSRimPrice80PredY(self, nSRimPrice80PredY):
+        self.__nSRimPrice80PredY = nSRimPrice80PredY
 
-    def SRimPredYPrice80(self):
-        return self.__nSRimPredYPrice80
+    def SRimPrice80PredY(self):
+        return self.__nSRimPrice80PredY
 
-    def SetSRim_y1Price80(self, nSRim_y1Price80):
-        self.__nSRim_y1Price80 = nSRim_y1Price80
+    def SetSRimPrice80_y1(self, nSRimPrice80_y1):
+        self.__nSRimPrice80_y1 = nSRimPrice80_y1
 
-    def SRim_y1Price80(self):
-        return self.__nSRim_y1Price80
-
-
-    def SetSRimConsenPrice90(self, nSRimConsenPrice90):
-        self.__nSRimConsenPrice90 = nSRimConsenPrice90
-
-    def SRimConsenPrice90(self):
-        return self.__nSRimConsenPrice90
-
-    def SetSRimPredQPrice90(self, nSRimPredQPrice90):
-        self.__nSRimPredQPrice90 = nSRimPredQPrice90
-
-    def SRimPredQPrice90(self):
-        return self.__nSRimPredQPrice90
-
-    def SetSRimPredYPrice90(self, nSRimPredYPrice90):
-        self.__nSRimPredYPrice90 = nSRimPredYPrice90
-
-    def SRimPredYPrice90(self):
-        return self.__nSRimPredYPrice90
-
-    def SetSRim_y1Price90(self, nSRim_y1Price90):
-        self.__nSRim_y1Price90 = nSRim_y1Price90
-
-    def SRim_y1Price90(self):
-        return self.__nSRim_y1Price90
+    def SRimPrice80_y1(self):
+        return self.__nSRimPrice80_y1
 
 
-    def SetSRimConsenPrice100(self, nSRimConsenPrice100):
-        self.__nSRimConsenPrice100 = nSRimConsenPrice100
+    def SetSRimPrice90Consen(self, nSRimPrice90Consen):
+        self.__nSRimPrice90Consen = nSRimPrice90Consen
 
-    def SRimConsenPrice100(self):
-        return self.__nSRimConsenPrice100
+    def SRimPrice90Consen(self):
+        return self.__nSRimPrice90Consen
 
-    def SetSRimPredQPrice100(self, nSRimPredQPrice100):
-        self.__nSRimPredQPrice100 = nSRimPredQPrice100
+    def SetSRimPrice90PredQ(self, nSRimPrice90PredQ):
+        self.__nSRimPrice90PredQ = nSRimPrice90PredQ
 
-    def SRimPredQPrice100(self):
-        return self.__nSRimPredQPrice100
+    def SRimPrice90PredQ(self):
+        return self.__nSRimPrice90PredQ
 
-    def SetSRimPredYPrice100(self, nSRimPredYPrice100):
-        self.__nSRimPredYPrice100 = nSRimPredYPrice100
+    def SetSRiPrice90mPredY(self, nSRiPrice90mPredY):
+        self.__nSRimPrice90PredY = nSRiPrice90mPredY
 
-    def SRimPredYPrice100(self):
-        return self.__nSRimPredYPrice100
+    def SRiPrice90mPredY(self):
+        return self.__nSRimPrice90PredY
 
-    def SetSRim_y1Price100(self, nSRim_y1Price100):
-        self.__nSRim_y1Price100 = nSRim_y1Price100
+    def SetSRimPrice90_y1(self, nSRimPrice90_y1):
+        self.__nSRimPrice90_y1 = nSRimPrice90_y1
 
-    def SRim_y1Price100(self):
-        return self.__nSRim_y1Price100
+    def SRimPrice90_y1(self):
+        return self.__nSRimPrice90_y1
+
+
+    def SetSRimPrice100Consen(self, nSRimPrice100Consen):
+        self.__nSRimPrice100Consen = nSRimPrice100Consen
+
+    def SRimPrice100Consen(self):
+        return self.__nSRimPrice100Consen
+
+    def SetSRimPrice100PredQ(self, nSRimPrice100PredQ):
+        self.__nSRimPrice100PredQ = nSRimPrice100PredQ
+
+    def SRimPrice100PredQ(self):
+        return self.__nSRimPrice100PredQ
+
+    def SetSRimPrice100PredY(self, nSRimPrice100PredY):
+        self.__nSRimPrice100PredY = nSRimPrice100PredY
+
+    def SRimPrice100PredY(self):
+        return self.__nSRimPrice100PredY
+
+    def SetSRimPrice100_y1(self, nSRimPrice100_y1):
+        self.__nSRimPrice100_y1 = nSRimPrice100_y1
+
+    def SRimPrice100_y1(self):
+        return self.__nSRimPrice100_y1
 
 
     # SRIM 기대수익률
-    def SetSRimConsenExpRate80(self, dSRimConsenExpRate80):
-        self.__dSRimConsenExpRate80 = dSRimConsenExpRate80
+    def SetSRimExpRate80Consen(self, dSRimExpRate80Consen):
+        self.__dSRimExpRate80Consen = dSRimExpRate80Consen
 
-    def SRimConsenExpRate80(self):
-        return self.__dSRimConsenExpRate80
+    def SRimExpRate80Consen(self):
+        return self.__dSRimExpRate80Consen
 
-    def SetSRimPredQExpRate80(self, dSRimPredQExpRate80):
-        self.__dSRimPredQExpRate80 = dSRimPredQExpRate80
+    def SetSRimExpRate80PredQ(self, dSRimExpRate80PredQ):
+        self.__dSRimExpRate80PredQ = dSRimExpRate80PredQ
 
-    def SRimPredQExpRate80(self):
-        return self.__dSRimPredQExpRate80
+    def SRimExpRate80PredQ(self):
+        return self.__dSRimExpRate80PredQ
 
-    def SetSRimPredYExpRate80(self, dSRimPredYExpRate80):
-        self.__dSRimPredYExpRate80= dSRimPredYExpRate80
+    def SetSRimExpRate80PredY(self, dSRimExpRate80PredY):
+        self.__dSRimExpRate80PredY= dSRimExpRate80PredY
 
-    def SRimPredYExpRate80(self):
-        return self.__dSRimPredYExpRate80
+    def SRimExpRate80PredY(self):
+        return self.__dSRimExpRate80PredY
 
-    def SetSRim_y1ExpRate80(self, dSRim_y1ExpRate80):
-        self.__dSRim_y1ExpRate80 = dSRim_y1ExpRate80
+    def SetSRimExpRate80_y1(self, dSRimExpRate80_y1):
+        self.__dSRimExpRate80_y1 = dSRimExpRate80_y1
 
-    def SRim_y1ExpRate80(self):
-        return self.__dSRim_y1ExpRate80
+    def SRimExpRate80_y1(self):
+        return self.__dSRimExpRate80_y1
 
-    def SetSRimConsenExpRate90(self, dSRimConsenExpRate90):
-        self.__dSRimConsenExpRate90 = dSRimConsenExpRate90
+    def SetSRimExpRate90Consen(self, dSRimExpRate90Consen):
+        self.__dSRimExpRate90Consen = dSRimExpRate90Consen
 
-    def SRimConsenExpRate90(self):
-        return self.__dSRimConsenExpRate90
+    def SRimExpRate90Consen(self):
+        return self.__dSRimExpRate90Consen
 
-    def SetSRimPredQExpRate90(self, dSRimPredQExpRate90):
-        self.__dSRimPredQExpRate90 = dSRimPredQExpRate90
+    def SetSRimExpRate90PredQ(self, dSRimExpRate90PredQ):
+        self.__dSRimExpRate90PredQ = dSRimExpRate90PredQ
 
-    def SRimPredQExpRate90(self):
-        return self.__dSRimPredQExpRate90
+    def SRimExpRate90PredQ(self):
+        return self.__dSRimExpRate90PredQ
 
-    def SetSRimPredYExpRate90(self, dSRimPredYExpRate90):
-        self.__dSRimPredYExpRate90= dSRimPredYExpRate90
+    def SetSRimExpRate90PredY(self, dSRimExpRate90PredY):
+        self.__dSRimExpRate90PredY= dSRimExpRate90PredY
 
-    def SRimPredYExpRate90(self):
-        return self.__dSRimPredYExpRate90
+    def SRimExpRate90PredY(self):
+        return self.__dSRimExpRate90PredY
 
-    def SetSRim_y1ExpRate90(self, dSRim_y1ExpRate90):
-        self.__dSRim_y1ExpRate90 = dSRim_y1ExpRate90
+    def SetSRimExpRate90_y1(self, dSRimExpRate90_y1):
+        self.__dSRimExpRate90_y1 = dSRimExpRate90_y1
 
-    def SRim_y1ExpRate90(self):
-        return self.__dSRim_y1ExpRate90
+    def SRimExpRate90_y1(self):
+        return self.__dSRimExpRate90_y1
 
 
-    def SetSRimConsenExpRate100(self, dSRimConsenExpRate100):
-        self.__dSRimConsenExpRate100 = dSRimConsenExpRate100
+    def SetSRimExpRate100Consen(self, dSRimExpRate100Consen):
+        self.__dSRimExpRate100Consen = dSRimExpRate100Consen
 
-    def SRimConsenExpRate100(self):
-        return self.__dSRimConsenExpRate100
+    def SRimExpRate100Consen(self):
+        return self.__dSRimExpRate100Consen
 
-    def SetSRimPredQExpRate100(self, dSRimPredQExpRate100):
-        self.__dSRimPredQExpRate100 = dSRimPredQExpRate100
+    def SetSRimExpRate100PredQ(self, dSRimExpRate100PredQ):
+        self.__dSRimExpRate100PredQ = dSRimExpRate100PredQ
 
-    def SRimPredQExpRate100(self):
-        return self.__dSRimPredQExpRate100
+    def SRimExpRate100PredQ(self):
+        return self.__dSRimExpRate100PredQ
 
-    def SetSRimPredYExpRate100(self, dSRimPredYExpRate100):
-        self.__dSRimPredYExpRate100= dSRimPredYExpRate100
+    def SetSRimExpRate100PredY(self, dSRimExpRate100PredY):
+        self.__dSRimExpRate100PredY= dSRimExpRate100PredY
 
-    def SRimPredYExpRate100(self):
-        return self.__dSRimPredYExpRate100
+    def SRimExpRate100PredY(self):
+        return self.__dSRimExpRate100PredY
 
-    def SetSRim_y1ExpRate100(self, dSRim_y1ExpRate100):
-        self.__dSRim_y1ExpRate100 = dSRim_y1ExpRate100
+    def SetSRimExpRate100_y1(self, dSRimExpRate100_y1):
+        self.__dSRimExpRate100_y1 = dSRimExpRate100_y1
 
-    def SRim_y1ExpRate100(self):
-        return self.__dSRim_y1ExpRate100
+    def SRimExpRate100_y1(self):
+        return self.__dSRimExpRate100_y1
 
     # 영업이익
     def SetBsProfPredQ(self, nBsProfPredQ):
@@ -325,7 +388,7 @@ class CStockCustomtData:
 
     # 비영업이익
     def SetNonBsProf_y1(self, nNonBsProf_y1):
-       self.__nNonBsProf_y1 = nNonBsProf_y1
+        self.__nNonBsProf_y1 = nNonBsProf_y1
 
     def NonBsProf_y1(self):
         return self.__nNonBsProf_y1
@@ -349,6 +412,98 @@ class CStockCustomtData:
     def NonBsRateLastQ(self):
         return self.__dNonBsRateLastQ
 
+    # 영업현금흐름 - 영업이익
+    def SetCfBsProfDiff_y1(self, nCfBsProfDiff_y1):
+        self.__nCfBsProfDiff_y1 = nCfBsProfDiff_y1
+
+    def CfBsProfDiff_y1(self):
+        return self.__nCfBsProfDiff_y1
+
+    def SetCfBsProfDiffLastQ(self, nCfBsProfDiffLastQ):
+        self.__nCfBsProfDiffLastQ = nCfBsProfDiffLastQ
+
+    def CfBsProfDiffLastQ(self):
+        return self.__nCfBsProfDiffLastQ
+
+    # 현금흐름패턴
+    def SetCfPattern_y1(self, sCfPattern_y1):
+        self.__sCfPattern_y1 = sCfPattern_y1
+
+    def CfPattern_y1(self):
+        return self.__sCfPattern_y1
+
+    def SetCfPatternLastQ(self, sCfPatternLastQ):
+        self.__sCfPatternLastQ = sCfPatternLastQ
+
+    def CfPatternLastQ(self):
+        return self.__sCfPatternLastQ
+
+    # PEGR
+    def SetPegr(self, dPegr):
+        self.__dPegr = dPegr
+
+    def Pegr(self):
+        return self.__dPegr
+
+
+    # 자본잠식
+    def SetCortaxCond(self, sCortaxCond):
+        self.__sCortaxCond = sCortaxCond
+
+    def CortaxCond(self):
+        return self.__sCortaxCond
+
+
+    # KPRICE
+    def SetKPriceBsProf_y1(self, nKPriceBsProf_y1):
+        self.__nKPriceBsProf_y1 = nKPriceBsProf_y1
+
+    def KPriceBsProf_y1(self):
+        return self.__nKPriceBsProf_y1
+
+    def SetKPriceBsProfPredQ(self, nKPriceBsProfPredQ):
+        self.__nKPriceBsProfPredQ = nKPriceBsProfPredQ
+
+    def KPriceBsProfPredQ(self):
+        return self.__nKPriceBsProfPredQ
+
+    def SetKPriceNetProf_y1(self, nKPriceNetProf_y1):
+        self.__nKPriceNetProf_y1 = nKPriceNetProf_y1
+
+    def KPriceNetProf_y1(self):
+        return  self.__nKPriceNetProf_y1
+
+    def SetKPriceNetProfPredQ(self, nKPriceNetProfPredQ):
+        self.__nKPriceNetProfPredQ = nKPriceNetProfPredQ
+
+    def KPriceNetProfPredQ(self):
+        return self.__nKPriceNetProfPredQ
+
+    # KPRICE 기대수익률
+    def SetKPriceBsProfExpRate_y1(self, nKPriceBsProfExpRate_y1):
+        self.__nKPriceBsProfExpRate_y1= nKPriceBsProfExpRate_y1
+
+    def KPriceBsProfExpRate_y1(self):
+        return self.__nKPriceBsProfExpRate_y1
+
+    def SetKPriceBsProfExpRatePredQ(self, nKPriceBsProfExpRatePredQ):
+        self.__nKPriceBsProfExpRatePredQ = nKPriceBsProfExpRatePredQ
+
+    def KPriceBsProfExpRatePredQ(self):
+        return self.__nKPriceBsProfExpRatePredQ
+
+
+    def SetKPriceNetProfExpRate_y1(self, nKPriceNetProfExpRate_y1):
+        self.__nKPriceNetProfExpRate_y1 = nKPriceNetProfExpRate_y1
+
+    def KPriceNetProfExpRate_y1(self):
+        return self.__nKPriceNetProfExpRate_y1
+
+    def SetKPriceNetProfExpRatePredQ(self, nKPriceNetProfExpRatePredQ):
+        self.__nKPriceNetProfExpRatePredQ = nKPriceNetProfExpRatePredQ
+
+    def KPriceNetProfExpRatePredQ(self):
+        return self.__nKPriceNetProfExpRatePredQ
 
 class CStockCustomModel:
 
@@ -371,87 +526,118 @@ class CStockCustomModel:
                                                 fnData.DomNetProfLastQ(),
                                                 fnData.DomNetProfLastQ_y1())
 
-        # ROE
-        dRoePredQ = self.RoePredQ(nDomNetProfPredQ, fnData.DomCapLastQ())
-
-        dRoePredY = self.RoePredY(fnData.Roe_y1(), fnData.Roe_y2(), fnData.Roe_y3())
-
-        # SRIM
-        nSRimConsen80 = self.SRim(fnData.DomCapLastQ(), fnData.RoeConsen(),
-                                  kisData.BondBBB_5Rate(), 0.8)
-        nSRimPredQ80 = self.SRim(fnData.DomCapLastQ(), dRoePredQ,
-                                 kisData.BondBBB_5Rate(), 0.8)
-        nSRimPredY80 = self.SRim(fnData.DomCapLastQ(), dRoePredY,
-                                 kisData.BondBBB_5Rate(), 0.8)
-        nSRim_y180 = self.SRim(fnData.DomCapLastQ(), fnData.Roe_y1(),
-                               kisData.BondBBB_5Rate(), 0.8)
-
-        nSRimConsen90 = self.SRim(fnData.DomCapLastQ(), fnData.RoeConsen(),
-                                  kisData.BondBBB_5Rate(), 0.9)
-        nSRimPredQ90 = self.SRim(fnData.DomCapLastQ(), dRoePredQ,
-                                 kisData.BondBBB_5Rate(), 0.9)
-        nSRimPredY90 = self.SRim(fnData.DomCapLastQ(), dRoePredY,
-                                 kisData.BondBBB_5Rate(), 0.9)
-        nSRim_y190 = self.SRim(fnData.DomCapLastQ(), fnData.Roe_y1(),
-                               kisData.BondBBB_5Rate(), 0.9)
-
-        nSRimConsen100 = self.SRim(fnData.DomCapLastQ(), fnData.RoeConsen(),
-                                   kisData.BondBBB_5Rate(), 0.9)
-        nSRimPredQ100 = self.SRim(fnData.DomCapLastQ(), dRoePredQ,
-                                  kisData.BondBBB_5Rate(), 0.9)
-        nSRimPredY100 = self.SRim(fnData.DomCapLastQ(), dRoePredY,
-                                  kisData.BondBBB_5Rate(), 0.9)
-        nSRim_y1100 = self.SRim(fnData.DomCapLastQ(), fnData.Roe_y1(),
-                                kisData.BondBBB_5Rate(), 0.9)
-
-        # SRIM 적정주가
-        nSRimConsenPrice80 = self.SRimPrice(nSRimConsen80,fnData.StockCntTot())
-        nSRimPredQPrice80 = self.SRimPrice(nSRimPredQ80,fnData.StockCntTot())
-        nSRimPredYPrice80 = self.SRimPrice(nSRimPredY80,fnData.StockCntTot())
-        nSRim_y1Price80 = self.SRimPrice(nSRim_y180,fnData.StockCntTot())
-
-        nSRimConsenPrice90 = self.SRimPrice(nSRimConsen90, fnData.StockCntTot())
-        nSRimPredQPrice90 = self.SRimPrice(nSRimPredQ90, fnData.StockCntTot())
-        nSRimPredYPrice90 = self.SRimPrice(nSRimPredY90, fnData.StockCntTot())
-        nSRim_y1Price90 = self.SRimPrice(nSRim_y190, fnData.StockCntTot())
-
-        nSRimConsenPrice100 = self.SRimPrice(nSRimConsen100, fnData.StockCntTot())
-        nSRimPredQPrice100 = self.SRimPrice(nSRimPredQ100, fnData.StockCntTot())
-        nSRimPredYPrice100 = self.SRimPrice(nSRimPredY100, fnData.StockCntTot())
-        nSRim_y1Price100 = self.SRimPrice(nSRim_y1100, fnData.StockCntTot())
-
-        # SRIM 기대수익률
-        dSRimConseneExpRate80 = self.ExpReturnRate(nSRimConsenPrice80, fnData.LastPrice())
-        dSRimPredQExpRate80 = self.ExpReturnRate(nSRimPredQPrice80, fnData.LastPrice())
-        dSRimPredYExpRate80 = self.ExpReturnRate(nSRimPredYPrice80, fnData.LastPrice())
-        dSRim_y1ExpRate80 = self.ExpReturnRate(nSRim_y1Price80, fnData.LastPrice())
-
-        dSRimConseneExpRate90 = self.ExpReturnRate(nSRimConsenPrice90, fnData.LastPrice())
-        dSRimPredQExpRate90 = self.ExpReturnRate(nSRimPredQPrice90, fnData.LastPrice())
-        dSRimPredYExpRate90 = self.ExpReturnRate(nSRimPredYPrice90, fnData.LastPrice())
-        dSRim_y1ExpRate90 = self.ExpReturnRate(nSRim_y1Price90, fnData.LastPrice())
-
-        dSRimConseneExpRate100 = self.ExpReturnRate(nSRimConsenPrice100, fnData.LastPrice())
-        dSRimPredQExpRate100 = self.ExpReturnRate(nSRimPredQPrice100, fnData.LastPrice())
-        dSRimPredYExpRate100 = self.ExpReturnRate(nSRimPredYPrice100, fnData.LastPrice())
-        dSRim_y1ExpRate100 = self.ExpReturnRate(nSRim_y1Price100, fnData.LastPrice())
 
         # 영업이익
-        nBsProfPredQ = self.BsProfPredQ(fnData.LastQ(), fnData.BsProf_y1(),
-                                        fnData.BsProfLastQ(), fnData.BsProfLastQ_y1())
+        nBsProfPredQ = self.BsProfPredQ(fnData.LastQ(), fnData.BsProf_y1(), fnData.BsProfLastQ(), fnData.BsProfLastQ_y1())
+
+        # ROE
+        dRoePredQ = self.RoePredQ(nDomNetProfPredQ, fnData.DomCapLastQ())
+        dRoePredY = self.RoePredY(fnData.Roe_y1(), fnData.Roe_y2(), fnData.Roe_y3())
+        dRoeBsProf_y1 = self.RoeBsProf(fnData.BsProf_y1(),fnData.DomCap_y1())
+        dRoeBsProfPredQ = self.RoeBsProfPredQ(nBsProfPredQ,fnData.DomCapLastQ())
+
+        # EPS
+        dEpsPredQ = self.EpsPredQ(nDomNetProfPredQ, fnData.StockCntTot())
+        dEpsBsProfPredQ = self.EpsBsProfPredQ(nBsProfPredQ, fnData.StockCntTot())
+        dEpsBsProf_y1 = self.EpsBsProf(fnData.BsProf_y1(), fnData.StockCntTot())
+
+        # SRIM
+        nSRim80Consen = self.SRim(fnData.DomCapLastQ(), fnData.RoeConsen(),
+                                  kisData.BondBBB_5Rate(), 0.8)
+        nSRim80PredQ = self.SRim(fnData.DomCapLastQ(), dRoePredQ,
+                                 kisData.BondBBB_5Rate(), 0.8)
+        nSRim80PredY = self.SRim(fnData.DomCapLastQ(), dRoePredY,
+                                 kisData.BondBBB_5Rate(), 0.8)
+        nSRim80_y1 = self.SRim(fnData.DomCapLastQ(), fnData.Roe_y1(),
+                               kisData.BondBBB_5Rate(), 0.8)
+
+        nSRim90Consen = self.SRim(fnData.DomCapLastQ(), fnData.RoeConsen(),
+                                  kisData.BondBBB_5Rate(), 0.9)
+        nSRim90PredQ = self.SRim(fnData.DomCapLastQ(), dRoePredQ,
+                                 kisData.BondBBB_5Rate(), 0.9)
+        nSRim90PredY = self.SRim(fnData.DomCapLastQ(), dRoePredY,
+                                 kisData.BondBBB_5Rate(), 0.9)
+        nSRim90_y1 = self.SRim(fnData.DomCapLastQ(), fnData.Roe_y1(),
+                               kisData.BondBBB_5Rate(), 0.9)
+
+        nSRim100Consen = self.SRim(fnData.DomCapLastQ(), fnData.RoeConsen(),
+                                   kisData.BondBBB_5Rate(), 1.0)
+        nSRim100PredQ = self.SRim(fnData.DomCapLastQ(), dRoePredQ,
+                                  kisData.BondBBB_5Rate(), 1.0)
+        nSRim100PredY = self.SRim(fnData.DomCapLastQ(), dRoePredY,
+                                  kisData.BondBBB_5Rate(), 1.0)
+        nSRim100_y1 = self.SRim(fnData.DomCapLastQ(), fnData.Roe_y1(),
+                                kisData.BondBBB_5Rate(), 1.0)
+
+        # SRIM 적정주가
+        nSRimPrice80Consen = self.SRimPrice(nSRim80Consen,fnData.StockCntTot())
+        nSRimPrice80PredQ = self.SRimPrice(nSRim80PredQ,fnData.StockCntTot())
+        nSRimPrice80PredY = self.SRimPrice(nSRim80PredY,fnData.StockCntTot())
+        nSRimPrice80_y1 = self.SRimPrice(nSRim80_y1,fnData.StockCntTot())
+
+        nSRimPrice90Consen = self.SRimPrice(nSRim90Consen, fnData.StockCntTot())
+        nSRimPrice90PredQ = self.SRimPrice(nSRim90PredQ, fnData.StockCntTot())
+        nSRiPrice90mPredY = self.SRimPrice(nSRim90PredY, fnData.StockCntTot())
+        nSRimPrice90_y1 = self.SRimPrice(nSRim90_y1, fnData.StockCntTot())
+
+        nSRimPrice100Consen = self.SRimPrice(nSRim100Consen, fnData.StockCntTot())
+        nSRimPrice100PredQ = self.SRimPrice(nSRim100PredQ, fnData.StockCntTot())
+        nSRimPrice100PredY = self.SRimPrice(nSRim100PredY, fnData.StockCntTot())
+        nSRimPrice100_y1 = self.SRimPrice(nSRim100_y1, fnData.StockCntTot())
+
+        # SRIM 기대수익률
+        dSRimConseneExpRate80 = self.ExpReturnRate(nSRimPrice80Consen, fnData.LastPrice())
+        dSRimExpRate80PredQ = self.ExpReturnRate(nSRimPrice80PredQ, fnData.LastPrice())
+        dSRimExpRate80PredY = self.ExpReturnRate(nSRimPrice80PredY, fnData.LastPrice())
+        dSRimExpRate80_y1 = self.ExpReturnRate(nSRimPrice80_y1, fnData.LastPrice())
+
+        dSRimConseneExpRate90 = self.ExpReturnRate(nSRimPrice90Consen, fnData.LastPrice())
+        dSRimExpRate90PredQ = self.ExpReturnRate(nSRimPrice90PredQ, fnData.LastPrice())
+        dSRimExpRate90PredY = self.ExpReturnRate(nSRiPrice90mPredY, fnData.LastPrice())
+        dSRimExpRate90_y1 = self.ExpReturnRate(nSRimPrice90_y1, fnData.LastPrice())
+
+        dSRimConseneExpRate100 = self.ExpReturnRate(nSRimPrice100Consen, fnData.LastPrice())
+        dSRimExpRate100PredQ = self.ExpReturnRate(nSRimPrice100PredQ, fnData.LastPrice())
+        dSRimExpRate100PredY = self.ExpReturnRate(nSRimPrice100PredY, fnData.LastPrice())
+        dSRimExpRate100_y1 = self.ExpReturnRate(nSRimPrice100_y1, fnData.LastPrice())
+
+
         # 비영업이익
         nNonBsProf_y1 = self.NonBsProf_y1(fnData.BsProfBefTax_y1(), fnData.BsProf_y1())
-
         nNonBsProfLastQ = self.NonBsProfLastQ(fnData.BsProfBefTaxLastQ(), fnData.BsProfLastQ())
 
         # 비영업이익 비율
         dNonBsRate_y = self.NonBsRate_y1(fnData.BsProf_y1(), nNonBsProf_y1)
-
         dNonBsRateLastQ = self.NonBsRateLastQ(fnData.BsProfLastQ(), nNonBsProfLastQ)
 
-        print( nBsProfPredQ, nNonBsProf_y1, nNonBsProfLastQ, dNonBsRate_y, dNonBsRateLastQ)
+        # 영업현금흐름 - 영업이익
+        nCfBsProfDiff_y1 = self.DiffVal(fnData.CfBs_y1(), fnData.BsProf_y1())
+        CfBsProfDiffLastQ = self.DiffVal(fnData.CfBsLastQ(), fnData.BsProfLastQ())
+
+        # 현금흐름패턴
+        sCfPattern_y1 = self.CfPattern(fnData.CfBs_y1(), fnData.CfInv_y1(), fnData.CfFin_y1())
+        sCfPatternLastQ = self.CfPattern(fnData.CfBsLastQ(), fnData.CfInvLastQ(), fnData.CfFinLastQ())
+
+        # PEGR
+        dPegr = self.Pegr(fnData.EpsIncrRate(), fnData.Per())
+
+        # 자본잠식
+        sCortaxCond = self.CortaxCond(fnData.CapTotalLastQ(), fnData.CapOrgLastQ())
+
+        # KPRICE
+        nKPriceBsProf_y1 = self.KPrice(dEpsBsProf_y1, dRoeBsProf_y1)
+        nKPriceBsProfPredQ = self.KPrice(dEpsBsProfPredQ, dRoeBsProfPredQ)
+        nKPriceNetProf_y1 = self.KPrice(fnData.Eps_y1(),fnData.Roe_y1())
+        nKPriceNetProfPredQ = self.KPrice(dEpsPredQ, dRoePredQ)
+
+        # KPRICE 기대수익률
+        nKPriceBsProfExpRate_y1 = self.ExpReturnRate(nKPriceBsProf_y1, fnData.LastPrice())
+        nKPriceBsProfExpRatePredQ = self.ExpReturnRate(nKPriceBsProfPredQ, fnData.LastPrice())
+        nKPriceNetProfExpRate_y1 = self.ExpReturnRate(nKPriceNetProf_y1, fnData.LastPrice())
+        nKPriceNetProfExpRatePredQ = self.ExpReturnRate(nKPriceNetProfPredQ, fnData.LastPrice())
 
         return True
+
 
     def DomNetProfPredQ(self, sLastQ, nDomNetProf_y1, nDomNetProfLastQ, nDomNetProfLastQ_y1):
         if math.isnan(nDomNetProf_y1) or math.isnan(nDomNetProfLastQ) or math.isnan(nDomNetProfLastQ_y1):
@@ -505,11 +691,11 @@ class CStockCustomModel:
         return dNonBsRateLastQ
 
     # ROE
-    def RoePredQ(self, nDomNetProfFromQ, nDomCapLastQ):
-        if math.isnan(nDomNetProfFromQ) or math.isnan(nDomCapLastQ):
+    def RoePredQ(self, nDomNetProfPredQ, nDomCapLastQ):
+        if math.isnan(nDomNetProfPredQ) or math.isnan(nDomCapLastQ):
             return math.nan
 
-        dRoePredQ = nDomNetProfFromQ / nDomCapLastQ * 100
+        dRoePredQ = nDomNetProfPredQ / nDomCapLastQ * 100
         return dRoePredQ
 
 
@@ -531,6 +717,44 @@ class CStockCustomModel:
 
         return dRoePredY
 
+    def RoeBsProf(self, nBsProf, nDomCap ):
+        if math.isnan(nBsProf) or math.isnan(nDomCap):
+            return math.nan
+
+        dRoeBsProf= nBsProf / nDomCap * 100
+        return dRoeBsProf
+
+    def RoeBsProfPredQ(self, nBsProfPredQ, nDomCapLastQ ):
+        if math.isnan(nBsProfPredQ) or math.isnan(nDomCapLastQ):
+            return math.nan
+
+        dRoeBsProfPredQ = nBsProfPredQ / nDomCapLastQ * 100
+        return dRoeBsProfPredQ
+
+    # EPS
+    def EpsPredQ(self, nDomNetProfPredQ, nStockCntTot, unit = 100000000 ):
+        if math.isnan(nDomNetProfPredQ) or math.isnan(nStockCntTot):
+            return math.nan
+
+        dEpsPredQ = nDomNetProfPredQ / nStockCntTot * unit
+        return dEpsPredQ
+
+
+    def EpsBsProfPredQ(self, nBsProfPredQ, nStockCntTot, unit = 100000000 ):
+        if math.isnan(nBsProfPredQ) or math.isnan(nStockCntTot):
+            return math.nan
+
+        dEpsBsProfPredQ = nBsProfPredQ / nStockCntTot * unit
+        return dEpsBsProfPredQ
+
+    def EpsBsProf(self, nBsProf, nStockCntTot, unit = 100000000 ):
+        if math.isnan(nBsProf) or math.isnan(nStockCntTot):
+            return math.nan
+
+        dEpsBsProf = nBsProf / nStockCntTot * unit
+        return dEpsBsProf
+
+    #SRIM
     def SRim(self, nDomCapLastQ, dRoeRate, dBondRate, w):
         if math.isnan(nDomCapLastQ) or math.isnan(dRoeRate) or math.isnan(dBondRate):
             return math.nan
@@ -548,6 +772,14 @@ class CStockCustomModel:
         nSRimPrice = nSRim / nStockCnt * unit
 
         return nSRimPrice
+
+    def KPrice(self, dEps, dRoe):
+        if math.isnan(dEps) or math.isnan(dRoe):
+            return math.nan
+
+        nKPrice = dEps*dRoe
+
+        return nKPrice
 
 
     ### Util Function ###
@@ -569,6 +801,53 @@ class CStockCustomModel:
         dExpReturnRate = (nExpPrice - nLastPrice) / nLastPrice * 100
 
         return dExpReturnRate
+
+    def DiffVal(self, val1, val2):
+        if math.isnan(val1) or math.isnan(val2):
+            return math.nan
+
+        return val1 - val2
+
+    def CfPattern(self, nCfBs, nCfInv, nCfFin ):
+        if math.isnan(nCfBs) or math.isnan(nCfInv) or math.isnan(nCfFin):
+            return math.nan
+
+        sCfPattern = ''
+        if nCfBs > 0:
+            sCfPattern += '+'
+        else:
+            sCfPattern += '-'
+
+        if nCfInv > 0:
+            sCfPattern += '+'
+        else:
+            sCfPattern += '-'
+
+        if nCfFin > 0:
+            sCfPattern += '+'
+        else:
+            sCfPattern += '-'
+
+        return sCfPattern
+
+    def Pegr(self, dEpsIncrRate, dPer):
+        if math.isnan(dEpsIncrRate) or math.isnan(dPer):
+            return math.nan
+
+        return dPer/dEpsIncrRate
+
+    def CortaxCond(self, nCapTotal, nCapOrg):
+        if math.isnan(nCapTotal) or math.isnan(nCapOrg):
+            return math.nan
+
+        sCortaxCond = ""
+        if nCapTotal < nCapOrg :
+            sCortaxCond = "TRUE"
+        else:
+            sCortaxCond = "FALSE"
+
+        return sCortaxCond
+
 
     def QuarterNum(self, sLastQ):
         re1q = re.compile(self.__sTagRegQurter1)
