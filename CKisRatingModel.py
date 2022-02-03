@@ -6,13 +6,13 @@ import math
 class CKisRatingData:
 
     def __init__(self):
-        self.__dBondBBBRate = math.nan
+        self.__dBondBBB_5Rate = math.nan
 
     def SetBondBBB_5Rate(self, dBondBBB_5Rate):
-        self.__dBondBBBRate = dBondBBB_5Rate
+        self.__dBondBBB_5Rate = dBondBBB_5Rate
 
     def BondBBB_5Rate(self):
-        return self.__dBondBBBRate
+        return self.__dBondBBB_5Rate
 
 class CKisRatingModel:
 

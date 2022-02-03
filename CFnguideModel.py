@@ -8,10 +8,12 @@ from selenium import webdriver
 
 class CFnguideData:
     ### Data ###
-    def __init__(self, stockCode):
-        self.__sStockCode = stockCode
+    def __init__(self, sStockCode, sCompName):
+        self.__sStockCode = sStockCode
+        self.__sCompName = sCompName
 
         ### Snapshot ###
+        self.__sMarket =''
         self.__dRoe_y1 = math.nan
         self.__dRoe_y2 = math.nan
         self.__dRoe_y3 = math.nan
@@ -60,8 +62,14 @@ class CFnguideData:
     def StockCode(self):
         return self.__sStockCode
 
+    def CompName(self):
+        return self.__sCompName
+
     ### Snapshot ###
     # Setter
+    def SetMarket(self, sMarket):
+        self.__sMarket = sMarket
+
     def SetRoe_y1(self, dRoe_y1):
         self.__dRoe_y1 = dRoe_y1
 
@@ -102,6 +110,9 @@ class CFnguideData:
         self.__dDivIncome = dDivIncome
 
     # Getter
+    def Market(self):
+        return self.__sMarket
+
     def Roe_y1(self):
         return self.__dRoe_y1
 
@@ -303,25 +314,20 @@ class CFnguideData:
     def InterCovRate(self):
         return self.__dInterCovRate
 
-
-
-
 class CFnguideModel:
-    def __init__(self, stockCode):
-        self.__stockCode = stockCode
-        self.__Data = CFnguideData(stockCode)
+    def __init__(self, sStockCode, sCompName):
+        self.__sStockCode = sStockCode
+        self.__Data = CFnguideData(sStockCode, sCompName)
 
     def Data(self):
         return self.__Data
 
     def CrawlSnapshot(self):
-        print(" >>> Crawling Snaptshot ...")
-
         try:
             # Get Request
             url = 'http://comp.fnguide.com/SVO2/ASP/SVD_Main.asp?pGB=1&gicode=A{}' \
                   '&cID=&MenuYn=Y&ReportGB=&NewMenuID=101&stkGb=701'\
-                .format(self.__stockCode)
+                .format(self.__sStockCode)
             response = requests.get(url)
 
             ########## [Financial Highlight 테이블] ##########
@@ -406,6 +412,7 @@ class CFnguideModel:
                                          '> div.corp_group1 > p '
                                          '> span.stxt.stxt1').string
             strMarket = market_str.split()[0]
+            self.__Data.SetMarket(strMarket)
 
 
             sPer = html.select_one('#corp_group2 > dl:nth-child(1) > dd').string
@@ -436,26 +443,24 @@ class CFnguideModel:
             return True
 
         except ValueError:
-            print("         # ValueError : {}".format(self.__stockCode))
+            print("         # ValueError : {}".format(self.__sStockCode))
             print("           => pd.read_html() 실패 시 발생 가능. Table이 없는 Page")
             return False
         except KeyError:
-            print("         # KeyError : {}".format(self.__stockCode))
+            print("         # KeyError : {}".format(self.__sStockCode))
             print("           => df.loc[] 실패 시 발생 가능 ('해당 row/col Key가 없는 Table)")
             return False
         except IndexError:
-            print("         # IndexError : {}".format(self.__stockCode))
+            print("         # IndexError : {}".format(self.__sStockCode))
             return False
 
 
     def CrawlFinStat(self):
-        print(" >>> Crawling Financial Statements  ...")
-
         try:
             # Get Request
             url = 'http://comp.fnguide.com/SVO2/ASP/SVD_Finance.asp?pGB=1&gicode=A{}' \
                   '&cID=&MenuYn=Y&ReportGB=&NewMenuID=103&stkGb=701' \
-                .format(self.__stockCode)
+                .format(self.__sStockCode)
             response = requests.get(url)
 
             ########## [포괄손익계산서 테이블] ##########
@@ -577,27 +582,25 @@ class CFnguideModel:
             return True
 
         except ValueError:
-            print("         # ValueError : {}".format(self.__stockCode))
+            print("         # ValueError : {}".format(self.__sStockCode))
             print("           => pd.read_html() 실패 시 발생 가능. Table이 없는 Page")
             return False
         except KeyError:
-            print("         # KeyError : {}".format(self.__stockCode))
+            print("         # KeyError : {}".format(self.__sStockCode))
             print("           => df.loc[] 실패 시 발생 가능 ('해당 row/col Key가 없는 Table)")
             return False
         except IndexError:
-            print("         # IndexError : {}".format(self.__stockCode))
+            print("         # IndexError : {}".format(self.__sStockCode))
             return False
 
 
 
     def CrawlFinRate(self):
-        print(" >>> Crawling Financial Rate  ...")
-
         try:
             # Get Request
             url = 'http://comp.fnguide.com/SVO2/ASP/SVD_FinanceRatio.asp?pGB=1&gicode=A{}' \
                   '&cID=&MenuYn=Y&ReportGB=&NewMenuID=104&stkGb=701' \
-                .format(self.__stockCode)
+                .format(self.__sStockCode)
             response = requests.get(url)
 
             ########## [재무비율 테이블] ##########
@@ -642,23 +645,16 @@ class CFnguideModel:
             return True
 
         except ValueError:
-            print("         # ValueError : {}".format(self.__stockCode))
+            print("         # ValueError : {}".format(self.__sStockCode))
             print("           => pd.read_html() 실패 시 발생 가능 ('match'에 해당하는 Table이 없는 Page)")
             return False
         except KeyError:
-            print("         # KeyError : {}".format(self.__stockCode))
+            print("         # KeyError : {}".format(self.__sStockCode))
             print("           => df.loc[] 실패 시 발생 가능 ('해당 row/col Key가 없는 Table)")
             return False
         except IndexError:
-            print("         # IndexError : {}".format(self.__stockCode))
+            print("         # IndexError : {}".format(self.__sStockCode))
             return False
-
-
-    def ToDictionary(self):
-        retDict = { self.m_Data.m_TagStockCode : self.m_Data.StockCode(),
-                    self.m_Data.m_TagPer : self.m_Data.StockCode() }
-
-        return retDict
 
     #################### [Private Static Members] ####################
     # Additional Tag
@@ -669,6 +665,10 @@ class CFnguideModel:
     __sTagNetLoanRateDum = '(순차입부채 / 총자본) * 100 순차입금비율'
     __sTagInterCovRateDum = '(배)영업이익 / 이자비용(비영업) 이자보상배율'
     __sTagChromeDriverPath = 'chromedriver.exe'
+
+    # 기본정보
+    __sTagStockCode = '종목코드'
+    __sTagCompName = '회사명'
 
     ### Snapshot ###
     # Financial Highlight
