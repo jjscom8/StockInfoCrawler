@@ -144,6 +144,9 @@ class CStockCustomData:
     def SetRoeBsProf_y1(self, dRoeBsProf_y1):
         self.__dRoeBsProf_y1 = dRoeBsProf_y1
 
+    def RoeBsProf_y1(self):
+        return self.__dRoeBsProf_y1
+
     # EPS
     def SetEpsPredQ(self, dEpsPredQ):
         self.__dEpsPredQ = dEpsPredQ
@@ -542,7 +545,6 @@ class CStockCustomModel:
         self.__Data.SetBsProfPredQ(nBsProfPredQ)
 
         # ROE
-        print(nDomNetProfPredQ)
         dRoePredQ = self.RoePredQ(nDomNetProfPredQ, fnData.DomCapLastQ())
         dRoePredY = self.RoePredY(fnData.Roe_y1(), fnData.Roe_y2(), fnData.Roe_y3())
         dRoeBsProf_y1 = self.RoeBsProf(fnData.BsProf_y1(),fnData.DomCap_y1())
