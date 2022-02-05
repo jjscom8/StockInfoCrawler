@@ -18,6 +18,10 @@ class CFnguideData:
         self.__dRoe_y2 = math.nan
         self.__dRoe_y3 = math.nan
         self.__dRoeConsen = math.nan
+        self.__nEps_y1 = math.nan
+        self.__nEps_y2 = math.nan
+        self.__nEps_y3 = math.nan
+        self.__nEpsConsen = math.nan
         self.__nLastPrice = math.nan
         self.__nMarketCap = math.nan
         self.__nStockCntOrd = math.nan
@@ -52,8 +56,6 @@ class CFnguideData:
         self.__nDebtLastQ = math.nan
 
         ### Finance Rate ###
-        self.__nEps_y1 = math.nan
-        self.__nEpsLastQ = math.nan
         self.__dEpsIncrRate = math.nan
         self.__dNetLoanRate = math.nan
         self.__dInterCovRate = math.nan
@@ -81,6 +83,18 @@ class CFnguideData:
 
     def SetRoeConsen(self, dRoeConsen):
         self.__dRoeConsen = dRoeConsen
+
+    def SetEps_y1(self, nEps_y1):
+        self.__nEps_y1 = nEps_y1
+
+    def SetEps_y2(self, nEps_y2):
+        self.__nEps_y2 = nEps_y2
+
+    def SetEps_y3(self, nEps_y3):
+        self.__nEps_y3 = nEps_y3
+
+    def SetEpsConsen(self, nEpsConsen):
+        self.__nEpsConsen = nEpsConsen
 
     def SetLastPrice(self, nLastPrice):
         self.__nLastPrice = nLastPrice
@@ -124,6 +138,18 @@ class CFnguideData:
 
     def RoeConsen(self):
         return self.__dRoeConsen
+
+    def Eps_y1(self):
+        return self.__nEps_y1
+
+    def Eps_y2(self):
+        return self.__nEps_y2
+
+    def Eps_y3(self):
+        return self.__nEps_y3
+
+    def EpsConsen(self):
+        return self.__nEpsConsen
 
     def LastPrice(self):
         return self.__nLastPrice
@@ -282,13 +308,7 @@ class CFnguideData:
         return self.__nDebtLastQ
 
     ### Finance Rate ###
-    # Getter
-    def SetEps_y1(self, nEps_y1):
-        self.__nEps_y1 = nEps_y1
-
-    def SetEpsLastQ(self, nEpsLastQ):
-        self.__nEpsLastQ = nEpsLastQ
-
+    # Setter
     def SetEpsIncrRate(self, dEpsIncrRate):
         self.__dEpsIncrRate = dEpsIncrRate
 
@@ -298,13 +318,7 @@ class CFnguideData:
     def SetInterCovRate(self, dInterCovRate):
         self.__dInterCovRate = dInterCovRate
 
-    # Setter
-    def Eps_y1(self):
-        return self.__nEps_y1
-
-    def EpsLastQ(self):
-        return self.__nEpsLastQ
-
+    # Getter
     def EpsIncrRate(self):
         return self.__dEpsIncrRate
 
@@ -343,6 +357,7 @@ class CFnguideModel:
             fhDf.iloc[:, 2] = pd.to_numeric(fhDf.iloc[:, 2], errors='coerce')
             fhDf.iloc[:, 1] = pd.to_numeric(fhDf.iloc[:, 1], errors='coerce')
             fhDf.iloc[:, 0] = fhDf.iloc[:, 0].str.replace(self.__sTagSpreadDum, "")
+            fhDf.iloc[:, 0] = fhDf.iloc[:, 0].str.replace(self.__sTagEpsSnapshotDum, "",regex=False)
 
             # Column Name
             fhDf.set_index(fhDf.columns[0], inplace=True)
@@ -363,6 +378,15 @@ class CFnguideModel:
             self.__Data.SetRoe_y3(dRoe_y3)
             self.__Data.SetRoeConsen(dRoeConsen)
 
+            nEps_y1 = fhDf.loc[self.__sTagEps, sFhDfCol_y1]
+            nEps_y2 = fhDf.loc[self.__sTagEps, sFhDfCol_y2]
+            nEps_y3 = fhDf.loc[self.__sTagEps, sFhDfCol_y3]
+            nEpsConsen = fhDf.loc[self.__sTagEps, sFhDfColConsen]
+
+            self.__Data.SetEps_y1(nEps_y1)
+            self.__Data.SetEps_y2(nEps_y2)
+            self.__Data.SetEps_y3(nEps_y3)
+            self.__Data.SetEpsConsen(nEpsConsen)
 
             ########## [시세현황 테이블] ##########
             # 시세현황 테이블은 문자를 값으로 갖는 테이블이다.
@@ -628,11 +652,6 @@ class CFnguideModel:
             sfinRateColLastQ = finRateDf.columns[4]
 
             # Get/Set Data
-            nEps_y1 = finRateDf.loc[self.__sTagEps, sfinRateCol_y1]
-            nEpsLastQ = finRateDf.loc[self.__sTagEps, sfinRateColLastQ]
-            self.__Data.SetEps_y1(nEps_y1)
-            self.__Data.SetEpsLastQ(nEpsLastQ)
-
             dEpsIncrRate = finRateDf.loc[self.__sTagEpsIncrRate, sfinRateColLastQ]
             self.__Data.SetEpsIncrRate(dEpsIncrRate)
 
@@ -661,6 +680,7 @@ class CFnguideModel:
     __sTagZeroCapDum = '완전잠식'
     __sTagSpreadDum = "계산에 참여한 계정 펼치기"
     __sTagEpsDum = '지배주주순이익 / 수정평균주식수 EPS'
+    __sTagEpsSnapshotDum = '(원)'
     __sTagEpsIncRateDum = '((수정EPS / 수정EPS(-1Y)) - 1) * 100 EPS증가율'
     __sTagNetLoanRateDum = '(순차입부채 / 총자본) * 100 순차입금비율'
     __sTagInterCovRateDum = '(배)영업이익 / 이자비용(비영업) 이자보상배율'
@@ -675,6 +695,7 @@ class CFnguideModel:
     __sTagFhTableMark = '지배주주지분'
     __sTagMarketPriceMark = '시가총액'
     __sTagRoe = 'ROE'
+    __sTagEps = 'EPS'
     __sTagPrice = '종가'
 
     # 시세현황

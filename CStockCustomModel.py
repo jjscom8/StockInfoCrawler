@@ -31,6 +31,7 @@ class CStockCustomData:
 
         # EPS
         self.__dEpsPredQ = math.nan
+        self.__dEpsPredY = math.nan
         self.__dEpsBsProf_y1 = math.nan # 영업이익으로 계산한 ROE
         self.__dEpsBsProfPredQ = math.nan # 영업이익으로 계산한 EPS
 
@@ -101,12 +102,16 @@ class CStockCustomData:
         self.__nKPriceBsProfPredQ = math.nan
         self.__nKPriceNetProf_y1 = math.nan
         self.__nKPriceNetProfPredQ = math.nan
+        self.__nKPriceNetProfPredY = math.nan
+        self.__nKPriceNetProfConsen = math.nan
 
         # KPRICE 기대수익률
         self.__nKPriceBsProfExpRate_y1= math.nan
         self.__nKPriceBsProfExpRatePredQ = math.nan
         self.__nKPriceNetProfExpRate_y1 = math.nan
         self.__nKPriceNetProfExpRatePredQ = math.nan
+        self.__nKPriceNetProfExpRatePredY = math.nan
+        self.__nKPriceNetProfExpRateConsen = math.nan
 
 
     def SetBondBBB_5Rate(self, dBondBBB_5Rate):
@@ -153,6 +158,12 @@ class CStockCustomData:
 
     def EpsPredQ(self):
         return self.__dEpsPredQ
+
+    def SetEpsPredY(self, dEpsPredY):
+        self.__dEpsPredY = dEpsPredY
+
+    def EpsPredY(self):
+        return self.__dEpsPredY
 
     def SetEpsBsProfPredQ(self, dEpsBsProfPredQ):
         self.__dEpsBsProfPredQ = dEpsBsProfPredQ
@@ -490,6 +501,18 @@ class CStockCustomData:
     def KPriceNetProfPredQ(self):
         return self.__nKPriceNetProfPredQ
 
+    def SetKPriceNetProfPredY(self, nKPriceNetProfPredY):
+        self.__nKPriceNetProfPredY = nKPriceNetProfPredY
+
+    def KPriceNetProfPredY(self):
+        return self.__nKPriceNetProfPredY
+
+    def SetKPriceNetProfConsen(self, nKPriceNetProfConsen):
+        self.__nKPriceNetProfConsen = nKPriceNetProfConsen
+
+    def KPriceNetProfConsen(self):
+        return self.__nKPriceNetProfConsen
+
     # KPRICE 기대수익률
     def SetKPriceBsProfExpRate_y1(self, nKPriceBsProfExpRate_y1):
         self.__nKPriceBsProfExpRate_y1= nKPriceBsProfExpRate_y1
@@ -515,6 +538,18 @@ class CStockCustomData:
 
     def KPriceNetProfExpRatePredQ(self):
         return self.__nKPriceNetProfExpRatePredQ
+
+    def SetKPriceNetProfExpRatePredY(self, nKPriceNetProfExpRatePredY):
+        self.__nKPriceNetProfExpRatePredY = nKPriceNetProfExpRatePredY
+
+    def KPriceNetProfExpRatePredY(self):
+        return self.__nKPriceNetProfExpRatePredY
+
+    def SetKPriceNetProfExpRateConsen(self, nKPriceNetProfExpRateConsen):
+        self.__nKPriceNetProfExpRateConsen = nKPriceNetProfExpRateConsen
+
+    def KPriceNetProfExpRateConsen(self):
+        return self.__nKPriceNetProfExpRateConsen
 
 class CStockCustomModel:
 
@@ -556,9 +591,11 @@ class CStockCustomModel:
 
         # EPS
         dEpsPredQ = self.EpsPredQ(nDomNetProfPredQ, fnData.StockCntTot())
+        dEpsPredY = self.EpsPredY(fnData.Eps_y1(), fnData.Eps_y2(), fnData.Eps_y3())
         dEpsBsProfPredQ = self.EpsBsProfPredQ(nBsProfPredQ, fnData.StockCntTot())
         dEpsBsProf_y1 = self.EpsBsProf(fnData.BsProf_y1(), fnData.StockCntTot())
         self.__Data.SetEpsPredQ(dEpsPredQ)
+        self.__Data.SetEpsPredY(dEpsPredY)
         self.__Data.SetEpsBsProfPredQ(dEpsBsProfPredQ)
         self.__Data.SetEpsBsProf_y1(dEpsBsProf_y1)
 
@@ -584,9 +621,9 @@ class CStockCustomModel:
                                  kisData.BondBBB_5Rate(), 0.9)
         nSRim90_y1 = self.SRim(fnData.DomCapLastQ(), fnData.Roe_y1(),
                                kisData.BondBBB_5Rate(), 0.9)
-        self.__Data.SetSRim90_y1(nSRim90Consen)
-        self.__Data.SetSRim90_y1(nSRim90_y1)
-        self.__Data.SetSRim90_y1(nSRim90_y1)
+        self.__Data.SetSRim90Consen(nSRim90Consen)
+        self.__Data.SetSRim90PredQ(nSRim90PredQ)
+        self.__Data.SetSRim90PredY(nSRim90PredY)
         self.__Data.SetSRim90_y1(nSRim90_y1)
 
         nSRim100Consen = self.SRim(fnData.DomCapLastQ(), fnData.RoeConsen(),
@@ -597,9 +634,9 @@ class CStockCustomModel:
                                   kisData.BondBBB_5Rate(), 1.0)
         nSRim100_y1 = self.SRim(fnData.DomCapLastQ(), fnData.Roe_y1(),
                                 kisData.BondBBB_5Rate(), 1.0)
-        self.__Data.SetSRim100_y1(nSRim100Consen)
-        self.__Data.SetSRim100_y1(nSRim100_y1)
-        self.__Data.SetSRim100_y1(nSRim100_y1)
+        self.__Data.SetSRim100Consen(nSRim100Consen)
+        self.__Data.SetSRim100PredQ(nSRim100PredQ)
+        self.__Data.SetSRim100PredY(nSRim100PredY)
         self.__Data.SetSRim100_y1(nSRim100_y1)
 
         # SRIM 적정주가
@@ -694,22 +731,32 @@ class CStockCustomModel:
         # KPRICE
         nKPriceBsProf_y1 = self.KPrice(dEpsBsProf_y1, dRoeBsProf_y1)
         nKPriceBsProfPredQ = self.KPrice(dEpsBsProfPredQ, dRoeBsProfPredQ)
-        nKPriceNetProf_y1 = self.KPrice(fnData.Eps_y1(),fnData.Roe_y1())
-        nKPriceNetProfPredQ = self.KPrice(dEpsPredQ, dRoePredQ)
         self.__Data.SetKPriceBsProf_y1(nKPriceBsProf_y1)
         self.__Data.SetKPriceBsProfPredQ(nKPriceBsProfPredQ)
+
+        nKPriceNetProf_y1 = self.KPrice(fnData.Eps_y1(),fnData.Roe_y1())
+        nKPriceNetProfPredQ = self.KPrice(dEpsPredQ, dRoePredQ)
+        nKPriceNetProfPredY = self.KPrice(dEpsPredY, dRoePredY)
+        nKPriceNetProfConsen = self.KPrice(fnData.EpsConsen(), fnData.RoeConsen())
         self.__Data.SetKPriceNetProf_y1(nKPriceNetProf_y1)
         self.__Data.SetKPriceNetProfPredQ(nKPriceNetProfPredQ)
+        self.__Data.SetKPriceNetProfPredY(nKPriceNetProfPredY)
+        self.__Data.SetKPriceNetProfConsen(nKPriceNetProfConsen)
 
         # KPRICE 기대수익률
         nKPriceBsProfExpRate_y1 = self.ExpReturnRate(nKPriceBsProf_y1, fnData.LastPrice())
         nKPriceBsProfExpRatePredQ = self.ExpReturnRate(nKPriceBsProfPredQ, fnData.LastPrice())
-        nKPriceNetProfExpRate_y1 = self.ExpReturnRate(nKPriceNetProf_y1, fnData.LastPrice())
-        nKPriceNetProfExpRatePredQ = self.ExpReturnRate(nKPriceNetProfPredQ, fnData.LastPrice())
         self.__Data.SetKPriceBsProfExpRate_y1(nKPriceBsProfExpRate_y1)
         self.__Data.SetKPriceBsProfExpRatePredQ(nKPriceBsProfExpRatePredQ)
+
+        nKPriceNetProfExpRate_y1 = self.ExpReturnRate(nKPriceNetProf_y1, fnData.LastPrice())
+        nKPriceNetProfExpRatePredQ = self.ExpReturnRate(nKPriceNetProfPredQ, fnData.LastPrice())
+        nKPriceNetProfExpRatePredY = self.ExpReturnRate(nKPriceNetProfPredY, fnData.LastPrice())
+        nKPriceNetProfExpRateConsen = self.ExpReturnRate(nKPriceNetProfConsen, fnData.LastPrice())
         self.__Data.SetKPriceNetProfExpRate_y1(nKPriceNetProfExpRate_y1)
         self.__Data.SetKPriceNetProfExpRatePredQ(nKPriceNetProfExpRatePredQ)
+        self.__Data.SetKPriceNetProfExpRatePredY(nKPriceNetProfExpRatePredY)
+        self.__Data.SetKPriceNetProfExpRateConsen(nKPriceNetProfExpRateConsen)
 
         return True
 
@@ -721,7 +768,7 @@ class CStockCustomModel:
         if self.QuarterNum(sLastQ) == 4:
             return nDomNetProfLastQ
 
-        dIncRate = (nDomNetProfLastQ - nDomNetProfLastQ_y1) / nDomNetProfLastQ_y1
+        dIncRate = (nDomNetProfLastQ - nDomNetProfLastQ_y1) / abs(nDomNetProfLastQ_y1)
         nDomNetProfPredQ = nDomNetProf_y1 + abs(nDomNetProf_y1)*dIncRate
 
         return nDomNetProfPredQ
@@ -734,7 +781,7 @@ class CStockCustomModel:
         if self.QuarterNum(sLastQ) == 4:
             return nBsProfLastQ
 
-        dIncRate = (nBsProfLastQ - nBsProfLastQ_y1) / nBsProfLastQ_y1
+        dIncRate = (nBsProfLastQ - nBsProfLastQ_y1) / abs(nBsProfLastQ_y1)
         nBsProfPredQ = nBsProf_y1 + abs(nBsProf_y1)*dIncRate
 
         return nBsProfPredQ
@@ -779,7 +826,7 @@ class CStockCustomModel:
             return math.nan
 
         dRoePredY = math.nan
-        if self.HasRoeTrend(dRoe_y1, dRoe_y2, dRoe_y3):
+        if self.HasTrend(dRoe_y1, dRoe_y2, dRoe_y3):
             dRoePredY = dRoe_y3
         else:
             dTotalRoe = 0
@@ -814,6 +861,23 @@ class CStockCustomModel:
         dEpsPredQ = nDomNetProfPredQ / nStockCntTot * unit
         return dEpsPredQ
 
+    def EpsPredY(self, nEps_y1, nEps_y2, nEps_y3):
+        if math.isnan(nEps_y1) or math.isnan(nEps_y2) or math.isnan(nEps_y3):
+            return math.nan
+
+        nEpsPredY = math.nan
+        if self.HasTrend(nEps_y1, nEps_y2, nEps_y3):
+            nEpsPredY = nEps_y3
+        else:
+            dTotalEps = 0
+            weight = 0
+            for index, val in enumerate([nEps_y3, nEps_y2, nEps_y1]):
+                dTotalEps = dTotalEps + val * (index + 1)
+                weight = weight + (index + 1)
+
+            nEpsPredY = dTotalEps / weight
+
+        return nEpsPredY
 
     def EpsBsProfPredQ(self, nBsProfPredQ, nStockCntTot, unit = 100000000 ):
         if math.isnan(nBsProfPredQ) or math.isnan(nStockCntTot):
@@ -858,13 +922,13 @@ class CStockCustomModel:
 
 
     ### Util Function ###
-    def HasRoeTrend(self, dRoe_y1, dRoe_y2, dRoe_y3):
+    def HasTrend(self, val_y1, val_y2, val_y3):
         # 증가 추세이거나 감소추세일때 변화폭 확인
-        if math.isnan(dRoe_y1) or math.isnan(dRoe_y2) or math.isnan(dRoe_y3):
+        if math.isnan(val_y1) or math.isnan(val_y2) or math.isnan(val_y3):
             return False
 
-        if (dRoe_y1 > dRoe_y2 and dRoe_y2 > dRoe_y3) \
-                or (dRoe_y1 < dRoe_y2 and dRoe_y2 < dRoe_y3):
+        if (val_y1 > val_y2 and val_y2 > val_y3) \
+                or (val_y1 < val_y2 and val_y2 < val_y3):
             return True
 
         return False

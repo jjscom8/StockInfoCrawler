@@ -16,11 +16,20 @@ class CStockResultData:
                 self.__sTagRoe_y1,
                 self.__sTagRoe_y2,
                 self.__sTagRoe_y3,
-                self.__sTagRoeConsen,
                 self.__sTagRoePredQ,
                 self.__sTagRoePredY,
-                self.__sTagRoeBsProfPredQ,  # 영업이익으로 계산한 ROE
-                self.__sTagRoeBsProf_y1,  # 영업이익으로 계산한 ROE
+                self.__sTagRoeConsen,
+                # self.__sTagRoeBsProfPredQ,  # 영업이익으로 계산한 ROE
+                # self.__sTagRoeBsProf_y1,  # 영업이익으로 계산한 ROE
+                self.__sTagEps_y1,
+                self.__sTagEps_y2,
+                self.__sTagEps_y3,
+                self.__sTagEpsPredQ,
+                self.__sTagEpsPredY,
+                self.__sTagEpsConsen,
+                self.__sTagEpsIncrRate,
+                # self.__sTagEpsBsProf_y1,
+                # self.__sTagEpsBsProfPredQ,
                 self.__sTagPer,
                 self.__sTagIndusPer,
                 self.__sTagPbr,
@@ -90,12 +99,6 @@ class CStockResultData:
                 self.__sTagStockCntOrd,
                 self.__sTagStockCntPref,
                 self.__sTagStockCntTot,
-                self.__sTagEps_y1,
-                self.__sTagEpsLastQ,
-                self.__sTagEpsPredQ,
-                self.__sTagEpsBsProf_y1,
-                self.__sTagEpsBsProfPredQ,
-                self.__sTagEpsIncrRate,
                 self.__sTagNetLoanRate,
                 self.__sTagInterCovRate,
                 self.__sTagNonBsRate_y1,
@@ -106,14 +109,18 @@ class CStockResultData:
                 self.__sTagCfPatternLastQ,
                 self.__sTagPegr,
                 self.__sTagCortaxCond,
-                self.__sTagKPriceBsProf_y1,
-                self.__sTagKPriceBsProfPredQ,
+                # self.__sTagKPriceBsProf_y1,
+                # self.__sTagKPriceBsProfPredQ,
                 self.__sTagKPriceNetProf_y1,
                 self.__sTagKPriceNetProfPredQ,
-                self.__sTagKPriceBsProfExpRate_y1,
-                self.__sTagKPriceBsProfExpRatePredQ,
+                self.__sTagKPriceNetProfPredY,
+                self.__sTagKPriceNetProfConsen,
+                # self.__sTagKPriceBsProfExpRate_y1,
+                # self.__sTagKPriceBsProfExpRatePredQ,
                 self.__sTagKPriceNetProfExpRate_y1,
                 self.__sTagKPriceNetProfExpRatePredQ,
+                self.__sTagKPriceNetProfExpRatePredY,
+                self.__sTagKPriceNetProfExpRateConsen
             ])
 
 
@@ -127,11 +134,20 @@ class CStockResultData:
             self.__sTagRoe_y1 : fnData.Roe_y1(),
             self.__sTagRoe_y2 : fnData.Roe_y2(),
             self.__sTagRoe_y3 : fnData.Roe_y3(),
-            self.__sTagRoeConsen : fnData.RoeConsen(),
             self.__sTagRoePredQ : customData.RoePredQ(),
             self.__sTagRoePredY : customData.RoePredY(),
-            self.__sTagRoeBsProfPredQ : customData.RoeBsProfPredQ(),
-            self.__sTagRoeBsProf_y1 :customData.RoeBsProf_y1(),
+            self.__sTagRoeConsen : fnData.RoeConsen(),
+            # self.__sTagRoeBsProfPredQ : customData.RoeBsProfPredQ(),
+            # self.__sTagRoeBsProf_y1 :customData.RoeBsProf_y1(),
+            self.__sTagEps_y1 : fnData.Eps_y1(),
+            self.__sTagEps_y2 : fnData.Eps_y2(),
+            self.__sTagEps_y3 : fnData.Eps_y3(),
+            self.__sTagEpsPredQ : customData.EpsPredQ(),
+            self.__sTagEpsPredY: customData.EpsPredY(),
+            self.__sTagEpsConsen : fnData.EpsConsen(),
+            self.__sTagEpsIncrRate : fnData.EpsIncrRate(),
+            # self.__sTagEpsBsProf_y1 : customData.EpsBsProf_y1(),
+            # self.__sTagEpsBsProfPredQ : customData.EpsBsProfPredQ(),
             self.__sTagPer :fnData.Per(),
             self.__sTagIndusPer : fnData.IndusPer(),
             self.__sTagPbr : fnData.Pbr(),
@@ -201,12 +217,6 @@ class CStockResultData:
             self.__sTagStockCntOrd : fnData.StockCntOrd(),
             self.__sTagStockCntPref : fnData.StockCntPref(),
             self.__sTagStockCntTot : fnData.StockCntTot(),
-            self.__sTagEps_y1 : fnData.Eps_y1(),
-            self.__sTagEpsLastQ : fnData.EpsLastQ(),
-            self.__sTagEpsPredQ : customData.EpsPredQ(),
-            self.__sTagEpsBsProf_y1 : customData.EpsBsProf_y1(),
-            self.__sTagEpsBsProfPredQ : customData.EpsBsProfPredQ(),
-            self.__sTagEpsIncrRate : fnData.EpsIncrRate(),
             self.__sTagNetLoanRate : fnData.NetLoanRate(),
             self.__sTagInterCovRate : fnData.InterCovRate(),
             self.__sTagNonBsRate_y1 : customData.NonBsRate_y1(),
@@ -217,14 +227,18 @@ class CStockResultData:
             self.__sTagCfPatternLastQ : customData.CfPatternLastQ(),
             self.__sTagPegr : customData.Pegr(),
             self.__sTagCortaxCond : customData.CortaxCond(),
-            self.__sTagKPriceBsProf_y1 : customData.KPriceBsProf_y1(),
-            self.__sTagKPriceBsProfPredQ : customData.KPriceBsProfPredQ(),
+            # self.__sTagKPriceBsProf_y1 : customData.KPriceBsProf_y1(),
+            # self.__sTagKPriceBsProfPredQ : customData.KPriceBsProfPredQ(),
             self.__sTagKPriceNetProf_y1 : customData.KPriceNetProf_y1(),
             self.__sTagKPriceNetProfPredQ : customData.KPriceNetProfPredQ(),
-            self.__sTagKPriceBsProfExpRate_y1 : customData.KPriceBsProfExpRate_y1(),
-            self.__sTagKPriceBsProfExpRatePredQ : customData.KPriceBsProfExpRatePredQ(),
+            self.__sTagKPriceNetProfPredY : customData.KPriceNetProfPredY(),
+            self.__sTagKPriceNetProfConsen : customData.KPriceNetProfConsen(),
+            # self.__sTagKPriceBsProfExpRate_y1 : customData.KPriceBsProfExpRate_y1(),
+            # self.__sTagKPriceBsProfExpRatePredQ : customData.KPriceBsProfExpRatePredQ(),
             self.__sTagKPriceNetProfExpRate_y1 : customData.KPriceNetProfExpRate_y1(),
-            self.__sTagKPriceNetProfExpRatePredQ : customData.KPriceNetProfExpRatePredQ()
+            self.__sTagKPriceNetProfExpRatePredQ : customData.KPriceNetProfExpRatePredQ(),
+            self.__sTagKPriceNetProfExpRatePredY: customData.KPriceNetProfExpRatePredY(),
+            self.__sTagKPriceNetProfExpRateConsen: customData.KPriceNetProfExpRateConsen()
         }
 
         self.__ResultDf = self.__ResultDf.append(dictData, ignore_index=True)
@@ -244,9 +258,17 @@ class CStockResultData:
     __sTagRoeConsen = 'ROE[CONSEN](%)'
     __sTagRoePredQ = 'ROE[Q+](%)'
     __sTagRoePredY = 'ROE[Y+](%)'
-
-    __sTagRoeBsProfPredQ = 'ROE_영업이익[-Y1](%)'
-    __sTagRoeBsProf_y1 = 'ROE_영업이익[Q+](%)'
+    # __sTagRoeBsProfPredQ = 'ROE_영업이익[-Y1](%)'
+    # __sTagRoeBsProf_y1 = 'ROE_영업이익[Q+](%)'
+    __sTagEps_y1 = 'EPS[-Y1]'
+    __sTagEps_y2 = 'EPS[-Y2]'
+    __sTagEps_y3 = 'EPS[-Y3]'
+    __sTagEpsPredQ = 'EPS[Q+]'
+    __sTagEpsPredY = 'EPS[Y+]'
+    __sTagEpsConsen = 'EPS[CONSEN]'
+    __sTagEpsIncrRate = 'EPS증가율(%)'
+    # __sTagEpsBsProf_y1 = 'EPS_영업이익[-Y1]'
+    # __sTagEpsBsProfPredQ = 'EPS_영업이익[Q+]'
     __sTagPer = 'PER[CUR]'
     __sTagIndusPer = '업종PER[CUR]'
     __sTagPbr = 'PBR[CUR]'
@@ -316,12 +338,6 @@ class CStockResultData:
     __sTagStockCntOrd = '발행주식수_보통주'
     __sTagStockCntPref = '발행주식수_우선주'
     __sTagStockCntTot = '발행주식수_전체'
-    __sTagEps_y1 = 'EPS[-Y1]'
-    __sTagEpsLastQ = 'EPS[Q]'
-    __sTagEpsPredQ = 'EPS[Q+]'
-    __sTagEpsBsProf_y1 = 'EPS_영업이익[-Y1]'
-    __sTagEpsBsProfPredQ = 'EPS_영업이익[Q+]'
-    __sTagEpsIncrRate = 'EPS증가율[Q](%)'
     __sTagNetLoanRate = '순차입금비율[Q](%)(<30)'
     __sTagInterCovRate = '이자보상배율[Q](>1)'
     __sTagNonBsRate_y1 = '비영업/영업이익[-Y1](%)(<30)'
@@ -332,14 +348,18 @@ class CStockResultData:
     __sTagCfPatternLastQ = '현금흐름패턴[Q](+--/-+-)'
     __sTagPegr = 'PEGR[CUR](0.5/1.5)'
     __sTagCortaxCond = '자본잠식[Q]'
-    __sTagKPriceBsProf_y1 = 'Kprice_영업이익[-Y1]'
-    __sTagKPriceBsProfPredQ = 'Kprice_영업이익[Q+]'
+    # __sTagKPriceBsProf_y1 = 'Kprice_영업이익[-Y1]'
+    # __sTagKPriceBsProfPredQ = 'Kprice_영업이익[Q+]'
     __sTagKPriceNetProf_y1 = 'Kprice_순이익[-Y1]'
     __sTagKPriceNetProfPredQ = 'Kprice_순이익[Q+]'
-    __sTagKPriceBsProfExpRate_y1 = 'Kprice_기대수익률_영업이익[-Y1]'
-    __sTagKPriceBsProfExpRatePredQ = 'Kprice_기대수익률_영업이익[Q+]'
+    __sTagKPriceNetProfPredY = 'Kprice_순이익[Y+]'
+    __sTagKPriceNetProfConsen = 'Kprice_순이익[CONSEN]'
+    # __sTagKPriceBsProfExpRate_y1 = 'Kprice_기대수익률_영업이익[-Y1]'
+    # __sTagKPriceBsProfExpRatePredQ = 'Kprice_기대수익률_영업이익[Q+]'
     __sTagKPriceNetProfExpRate_y1 = 'Kprice_기대수익률_순이익[-Y1]'
     __sTagKPriceNetProfExpRatePredQ = 'Kprice_기대수익률_순이익[Q+]'
+    __sTagKPriceNetProfExpRatePredY = 'Kprice_기대수익률_순이익[Y+]'
+    __sTagKPriceNetProfExpRateConsen = 'Kprice_기대수익률_순이익[CONSEN]'
 
 
 class CStockResultModel:

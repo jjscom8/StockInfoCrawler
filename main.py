@@ -59,13 +59,13 @@ if __name__ == '__main__':
         print( '  => Crawling : ' , sCompName, curStockCode)
         fnModel = CFnguideModel(curStockCode, sCompName)
         if not fnModel.CrawlSnapshot() :
-            print( " - Fail :: CrawlSnapshot ")
+            print( "            - Fail :: CrawlSnapshot ")
 
         if not fnModel.CrawlFinStat() :
-            print(" - Fail :: CrawlFinStat ")
+            print("             - Fail :: CrawlFinStat ")
 
         if not fnModel.CrawlFinRate() :
-            print(" - Fail :: CrawlFinRate ")
+            print("             - Fail :: CrawlFinRate ")
 
         fnData = fnModel.Data()
 
