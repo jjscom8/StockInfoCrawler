@@ -39,7 +39,7 @@ if __name__ == '__main__':
     krxCompDf = krxData.CompDf()
 
     #Export Excel
-    sTargetCompsFileName = 'DEVS_TARGET_' + startDateTime.strftime('%Y%m%d_%H%M%S') + '.xlsx'
+    sTargetCompsFileName = 'TAG_RESULT_' + startDateTime.strftime('%Y%m%d_%H%M%S') + '.xlsx'
     sTargetCompsPath = outDir + '/' + sTargetCompsFileName
     krxModel.ExportExcel(sTargetCompsPath)
 
@@ -56,8 +56,9 @@ if __name__ == '__main__':
     for curStockCode in tqdm.tqdm(stockCodes):
         ########## [ Fnguide 크롤링 ] ##########
         sCompName = krxCompDf.loc[curStockCode, krxModel.ColCompName()]
+        sIndustry = krxCompDf.loc[curStockCode, krxModel.ColIndustry()]
         print( '  => Crawling : ' , sCompName, curStockCode)
-        fnModel = CFnguideModel(curStockCode, sCompName)
+        fnModel = CFnguideModel(curStockCode, sCompName, sIndustry)
         if not fnModel.CrawlSnapshot() :
             print( "            - Fail :: CrawlSnapshot ")
 
@@ -81,9 +82,13 @@ if __name__ == '__main__':
         time.sleep(3)
 
     # Export Excel
-    sResFileName = 'DEVS_RESULT_' + startDateTime.strftime('%Y%m%d_%H%M%S') + '.xlsx'
+    sResFileName = 'RAW_RESULT_' + startDateTime.strftime('%Y%m%d_%H%M%S') + '.xlsx'
     sResPath = outDir + '/' + sResFileName
     resModel.ExportExcel(sResPath)
+
+    sSumFileName = 'SUM_RESULT_' + startDateTime.strftime('%Y%m%d_%H%M%S') + '.xlsx'
+    sSumPath = outDir + '/' + sSumFileName
+    resModel.ExportSummaryExcel(sSumPath)
 
 
     endDateTime = datetime.datetime.now()

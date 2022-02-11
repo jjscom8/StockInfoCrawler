@@ -1,6 +1,7 @@
 from CFnguideModel import  CFnguideData
 from CStockCustomModel import  CStockCustomData
 import pandas as pd
+import numpy as np
 import math
 
 
@@ -11,6 +12,7 @@ class CStockResultData:
                 self.__sTagStockCode,
                 self.__sTagCompName,
                 self.__sTagMarket,
+                self.__sTagIndustry,
                 self.__sTagLastQ,
                 self.__sBondBBB_5Rate,
                 self.__sTagRoe_y1,
@@ -129,6 +131,7 @@ class CStockResultData:
             self.__sTagStockCode : stockCode,
             self.__sTagCompName : fnData.CompName(),
             self.__sTagMarket : fnData.Market(),
+            self.__sTagIndustry : fnData.Industry(),
             self.__sTagLastQ : fnData.LastQ(),
             self.__sBondBBB_5Rate : customData.BondBBB_5Rate(),
             self.__sTagRoe_y1 : fnData.Roe_y1(),
@@ -246,16 +249,88 @@ class CStockResultData:
     def ResultDf(self):
         return  self.__ResultDf
 
+    def SummaryCols(self):
+        summaryCols = [
+            self.__sTagStockCode,
+            self.__sTagCompName,
+            self.__sTagLastQ,
+
+            self.__sTagSRimExpRate100Consen,
+            self.__sTagSRimExpRate100PredQ,
+            self.__sTagSRimExpRate100PredY,
+            self.__sTagSRimExpRate100_y1,
+            self.__sTagKPriceNetProfExpRateConsen,
+            self.__sTagKPriceNetProfExpRatePredQ,
+            self.__sTagKPriceNetProfExpRatePredY,
+            self.__sTagKPriceNetProfExpRate_y1,
+
+            self.__sTagCortaxCond,
+            self.__sTagNonBsRateLastQ,
+            self.__sTagNonBsRate_y1,
+            self.__sTagCfBsProfDiffLastQ,
+            self.__sTagCfBsProfDiff_y1,
+
+            self.__sTagCfPatternLastQ,
+            self.__sTagCfPattern_y1,
+            self.__sTagPegr,
+            self.__sTagPer,
+            self.__sTagIndusPer,
+            self.__sTagDivIncome,
+
+            self.__sTagNetLoanRate,
+            self.__sTagInterCovRate,
+        ]
+
+        return summaryCols
+
+
+    def SummaryGroupCols(self):
+        groupCols = [
+            self.__sTagStockGrp,
+            self.__sTagStockGrp,
+            self.__sTagStockGrp,
+
+            self.__sTagSrimPriceGrp,
+            self.__sTagSrimPriceGrp,
+            self.__sTagSrimPriceGrp,
+            self.__sTagSrimPriceGrp,
+            self.__sTagKPriceGrp,
+            self.__sTagKPriceGrp,
+            self.__sTagKPriceGrp,
+            self.__sTagKPriceGrp,
+
+            self.__sTagSafeIndGrp,
+            self.__sTagSafeIndGrp,
+            self.__sTagSafeIndGrp,
+            self.__sTagSafeIndGrp,
+            self.__sTagSafeIndGrp,
+
+            self.__sTagSubIndGrp,
+            self.__sTagSubIndGrp,
+            self.__sTagSubIndGrp,
+            self.__sTagSubIndGrp,
+            self.__sTagSubIndGrp,
+            self.__sTagSubIndGrp,
+
+            self.__sTagDebGrp,
+            self.__sTagDebGrp
+        ]
+
+        resCols = [groupCols, self.SummaryCols()]
+
+        return resCols
+
     # Column Name
     __sTagStockCode = '종목코드'
     __sTagCompName = '회사명'
     __sTagMarket = '시장'
+    __sTagIndustry = '업종'
     __sTagLastQ = '회계분기'
-    __sBondBBB_5Rate = '채권기대수익률(%)'
+    __sBondBBB_5Rate = '채권_EXP(%)'
     __sTagRoe_y1 = 'ROE[-Y1](%)'
     __sTagRoe_y2 = 'ROE[-Y2](%)'
     __sTagRoe_y3 = 'ROE[-Y3](%)'
-    __sTagRoeConsen = 'ROE[CONSEN](%)'
+    __sTagRoeConsen = 'ROE[C](%)'
     __sTagRoePredQ = 'ROE[Q+](%)'
     __sTagRoePredY = 'ROE[Y+](%)'
     # __sTagRoeBsProfPredQ = 'ROE_영업이익[-Y1](%)'
@@ -265,7 +340,7 @@ class CStockResultData:
     __sTagEps_y3 = 'EPS[-Y3]'
     __sTagEpsPredQ = 'EPS[Q+]'
     __sTagEpsPredY = 'EPS[Y+]'
-    __sTagEpsConsen = 'EPS[CONSEN]'
+    __sTagEpsConsen = 'EPS[C]'
     __sTagEpsIncrRate = 'EPS증가율(%)'
     # __sTagEpsBsProf_y1 = 'EPS_영업이익[-Y1]'
     # __sTagEpsBsProfPredQ = 'EPS_영업이익[Q+]'
@@ -291,42 +366,42 @@ class CStockResultData:
     __sTagDomNetProfPredQ = '지배순이익[Q+](억)'
     __sTagBsProfBefTax_y1 = '세전계속사업이익[-Y1](억)'
     __sTagBsProfBefTaxLastQ = '세전계속사업이익[Q](억)'
-    __sTagSRim80Consen = 'SRIM_W80[CONSEN](억)'
+    __sTagSRim80Consen = 'SRIM_W80[C](억)'
     __sTagSRim80PredQ = 'SRIM_W80[Q+](억)'
     __sTagSRim80PredY = 'SRIM_W80[Y+](억)'
     __sTagSRim80_y1 = 'SRIM_W80[-Y1](억)'
-    __sTagSRim90Consen = 'SRIM_W90[CONSEN](억)'
+    __sTagSRim90Consen = 'SRIM_W90[C](억)'
     __sTagSRim90PredQ = 'SRIM_W90[Q+](억)'
     __sTagSRim90PredY = 'SRIM_W90[Y+](억)'
     __sTagSRim90_y1 = 'SRIM_W90[-Y1](억)'
-    __sTagSRim100Consen = 'SRIM_W100[CONSEN](억)'
+    __sTagSRim100Consen = 'SRIM_W100[C](억)'
     __sTagSRim100PredQ = 'SRIM_W100[Q+](억)'
     __sTagSRim100PredY = 'SRIM_W100[Y+](억)'
     __sTagSRim100_y1 = 'SRIM_W100[-Y1](억)'
-    __sTagSRimPrice80Consen = '적정주가_W80[CONSEN]'
+    __sTagSRimPrice80Consen = '적정주가_W80[C]'
     __sTagSRimPrice80PredQ = '적정주가_W80[Q+]'
     __sTagSRimPrice80PredY = '적정주가_W80[Y+]'
     __sTagSRimPrice80_y1 = '적정주가_W80[-Y1]'
-    __sTagSRimPrice90Consen = '적정주가_W90[CONSEN]'
+    __sTagSRimPrice90Consen = '적정주가_W90[C]'
     __sTagSRimPrice90PredQ = '적정주가_W90[Q+]'
     __sTagSRimPrice90PredY = '적정주가_W90[Y+]'
     __sTagSRimPrice90_y1 = '적정주가_W90[-Y1]'
-    __sTagSRimPrice100Consen = '적정주가_W100[CONSEN]'
+    __sTagSRimPrice100Consen = '적정주가_W100[C]'
     __sTagSRimPrice100PredQ = '적정주가_W100[Q+]'
     __sTagSRimPrice100PredY = '적정주가_W100[Y+]'
     __sTagSRimPrice100_y1 = '적정주가_W100[-Y1]'
-    __sTagSRimExpRate80Consen = 'SRIM_기대수익률_W80[CONSEN]'
-    __sTagSRimExpRate80PredQ = 'SRIM_기대수익률_W80[Q+]'
-    __sTagSRimExpRate80PredY = 'SRIM_기대수익률_W80[Y+]'
-    __sTagSRimExpRate80_y1 = 'SRIM_기대수익률_W80[-Y1]'
-    __sTagSRimExpRate90Consen = 'SRIM_기대수익률_W90[CONSEN]'
-    __sTagSRimExpRate90PredQ = 'SRIM_기대수익률_W90[Q+]'
-    __sTagSRimExpRate90PredY = 'SRIM_기대수익률_W90[Y+]'
-    __sTagSRimExpRate90_y1 = 'SRIM_기대수익률_W90[-Y1]'
-    __sTagSRimExpRate100Consen = 'SRIM_기대수익률_W100[CONSEN]'
-    __sTagSRimExpRate100PredQ = 'SRIM_기대수익률_W100[Q+]'
-    __sTagSRimExpRate100PredY = 'SRIM_기대수익률_W100[Y+]'
-    __sTagSRimExpRate100_y1 = 'SRIM_기대수익률_W100[-Y1]'
+    __sTagSRimExpRate80Consen = 'SRIM_EXP_W80[C]'
+    __sTagSRimExpRate80PredQ = 'SRIM_EXP_W80[Q+]'
+    __sTagSRimExpRate80PredY = 'SRIM_EXP_W80[Y+]'
+    __sTagSRimExpRate80_y1 = 'SRIM_EXP_W80[-Y1]'
+    __sTagSRimExpRate90Consen = 'SRIM_EXP_W90[C]'
+    __sTagSRimExpRate90PredQ = 'SRIM_EXP_W90[Q+]'
+    __sTagSRimExpRate90PredY = 'SRIM_EXP_W90[Y+]'
+    __sTagSRimExpRate90_y1 = 'SRIM_EXP_W90[-Y1]'
+    __sTagSRimExpRate100Consen = 'SRIM_EXP_W100[C]'
+    __sTagSRimExpRate100PredQ = 'SRIM_EXP_W100[Q+]'
+    __sTagSRimExpRate100PredY = 'SRIM_EXP_W100[Y+]'
+    __sTagSRimExpRate100_y1 = 'SRIM_EXP_W100[-Y1]'
     __sTagDomCapLastQ = '지배주주자본[Q](억)'
     __sTagDomCap_y1 = '지배주주자본[-Y1](억)'
     __sTagCapOrgLastQ = '자본금[Q](억)'
@@ -353,13 +428,21 @@ class CStockResultData:
     __sTagKPriceNetProf_y1 = 'Kprice_순이익[-Y1]'
     __sTagKPriceNetProfPredQ = 'Kprice_순이익[Q+]'
     __sTagKPriceNetProfPredY = 'Kprice_순이익[Y+]'
-    __sTagKPriceNetProfConsen = 'Kprice_순이익[CONSEN]'
-    # __sTagKPriceBsProfExpRate_y1 = 'Kprice_기대수익률_영업이익[-Y1]'
-    # __sTagKPriceBsProfExpRatePredQ = 'Kprice_기대수익률_영업이익[Q+]'
-    __sTagKPriceNetProfExpRate_y1 = 'Kprice_기대수익률_순이익[-Y1]'
-    __sTagKPriceNetProfExpRatePredQ = 'Kprice_기대수익률_순이익[Q+]'
-    __sTagKPriceNetProfExpRatePredY = 'Kprice_기대수익률_순이익[Y+]'
-    __sTagKPriceNetProfExpRateConsen = 'Kprice_기대수익률_순이익[CONSEN]'
+    __sTagKPriceNetProfConsen = 'Kprice_순이익[C]'
+    # __sTagKPriceBsProfExpRate_y1 = 'Kprice_EXP_영업이익[-Y1]'
+    # __sTagKPriceBsProfExpRatePredQ = 'Kprice_EXP_영업이익[Q+]'
+    __sTagKPriceNetProfExpRate_y1 = 'Kprice_EXP_순이익[-Y1]'
+    __sTagKPriceNetProfExpRatePredQ = 'Kprice_EXP_순이익[Q+]'
+    __sTagKPriceNetProfExpRatePredY = 'Kprice_EXP_순이익[Y+]'
+    __sTagKPriceNetProfExpRateConsen = 'Kprice_EXP_순이익[C]'
+
+    # Group Column Names
+    __sTagStockGrp = '종목'
+    __sTagSrimPriceGrp = '적정주가_SRIM'
+    __sTagKPriceGrp = '적정주가_KPRICE'
+    __sTagSafeIndGrp = '안전지표'
+    __sTagSubIndGrp = '보조지표'
+    __sTagDebGrp = '부채항목'
 
 
 class CStockResultModel:
@@ -374,6 +457,19 @@ class CStockResultModel:
 
     def ExportExcel(self, outPath):
         self.__Data.ResultDf().to_excel(outPath)
+
+    def ExportSummaryExcel(self, outPath):
+
+        resDf = self.__Data.ResultDf()
+        summaryDf = resDf[self.__Data.SummaryCols()]
+        summaryDf.columns = self.__Data.SummaryGroupCols()
+        writer = pd.ExcelWriter(outPath)
+        summaryDf.to_excel(writer,sheet_name='RESULT')
+
+        # 멀티 컬럼으로 EXCEL Export시 헤더 아래 empty row가 생기는 문제 처리
+        writer.sheets['RESULT'].set_row(2,None,None,{'hidden':True})
+        writer.save()
+        # self.__Data.ResultDf().to_excel(outPath, columns=self.__Data.SummaryCols())
 
 
 

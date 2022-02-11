@@ -22,6 +22,9 @@ class CKrxModel:
     def ColCompName(self):
         return self.__sTagName
 
+    def ColIndustry(self):
+        return self.__sTagIndustry
+
     def CrawlCompanies(self, compNames = []):
         try:
             # Excel(.xls)을 다운로드하지만 vim으로 열어보면 실제로는

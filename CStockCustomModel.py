@@ -30,10 +30,10 @@ class CStockCustomData:
         self.__dRoeBsProf_y1 = math.nan # 영업이익으로 계산한 ROE
 
         # EPS
-        self.__dEpsPredQ = math.nan
-        self.__dEpsPredY = math.nan
-        self.__dEpsBsProf_y1 = math.nan # 영업이익으로 계산한 ROE
-        self.__dEpsBsProfPredQ = math.nan # 영업이익으로 계산한 EPS
+        self.__nEpsPredQ = math.nan
+        self.__nEpsPredY = math.nan
+        self.__nEpsBsProf_y1 = math.nan # 영업이익으로 계산한 ROE
+        self.__nEpsBsProfPredQ = math.nan # 영업이익으로 계산한 EPS
 
         # SRIM
         self.__nSRim80Consen = math.nan
@@ -153,29 +153,29 @@ class CStockCustomData:
         return self.__dRoeBsProf_y1
 
     # EPS
-    def SetEpsPredQ(self, dEpsPredQ):
-        self.__dEpsPredQ = dEpsPredQ
+    def SetEpsPredQ(self, nEpsPredQ):
+        self.__nEpsPredQ = nEpsPredQ
 
     def EpsPredQ(self):
-        return self.__dEpsPredQ
+        return self.__nEpsPredQ
 
-    def SetEpsPredY(self, dEpsPredY):
-        self.__dEpsPredY = dEpsPredY
+    def SetEpsPredY(self, nEpsPredY):
+        self.__nEpsPredY = nEpsPredY
 
     def EpsPredY(self):
-        return self.__dEpsPredY
+        return self.__nEpsPredY
 
-    def SetEpsBsProfPredQ(self, dEpsBsProfPredQ):
-        self.__dEpsBsProfPredQ = dEpsBsProfPredQ
+    def SetEpsBsProfPredQ(self, nEpsBsProfPredQ):
+        self.__nEpsBsProfPredQ = nEpsBsProfPredQ
 
     def EpsBsProfPredQ(self):
-        return self.__dEpsBsProfPredQ
+        return self.__nEpsBsProfPredQ
 
-    def SetEpsBsProf_y1(self, dEpsBsProf_y1):
-        self.__dEpsBsProf_y1 = dEpsBsProf_y1
+    def SetEpsBsProf_y1(self, nEpsBsProf_y1):
+        self.__nEpsBsProf_y1 = nEpsBsProf_y1
 
     def EpsBsProf_y1(self):
-        return self.__dEpsBsProf_y1
+        return self.__nEpsBsProf_y1
 
     # SRIM
     def SetSRim80Consen(self, nSRim80Consen):
@@ -590,14 +590,14 @@ class CStockCustomModel:
         self.__Data.SetRoeBsProfPredQ(dRoeBsProfPredQ)
 
         # EPS
-        dEpsPredQ = self.EpsPredQ(nDomNetProfPredQ, fnData.StockCntTot())
-        dEpsPredY = self.EpsPredY(fnData.Eps_y1(), fnData.Eps_y2(), fnData.Eps_y3())
-        dEpsBsProfPredQ = self.EpsBsProfPredQ(nBsProfPredQ, fnData.StockCntTot())
-        dEpsBsProf_y1 = self.EpsBsProf(fnData.BsProf_y1(), fnData.StockCntTot())
-        self.__Data.SetEpsPredQ(dEpsPredQ)
-        self.__Data.SetEpsPredY(dEpsPredY)
-        self.__Data.SetEpsBsProfPredQ(dEpsBsProfPredQ)
-        self.__Data.SetEpsBsProf_y1(dEpsBsProf_y1)
+        nEpsPredQ = self.EpsPredQ(nDomNetProfPredQ, fnData.StockCntTot())
+        nEpsPredY = self.EpsPredY(fnData.Eps_y1(), fnData.Eps_y2(), fnData.Eps_y3())
+        nEpsBsProfPredQ = self.EpsBsProfPredQ(nBsProfPredQ, fnData.StockCntTot())
+        nEpsBsProf_y1 = self.EpsBsProf(fnData.BsProf_y1(), fnData.StockCntTot())
+        self.__Data.SetEpsPredQ(nEpsPredQ)
+        self.__Data.SetEpsPredY(nEpsPredY)
+        self.__Data.SetEpsBsProfPredQ(nEpsBsProfPredQ)
+        self.__Data.SetEpsBsProf_y1(nEpsBsProf_y1)
 
         # SRIM
         nSRim80Consen = self.SRim(fnData.DomCapLastQ(), fnData.RoeConsen(),
@@ -729,14 +729,14 @@ class CStockCustomModel:
         self.__Data.SetCortaxCond(sCortaxCond)
 
         # KPRICE
-        nKPriceBsProf_y1 = self.KPrice(dEpsBsProf_y1, dRoeBsProf_y1)
-        nKPriceBsProfPredQ = self.KPrice(dEpsBsProfPredQ, dRoeBsProfPredQ)
+        nKPriceBsProf_y1 = self.KPrice(nEpsBsProf_y1, dRoeBsProf_y1)
+        nKPriceBsProfPredQ = self.KPrice(nEpsBsProfPredQ, dRoeBsProfPredQ)
         self.__Data.SetKPriceBsProf_y1(nKPriceBsProf_y1)
         self.__Data.SetKPriceBsProfPredQ(nKPriceBsProfPredQ)
 
         nKPriceNetProf_y1 = self.KPrice(fnData.Eps_y1(),fnData.Roe_y1())
-        nKPriceNetProfPredQ = self.KPrice(dEpsPredQ, dRoePredQ)
-        nKPriceNetProfPredY = self.KPrice(dEpsPredY, dRoePredY)
+        nKPriceNetProfPredQ = self.KPrice(nEpsPredQ, dRoePredQ)
+        nKPriceNetProfPredY = self.KPrice(nEpsPredY, dRoePredY)
         nKPriceNetProfConsen = self.KPrice(fnData.EpsConsen(), fnData.RoeConsen())
         self.__Data.SetKPriceNetProf_y1(nKPriceNetProf_y1)
         self.__Data.SetKPriceNetProfPredQ(nKPriceNetProfPredQ)
@@ -771,7 +771,7 @@ class CStockCustomModel:
         dIncRate = (nDomNetProfLastQ - nDomNetProfLastQ_y1) / abs(nDomNetProfLastQ_y1)
         nDomNetProfPredQ = nDomNetProf_y1 + abs(nDomNetProf_y1)*dIncRate
 
-        return nDomNetProfPredQ
+        return math.trunc(nDomNetProfPredQ)
 
     # 영업이익
     def BsProfPredQ(self, sLastQ, nBsProf_y1, nBsProfLastQ, nBsProfLastQ_y1):
@@ -784,33 +784,33 @@ class CStockCustomModel:
         dIncRate = (nBsProfLastQ - nBsProfLastQ_y1) / abs(nBsProfLastQ_y1)
         nBsProfPredQ = nBsProf_y1 + abs(nBsProf_y1)*dIncRate
 
-        return nBsProfPredQ
+        return math.trunc(nBsProfPredQ)
 
     # 비영업이익
     def NonBsProf_y1(self, nBsProfBefTax_y1, nBsProf_y1):
         if math.isnan(nBsProfBefTax_y1) or math.isnan(nBsProf_y1):
             return math.nan
         nNonBsProf_y1 = nBsProfBefTax_y1 - nBsProf_y1
-        return nNonBsProf_y1
+        return math.trunc(nNonBsProf_y1)
 
     def NonBsProfLastQ(self, nBsProfBefTaxLastQ, nBsProfLastQ):
         if math.isnan(nBsProfBefTaxLastQ) or math.isnan(nBsProfLastQ):
             return math.nan
         nNonBsProfLastQ = nBsProfBefTaxLastQ - nBsProfLastQ
-        return nNonBsProfLastQ
+        return math.trunc(nNonBsProfLastQ)
 
     # 비영업이익 비율
     def NonBsRate_y1(self, nBsProf_y1, nNonBsProf_y1):
         if math.isnan(nBsProf_y1) or math.isnan(nNonBsProf_y1):
             return math.nan
         dNonBsRate_y1 = nNonBsProf_y1 / nBsProf_y1 * 100
-        return dNonBsRate_y1
+        return round(dNonBsRate_y1,2)
 
     def NonBsRateLastQ(self, nBsProfLastQ, nNonBsProfLastQ ):
         if math.isnan(nBsProfLastQ) or math.isnan(nNonBsProfLastQ):
             return math.nan
         dNonBsRateLastQ = nNonBsProfLastQ / nBsProfLastQ * 100
-        return dNonBsRateLastQ
+        return round(dNonBsRateLastQ,2)
 
     # ROE
     def RoePredQ(self, nDomNetProfPredQ, nDomCapLastQ):
@@ -818,7 +818,7 @@ class CStockCustomModel:
             return math.nan
 
         dRoePredQ = nDomNetProfPredQ / nDomCapLastQ * 100
-        return dRoePredQ
+        return round(dRoePredQ,2)
 
 
     def RoePredY(self, dRoe_y1, dRoe_y2, dRoe_y3):
@@ -837,29 +837,29 @@ class CStockCustomModel:
 
             dRoePredY = dTotalRoe / weight
 
-        return dRoePredY
+        return round(dRoePredY,2)
 
     def RoeBsProf(self, nBsProf, nDomCap ):
         if math.isnan(nBsProf) or math.isnan(nDomCap):
             return math.nan
 
         dRoeBsProf= nBsProf / nDomCap * 100
-        return dRoeBsProf
+        return round(dRoeBsProf,2)
 
     def RoeBsProfPredQ(self, nBsProfPredQ, nDomCapLastQ ):
         if math.isnan(nBsProfPredQ) or math.isnan(nDomCapLastQ):
             return math.nan
 
         dRoeBsProfPredQ = nBsProfPredQ / nDomCapLastQ * 100
-        return dRoeBsProfPredQ
+        return round(dRoeBsProfPredQ,2)
 
     # EPS
     def EpsPredQ(self, nDomNetProfPredQ, nStockCntTot, unit = 100000000 ):
         if math.isnan(nDomNetProfPredQ) or math.isnan(nStockCntTot):
             return math.nan
 
-        dEpsPredQ = nDomNetProfPredQ / nStockCntTot * unit
-        return dEpsPredQ
+        nEpsPredQ = nDomNetProfPredQ / nStockCntTot * unit
+        return math.trunc(nEpsPredQ)
 
     def EpsPredY(self, nEps_y1, nEps_y2, nEps_y3):
         if math.isnan(nEps_y1) or math.isnan(nEps_y2) or math.isnan(nEps_y3):
@@ -877,32 +877,32 @@ class CStockCustomModel:
 
             nEpsPredY = dTotalEps / weight
 
-        return nEpsPredY
+        return math.trunc(nEpsPredY)
 
     def EpsBsProfPredQ(self, nBsProfPredQ, nStockCntTot, unit = 100000000 ):
         if math.isnan(nBsProfPredQ) or math.isnan(nStockCntTot):
             return math.nan
 
-        dEpsBsProfPredQ = nBsProfPredQ / nStockCntTot * unit
-        return dEpsBsProfPredQ
+        nEpsBsProfPredQ = nBsProfPredQ / nStockCntTot * unit
+        return math.trunc(nEpsBsProfPredQ)
 
     def EpsBsProf(self, nBsProf, nStockCntTot, unit = 100000000 ):
         if math.isnan(nBsProf) or math.isnan(nStockCntTot):
             return math.nan
 
-        dEpsBsProf = nBsProf / nStockCntTot * unit
-        return dEpsBsProf
+        nEpsBsProf = nBsProf / nStockCntTot * unit
+        return math.trunc(nEpsBsProf)
 
     #SRIM
     def SRim(self, nDomCapLastQ, dRoeRate, dBondRate, w):
         if math.isnan(nDomCapLastQ) or math.isnan(dRoeRate) or math.isnan(dBondRate):
             return math.nan
 
-        dSrim = nDomCapLastQ \
+        nSrim = nDomCapLastQ \
                 + (nDomCapLastQ * (dRoeRate - dBondRate)) \
                 * w / (1 + dBondRate - w)
 
-        return dSrim
+        return math.trunc(nSrim)
 
     def SRimPrice(self, nSRim, nStockCnt, unit = 100000000 ):
         if math.isnan(nSRim) or math.isnan(nStockCnt):
@@ -910,15 +910,18 @@ class CStockCustomModel:
 
         nSRimPrice = nSRim / nStockCnt * unit
 
-        return nSRimPrice
+        return math.trunc(nSRimPrice)
 
-    def KPrice(self, dEps, dRoe):
-        if math.isnan(dEps) or math.isnan(dRoe):
+    def KPrice(self, nEps, dRoe):
+        if math.isnan(nEps) or math.isnan(dRoe):
             return math.nan
 
-        nKPrice = dEps*dRoe
+        if nEps < 0 or dRoe < 0:
+            return math.nan
 
-        return nKPrice
+        nKPrice = nEps*dRoe
+
+        return math.trunc(nKPrice)
 
 
     ### Util Function ###
@@ -939,13 +942,14 @@ class CStockCustomModel:
 
         dExpReturnRate = (nExpPrice - nLastPrice) / nLastPrice * 100
 
-        return dExpReturnRate
+        return round(dExpReturnRate,2)
 
     def DiffVal(self, val1, val2):
         if math.isnan(val1) or math.isnan(val2):
             return math.nan
 
-        return val1 - val2
+        diffVal = val1 - val2
+        return diffVal
 
     def CfPattern(self, nCfBs, nCfInv, nCfFin ):
         if math.isnan(nCfBs) or math.isnan(nCfInv) or math.isnan(nCfFin):
@@ -973,7 +977,8 @@ class CStockCustomModel:
         if math.isnan(dEpsIncrRate) or math.isnan(dPer):
             return math.nan
 
-        return dPer/dEpsIncrRate
+        dPegr = dPer / dEpsIncrRate
+        return round(dPegr,2)
 
     def CortaxCond(self, nCapTotal, nCapOrg):
         if math.isnan(nCapTotal) or math.isnan(nCapOrg):

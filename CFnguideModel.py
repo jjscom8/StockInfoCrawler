@@ -8,9 +8,10 @@ from selenium import webdriver
 
 class CFnguideData:
     ### Data ###
-    def __init__(self, sStockCode, sCompName):
+    def __init__(self, sStockCode, sCompName, sIndustry = ""):
         self.__sStockCode = sStockCode
         self.__sCompName = sCompName
+        self.__sIndustry = sIndustry
 
         ### Snapshot ###
         self.__sMarket =''
@@ -66,6 +67,9 @@ class CFnguideData:
 
     def CompName(self):
         return self.__sCompName
+
+    def Industry(self):
+        return self.__sIndustry
 
     ### Snapshot ###
     # Setter
@@ -329,9 +333,9 @@ class CFnguideData:
         return self.__dInterCovRate
 
 class CFnguideModel:
-    def __init__(self, sStockCode, sCompName):
+    def __init__(self, sStockCode, sCompName, sIndustry=""):
         self.__sStockCode = sStockCode
-        self.__Data = CFnguideData(sStockCode, sCompName)
+        self.__Data = CFnguideData(sStockCode, sCompName, sIndustry)
 
     def Data(self):
         return self.__Data
