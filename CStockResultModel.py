@@ -1,9 +1,7 @@
 from CFnguideModel import  CFnguideData
 from CStockCustomModel import  CStockCustomData
 import pandas as pd
-import numpy as np
-import math
-
+import os
 
 class CStockResultData:
     def __init__(self):
@@ -455,25 +453,46 @@ class CStockResultModel:
     def AppendData(self, stockCode : str, fnData: CFnguideData , customData: CStockCustomData):
         self.__Data.AppendData(stockCode, fnData, customData)
 
-    def ExportExcel(self, outPath):
-        self.__Data.ResultDf().to_excel(outPath)
+    def ExportExcel(self, sOutPath, sSheetName):
+        resDf = self.__Data.ResultDf()
 
-    def ExportSummaryExcel(self, outPath):
+        if not os.path.exists(sOutPath):
+            with pd.ExcelWriter(sOutPath, mode='w', engine='openpyxl') as writer:
+                resDf.to_excel(writer, sheet_name=sSheetName)
+                # writer.save()
+        else:
+            with pd.ExcelWriter(sOutPath, mode='a', engine='openpyxl') as writer:
+                resDf.to_excel(writer, sheet_name=sSheetName)
+                # writer.save()
 
+    def ExportSummaryExcel(self, sOutPath, sSheetName):
         resDf = self.__Data.ResultDf()
         summaryDf = resDf[self.__Data.SummaryCols()]
         summaryDf.columns = self.__Data.SummaryGroupCols()
-        writer = pd.ExcelWriter(outPath)
-        summaryDf.to_excel(writer,sheet_name='RESULT')
 
-        # 멀티 컬럼으로 EXCEL Export시 헤더 아래 empty row가 생기는 문제 처리
-        writer.sheets['RESULT'].set_row(2,None,None,{'hidden':True})
-        writer.save()
-        # self.__Data.ResultDf().to_excel(outPath, columns=self.__Data.SummaryCols())
+        if not os.path.exists(sOutPath):
+            with pd.ExcelWriter(sOutPath, mode='w', engine='openpyxl') as writer:
+                summaryDf.to_excel(writer, sheet_name=sSheetName)
+        else:
+            with pd.ExcelWriter(sOutPath, mode='a', engine='openpyxl') as writer:
+                summaryDf.to_excel(writer, sheet_name=sSheetName)
+                sheet = writer.sheets[sSheetName]
+                # 멀티 컬럼으로 EXCEL Export시 헤더 아래 Empty row 삭제
+                sheet.delete_rows(3)
 
+        # 위에서 engine을 openpyxl로 하게되면 아래 코드가 호환되지 않는다.
+        # 그러나 append 모드로 열기위해서는 위 엔진을 사용해야한다.
 
-
-
+        # resDf = self.__Data.ResultDf()
+        # summaryDf = resDf[self.__Data.SummaryCols()]
+        # summaryDf.columns = self.__Data.SummaryGroupCols()
+        #
+        # writer = pd.ExcelWriter(sOutPath)
+        # summaryDf.to_excel(writer,sheet_name=sSheetName)
+        #
+        # # 멀티 컬럼으로 EXCEL Export시 헤더 아래 empty row가 생기는 문제 처리
+        # writer.sheets[sSheetName].set_row(2,None,None,{'hidden':True})
+        # writer.save()
 
 
 

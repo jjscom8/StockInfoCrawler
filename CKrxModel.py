@@ -1,5 +1,6 @@
 import pandas as pd
 import requests
+import os
 from io import BytesIO
 
 class CKrxData:
@@ -75,8 +76,16 @@ class CKrxModel:
             print("         # IndexError : {}".format(self.__stockCode))
             return False
 
-    def ExportExcel(self, outPath):
-        self.__Data.CompDf().to_excel(outPath)
+    def ExportExcel(self, sOutPath, sSheetName):
+        resDf = self.__Data.CompDf()
+        if not os.path.exists(sOutPath):
+            with pd.ExcelWriter(sOutPath, mode='w', engine='openpyxl') as writer:
+                resDf.to_excel(writer, sheet_name=sSheetName)
+                # writer.save()
+        else:
+            with pd.ExcelWriter(sOutPath, mode='a', engine='openpyxl') as writer:
+                resDf.to_excel(writer, sheet_name=sSheetName)
+                # writer.save()
 
     # Header
     __sTagName = '회사명'

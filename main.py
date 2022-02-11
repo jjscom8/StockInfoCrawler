@@ -38,10 +38,6 @@ if __name__ == '__main__':
     krxData = krxModel.Data()
     krxCompDf = krxData.CompDf()
 
-    #Export Excel
-    sTargetCompsFileName = 'TAG_RESULT_' + startDateTime.strftime('%Y%m%d_%H%M%S') + '.xlsx'
-    sTargetCompsPath = outDir + '/' + sTargetCompsFileName
-    krxModel.ExportExcel(sTargetCompsPath)
 
     ########## [ KIS 채권정보 크롤링 ] ##########
     kisModel = CKisRatingModel()
@@ -82,18 +78,17 @@ if __name__ == '__main__':
         time.sleep(3)
 
     # Export Excel
-    sResFileName = 'RAW_RESULT_' + startDateTime.strftime('%Y%m%d_%H%M%S') + '.xlsx'
-    sResPath = outDir + '/' + sResFileName
-    resModel.ExportExcel(sResPath)
+    sResFileName = 'DEVS_' + startDateTime.strftime('%Y%m%d_%H%M%S') + '.xlsx'
+    sResFilePath = outDir + '/' + sResFileName
 
-    sSumFileName = 'SUM_RESULT_' + startDateTime.strftime('%Y%m%d_%H%M%S') + '.xlsx'
-    sSumPath = outDir + '/' + sSumFileName
-    resModel.ExportSummaryExcel(sSumPath)
+    krxModel.ExportExcel(sResFilePath, 'TARGET')
+    resModel.ExportExcel(sResFilePath, 'RAW')
+    resModel.ExportSummaryExcel(sResFilePath, 'SUMMARY')
 
 
     endDateTime = datetime.datetime.now()
 
-    print(' - FINISH CRAWLING :: ', sResPath)
+    print(' - FINISH CRAWLING :: ', sResFilePath)
     print(' => START DATE TIME :: ' , startDateTime.strftime('%Y-%m-%d %H:%M:%S'))
     print(' => END DATE TIME :: ', endDateTime.strftime('%Y-%m-%d %H:%M:%S'))
     print(' => RUNNING TIME :: ', endDateTime - startDateTime)
