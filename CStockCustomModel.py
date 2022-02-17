@@ -81,6 +81,7 @@ class CStockCustomData:
         self.__dSRimExpRate100Consen = math.nan
         self.__dSRimExpRate100PredQ = math.nan
         self.__dSRimExpRate100PredY = math.nan
+        self.__dSRimExpRateAvg100 = math.nan
         self.__dSRimExpRate100_y1 = math.nan
 
         # 영업현금흐름 - 영업이익
@@ -112,6 +113,10 @@ class CStockCustomData:
         self.__nKPriceNetProfExpRatePredQ = math.nan
         self.__nKPriceNetProfExpRatePredY = math.nan
         self.__nKPriceNetProfExpRateConsen = math.nan
+
+        # Pass/Fail
+        self.__bPassFail = ''
+        self.__sFailReason = ''
 
 
     def SetBondBBB_5Rate(self, dBondBBB_5Rate):
@@ -401,6 +406,12 @@ class CStockCustomData:
     def SRimExpRate100_y1(self):
         return self.__dSRimExpRate100_y1
 
+    def SetSRimExpRateAvg100(self, dSRimExpRateAvg100):
+        self.__dSRimExpRateAvg100 = dSRimExpRateAvg100
+
+    def SRimExpRateAvg100(self):
+        return self.__dSRimExpRateAvg100
+
     # 영업이익
     def SetBsProfPredQ(self, nBsProfPredQ):
         self.__nBsProfPredQ = nBsProfPredQ
@@ -551,6 +562,19 @@ class CStockCustomData:
     def KPriceNetProfExpRateConsen(self):
         return self.__nKPriceNetProfExpRateConsen
 
+    # Pass/Fail
+    def SetPassFail(self, sPassFail):
+        self.__sPassFail = sPassFail
+
+    def PassFail(self):
+        return self.__sPassFail
+
+    def SetFailReason(self, sFailReason):
+        self.__sFailReason = sFailReason
+
+    def FailReason(self):
+        return self.__sFailReason
+
 class CStockCustomModel:
 
     def __init__(self, stockCode ):
@@ -695,6 +719,10 @@ class CStockCustomModel:
         self.__Data.SetSRimExpRate100PredY(dSRimExpRate100PredY)
         self.__Data.SetSRimExpRate100_y1(dSRimExpRate100_y1)
 
+        exp100List = [dSRimExpRate100Consen, dSRimExpRate100PredQ, dSRimExpRate100PredY, dSRimExpRate100_y1]
+        dSRimExpRateAvg100 = self.Average(exp100List)
+        self.__Data.SetSRimExpRateAvg100(dSRimExpRateAvg100)
+
 
         # 비영업이익
         nNonBsProf_y1 = self.NonBsProf_y1(fnData.BsProfBefTax_y1(), fnData.BsProf_y1())
@@ -758,6 +786,16 @@ class CStockCustomModel:
         self.__Data.SetKPriceNetProfExpRatePredY(nKPriceNetProfExpRatePredY)
         self.__Data.SetKPriceNetProfExpRateConsen(nKPriceNetProfExpRateConsen)
 
+        # Pass/Fail
+        bCortax = self.IsCortax(fnData.CapTotalLastQ(), fnData.CapOrgLastQ())
+        bBsProfLoss = self.IsBsProfLoss(fnData.BsProfLastQ())
+        sFailReason = self.FailReason(bBsProfLoss,bCortax)
+        self.__Data.SetFailReason(sFailReason)
+        if sFailReason:
+            self.__Data.SetPassFail('FAIL')
+        else:
+            self.__Data.SetPassFail('PASS')
+
         return True
 
 
@@ -789,7 +827,6 @@ class CStockCustomModel:
 
         dIncRate = (nBsProfLastQ - nBsProfLastQ_y1) / abs(nBsProfLastQ_y1)
         nBsProfPredQ = nBsProf_y1 + abs(nBsProf_y1)*dIncRate
-        print( 'inc:', nBsProfLastQ_y1,dIncRate)
         return math.trunc(nBsProfPredQ)
 
     # 비영업이익
@@ -936,6 +973,9 @@ class CStockCustomModel:
         if math.isnan(nDomCapLastQ) or math.isnan(dRoeRate) or math.isnan(dBondRate):
             return math.nan
 
+        if nDomCapLastQ < 0 :
+            return math.nan
+
         nSrim = nDomCapLastQ \
                 + (nDomCapLastQ * (dRoeRate - dBondRate)) \
                 * w / (1 + dBondRate - w)
@@ -1030,14 +1070,62 @@ class CStockCustomModel:
         if math.isnan(nCapTotal) or math.isnan(nCapOrg):
             return math.nan
 
+        bCortaxCond = self.IsCortax(nCapTotal, nCapOrg)
         sCortaxCond = ""
-        if nCapTotal < nCapOrg :
+        if bCortaxCond:
             sCortaxCond = "TRUE"
         else:
             sCortaxCond = "FALSE"
 
         return sCortaxCond
 
+    def IsCortax(self, nCapTotal, nCapOrg):
+        if math.isnan(nCapTotal) or math.isnan(nCapOrg):
+            return False
+
+        if nCapTotal < nCapOrg :
+            return True
+        else:
+            return False
+
+    def IsBsProfLoss(self, nBsProf):
+        if math.isnan(nBsProf):
+            return False
+
+        if nBsProf < 0:
+            return True
+        else:
+            return False
+
+
+    def Average(self, dataList):
+        if len(dataList) == 0:
+            return math.nan
+
+        dataCnt = 0
+        total = 0
+        for val in dataList:
+            if math.isnan(val):
+                continue
+            dataCnt += 1
+            total += val
+
+        if dataCnt == 0:
+            return math.nan
+
+        avg = total/dataCnt
+
+        return round(avg,2)
+
+    def FailReason(self, bBsProfLoss, bCortax):
+        reasonList = []
+        if bBsProfLoss:
+            reasonList.append('영업손실')
+
+        if bCortax:
+            reasonList.append('자본잠식')
+
+        return ','.join(reasonList)
 
     def QuarterNum(self, sLastQ):
         re1q = re.compile(self.__sTagRegQurter1)

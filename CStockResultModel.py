@@ -87,6 +87,7 @@ class CStockResultData:
                 self.__sTagSRimExpRate100Consen,
                 self.__sTagSRimExpRate100PredQ,
                 self.__sTagSRimExpRate100PredY,
+                self.__sTagSRimExpRateAvg100,
                 self.__sTagSRimExpRate100_y1,
                 self.__sTagDomCapLastQ,
                 self.__sTagDomCap_y1,
@@ -120,8 +121,10 @@ class CStockResultData:
                 self.__sTagKPriceNetProfExpRate_y1,
                 self.__sTagKPriceNetProfExpRatePredQ,
                 self.__sTagKPriceNetProfExpRatePredY,
-                self.__sTagKPriceNetProfExpRateConsen
-            ])
+                self.__sTagKPriceNetProfExpRateConsen,
+                self.__sTagPassFail,
+                self.__sTagFailReason
+        ])
 
 
     def AppendData(self, stockCode : str, fnData: CFnguideData , customData: CStockCustomData):
@@ -194,6 +197,7 @@ class CStockResultData:
             self.__sTagSRimPrice100Consen : customData.SRimPrice100Consen(),
             self.__sTagSRimPrice100PredQ : customData.SRimPrice100PredQ(),
             self.__sTagSRimPrice100PredY : customData.SRimPrice100PredY(),
+            self.__sTagSRimExpRateAvg100 : customData.SRimExpRateAvg100(),
             self.__sTagSRimPrice100_y1 : customData.SRimPrice100_y1(),
             self.__sTagSRimExpRate80Consen : customData.SRimExpRate80Consen(),
             self.__sTagSRimExpRate80PredQ : customData.SRimExpRate80PredQ(),
@@ -238,8 +242,10 @@ class CStockResultData:
             # self.__sTagKPriceBsProfExpRatePredQ : customData.KPriceBsProfExpRatePredQ(),
             self.__sTagKPriceNetProfExpRate_y1 : customData.KPriceNetProfExpRate_y1(),
             self.__sTagKPriceNetProfExpRatePredQ : customData.KPriceNetProfExpRatePredQ(),
-            self.__sTagKPriceNetProfExpRatePredY: customData.KPriceNetProfExpRatePredY(),
-            self.__sTagKPriceNetProfExpRateConsen: customData.KPriceNetProfExpRateConsen()
+            self.__sTagKPriceNetProfExpRatePredY : customData.KPriceNetProfExpRatePredY(),
+            self.__sTagKPriceNetProfExpRateConsen : customData.KPriceNetProfExpRateConsen(),
+            self.__sTagPassFail : customData.PassFail(),
+            self.__sTagFailReason : customData.FailReason()
         }
 
         self.__ResultDf = self.__ResultDf.append(dictData, ignore_index=True)
@@ -251,18 +257,18 @@ class CStockResultData:
         summaryCols = [
             self.__sTagStockCode,
             self.__sTagCompName,
+            self.__sTagIndustry,
             self.__sTagLastQ,
+            self.__sTagPassFail,
+            self.__sTagFailReason,
+            self.__sTagLastPrice,
 
             self.__sTagSRimExpRate100Consen,
             self.__sTagSRimExpRate100PredQ,
             self.__sTagSRimExpRate100PredY,
             self.__sTagSRimExpRate100_y1,
-            self.__sTagKPriceNetProfExpRateConsen,
-            self.__sTagKPriceNetProfExpRatePredQ,
-            self.__sTagKPriceNetProfExpRatePredY,
-            self.__sTagKPriceNetProfExpRate_y1,
+            self.__sTagSRimExpRateAvg100,
 
-            self.__sTagCortaxCond,
             self.__sTagNonBsRateLastQ,
             self.__sTagNonBsRate_y1,
             self.__sTagCfBsProfDiffLastQ,
@@ -287,17 +293,17 @@ class CStockResultData:
             self.__sTagStockGrp,
             self.__sTagStockGrp,
             self.__sTagStockGrp,
+            self.__sTagStockGrp,
+            self.__sTagStockGrp,
+            self.__sTagStockGrp,
+            self.__sTagStockGrp,
 
             self.__sTagSrimPriceGrp,
             self.__sTagSrimPriceGrp,
             self.__sTagSrimPriceGrp,
             self.__sTagSrimPriceGrp,
-            self.__sTagKPriceGrp,
-            self.__sTagKPriceGrp,
-            self.__sTagKPriceGrp,
-            self.__sTagKPriceGrp,
+            self.__sTagSrimPriceGrp,
 
-            self.__sTagSafeIndGrp,
             self.__sTagSafeIndGrp,
             self.__sTagSafeIndGrp,
             self.__sTagSafeIndGrp,
@@ -400,6 +406,7 @@ class CStockResultData:
     __sTagSRimExpRate100PredQ = 'SRIM_EXP_W100[Q+]'
     __sTagSRimExpRate100PredY = 'SRIM_EXP_W100[Y+]'
     __sTagSRimExpRate100_y1 = 'SRIM_EXP_W100[-Y1]'
+    __sTagSRimExpRateAvg100 = 'SRIM_EXP_AVG_W100'
     __sTagDomCapLastQ = '지배주주자본[Q](억)'
     __sTagDomCap_y1 = '지배주주자본[-Y1](억)'
     __sTagCapOrgLastQ = '자본금[Q](억)'
@@ -433,6 +440,9 @@ class CStockResultData:
     __sTagKPriceNetProfExpRatePredQ = 'Kprice_EXP_순이익[Q+]'
     __sTagKPriceNetProfExpRatePredY = 'Kprice_EXP_순이익[Y+]'
     __sTagKPriceNetProfExpRateConsen = 'Kprice_EXP_순이익[C]'
+
+    __sTagPassFail = 'PASS/FAIL'
+    __sTagFailReason = 'FAIL사유'
 
     # Group Column Names
     __sTagStockGrp = '종목'
