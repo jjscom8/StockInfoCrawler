@@ -71,11 +71,13 @@ class CStockCustomData:
         self.__dSRimExpRate80Consen = math.nan
         self.__dSRimExpRate80PredQ = math.nan
         self.__dSRimExpRate80PredY = math.nan
+        self.__dSRimExpRateAvg80 = math.nan
         self.__dSRimExpRate80_y1 = math.nan
 
         self.__dSRimExpRate90Consen = math.nan
         self.__dSRimExpRate90PredQ = math.nan
         self.__dSRimExpRate90PredY = math.nan
+        self.__dSRimExpRateAvg90 = math.nan
         self.__dSRimExpRate90_y1 = math.nan
 
         self.__dSRimExpRate100Consen = math.nan
@@ -357,6 +359,12 @@ class CStockCustomData:
     def SRimExpRate80_y1(self):
         return self.__dSRimExpRate80_y1
 
+    def SetSRimExpRateAvg80(self, dSRimExpRateAvg80):
+        self.__dSRimExpRateAvg80 = dSRimExpRateAvg80
+
+    def SRimExpRateAvg80(self):
+        return self.__dSRimExpRateAvg80
+
     def SetSRimExpRate90Consen(self, dSRimExpRate90Consen):
         self.__dSRimExpRate90Consen = dSRimExpRate90Consen
 
@@ -381,6 +389,11 @@ class CStockCustomData:
     def SRimExpRate90_y1(self):
         return self.__dSRimExpRate90_y1
 
+    def SetSRimExpRateAvg90(self, dSRimExpRateAvg90):
+        self.__dSRimExpRateAvg90 = dSRimExpRateAvg90
+
+    def SRimExpRateAvg90(self):
+        return self.__dSRimExpRateAvg90
 
     def SetSRimExpRate100Consen(self, dSRimExpRate100Consen):
         self.__dSRimExpRate100Consen = dSRimExpRate100Consen
@@ -723,6 +736,13 @@ class CStockCustomModel:
         dSRimExpRateAvg100 = self.Average(exp100List)
         self.__Data.SetSRimExpRateAvg100(dSRimExpRateAvg100)
 
+        exp90List = [dSRimExpRate90Consen, dSRimExpRate90PredQ, dSRimExpRate90PredY, dSRimExpRate100_y1]
+        dSRimExpRateAvg90 = self.Average(exp90List)
+        self.__Data.SetSRimExpRateAvg90(dSRimExpRateAvg90)
+
+        exp80List = [dSRimExpRate80Consen, dSRimExpRate80PredQ, dSRimExpRate80PredY, dSRimExpRate100_y1]
+        dSRimExpRateAvg80 = self.Average(exp80List)
+        self.__Data.SetSRimExpRateAvg80(dSRimExpRateAvg80)
 
         # 비영업이익
         nNonBsProf_y1 = self.NonBsProf_y1(fnData.BsProfBefTax_y1(), fnData.BsProf_y1())
@@ -789,7 +809,9 @@ class CStockCustomModel:
         # Pass/Fail
         bCortax = self.IsCortax(fnData.CapTotalLastQ(), fnData.CapOrgLastQ())
         bBsProfLoss = self.IsBsProfLoss(fnData.BsProfLastQ())
-        sFailReason = self.FailReason(bBsProfLoss,bCortax)
+        bCfBsLoss = self.IsCfBsLoss(fnData.CfBsLastQ())
+        sFailReason = self.FailReason(bBsProfLoss,bCortax,bCfBsLoss)
+
         self.__Data.SetFailReason(sFailReason)
         if sFailReason:
             self.__Data.SetPassFail('FAIL')
@@ -881,7 +903,7 @@ class CStockCustomModel:
 
         dRoePredY = math.nan
         if self.HasTrend(dRoe_y1, dRoe_y2, dRoe_y3):
-            dRoePredY = dRoe_y3
+            dRoePredY = dRoe_y1
         else:
             dTotalRoe = 0
             weight = 0
@@ -1097,6 +1119,15 @@ class CStockCustomModel:
         else:
             return False
 
+    def IsCfBsLoss(self, nCfBs):
+        if math.isnan(nCfBs):
+            return False
+
+        if nCfBs < 0:
+            return True
+        else:
+            return False
+
 
     def Average(self, dataList):
         if len(dataList) == 0:
@@ -1117,13 +1148,16 @@ class CStockCustomModel:
 
         return round(avg,2)
 
-    def FailReason(self, bBsProfLoss, bCortax):
+    def FailReason(self, bBsProfLoss, bCortax, bCfBsLoss):
         reasonList = []
         if bBsProfLoss:
             reasonList.append('영업손실')
 
         if bCortax:
             reasonList.append('자본잠식')
+
+        if bCfBsLoss:
+            reasonList.append('현금흐름손실')
 
         return ','.join(reasonList)
 

@@ -79,10 +79,12 @@ class CStockResultData:
                 self.__sTagSRimExpRate80Consen,
                 self.__sTagSRimExpRate80PredQ,
                 self.__sTagSRimExpRate80PredY,
+                self.__sTagSRimExpRateAvg80,
                 self.__sTagSRimExpRate80_y1,
                 self.__sTagSRimExpRate90Consen,
                 self.__sTagSRimExpRate90PredQ,
                 self.__sTagSRimExpRate90PredY,
+                self.__sTagSRimExpRateAvg90,
                 self.__sTagSRimExpRate90_y1,
                 self.__sTagSRimExpRate100Consen,
                 self.__sTagSRimExpRate100PredQ,
@@ -189,10 +191,12 @@ class CStockResultData:
             self.__sTagSRimPrice80Consen : customData.SRimPrice80Consen(),
             self.__sTagSRimPrice80PredQ : customData.SRimPrice80PredQ(),
             self.__sTagSRimPrice80PredY : customData.SRimPrice80PredY(),
+            self.__sTagSRimExpRateAvg80 : customData.SRimExpRateAvg80(),
             self.__sTagSRimPrice80_y1 : customData.SRimPrice80_y1(),
             self.__sTagSRimPrice90Consen : customData.SRimPrice90Consen(),
             self.__sTagSRimPrice90PredQ : customData.SRimPrice90PredQ(),
             self.__sTagSRimPrice90PredY : customData.SRimPrice90PredY(),
+            self.__sTagSRimExpRateAvg90 : customData.SRimExpRateAvg90(),
             self.__sTagSRimPrice90_y1 : customData.SRimPrice90_y1(),
             self.__sTagSRimPrice100Consen : customData.SRimPrice100Consen(),
             self.__sTagSRimPrice100PredQ : customData.SRimPrice100PredQ(),
@@ -263,11 +267,11 @@ class CStockResultData:
             self.__sTagFailReason,
             self.__sTagLastPrice,
 
-            self.__sTagSRimExpRate100Consen,
-            self.__sTagSRimExpRate100PredQ,
-            self.__sTagSRimExpRate100PredY,
-            self.__sTagSRimExpRate100_y1,
-            self.__sTagSRimExpRateAvg100,
+            self.__sTagSRimExpRate80Consen,
+            self.__sTagSRimExpRate80PredQ,
+            self.__sTagSRimExpRate80PredY,
+            self.__sTagSRimExpRate80_y1,
+            self.__sTagSRimExpRateAvg80,
 
             self.__sTagNonBsRateLastQ,
             self.__sTagNonBsRate_y1,
@@ -279,6 +283,7 @@ class CStockResultData:
             self.__sTagPegr,
             self.__sTagPer,
             self.__sTagIndusPer,
+            self.__sTagPbr,
             self.__sTagDivIncome,
 
             self.__sTagNetLoanRate,
@@ -298,17 +303,18 @@ class CStockResultData:
             self.__sTagStockGrp,
             self.__sTagStockGrp,
 
-            self.__sTagSrimPriceGrp,
-            self.__sTagSrimPriceGrp,
-            self.__sTagSrimPriceGrp,
-            self.__sTagSrimPriceGrp,
-            self.__sTagSrimPriceGrp,
+            self.__sTagSrimExpGrp,
+            self.__sTagSrimExpGrp,
+            self.__sTagSrimExpGrp,
+            self.__sTagSrimExpGrp,
+            self.__sTagSrimExpGrp,
 
             self.__sTagSafeIndGrp,
             self.__sTagSafeIndGrp,
             self.__sTagSafeIndGrp,
             self.__sTagSafeIndGrp,
 
+            self.__sTagSubIndGrp,
             self.__sTagSubIndGrp,
             self.__sTagSubIndGrp,
             self.__sTagSubIndGrp,
@@ -398,10 +404,12 @@ class CStockResultData:
     __sTagSRimExpRate80PredQ = 'SRIM_EXP_W80[Q+]'
     __sTagSRimExpRate80PredY = 'SRIM_EXP_W80[Y+]'
     __sTagSRimExpRate80_y1 = 'SRIM_EXP_W80[-Y1]'
+    __sTagSRimExpRateAvg80 = 'SRIM_EXP_AVG_W80'
     __sTagSRimExpRate90Consen = 'SRIM_EXP_W90[C]'
     __sTagSRimExpRate90PredQ = 'SRIM_EXP_W90[Q+]'
     __sTagSRimExpRate90PredY = 'SRIM_EXP_W90[Y+]'
     __sTagSRimExpRate90_y1 = 'SRIM_EXP_W90[-Y1]'
+    __sTagSRimExpRateAvg90 = 'SRIM_EXP_AVG_W90'
     __sTagSRimExpRate100Consen = 'SRIM_EXP_W100[C]'
     __sTagSRimExpRate100PredQ = 'SRIM_EXP_W100[Q+]'
     __sTagSRimExpRate100PredY = 'SRIM_EXP_W100[Y+]'
@@ -446,7 +454,7 @@ class CStockResultData:
 
     # Group Column Names
     __sTagStockGrp = '종목'
-    __sTagSrimPriceGrp = '적정주가_SRIM'
+    __sTagSrimExpGrp = '기대수익_SRIM'
     __sTagKPriceGrp = '적정주가_KPRICE'
     __sTagSafeIndGrp = '안전지표'
     __sTagSubIndGrp = '보조지표'

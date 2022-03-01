@@ -76,6 +76,9 @@ class CFnguideData:
     def SetMarket(self, sMarket):
         self.__sMarket = sMarket
 
+    def SetIndustry(self, sIndustry):
+        self.__sIndustry = sIndustry
+
     def SetRoe_y1(self, dRoe_y1):
         self.__dRoe_y1 = dRoe_y1
 
@@ -441,6 +444,12 @@ class CFnguideModel:
                                          '> span.stxt.stxt1').string
             strMarket = market_str.split()[0]
             self.__Data.SetMarket(strMarket)
+            # 업종
+            industry_str = html.select_one('#compBody '
+                                         '> div.section.ul_corpinfo '
+                                         '> div.corp_group1 > p '
+                                         '> span.stxt.stxt2').string
+            self.__Data.SetIndustry(industry_str)
 
 
             sPer = html.select_one('#corp_group2 > dl:nth-child(1) > dd').string
