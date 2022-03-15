@@ -856,13 +856,13 @@ class CStockCustomModel:
         if math.isnan(nBsProfBefTax_y1) or math.isnan(nBsProf_y1):
             return math.nan
         nNonBsProf_y1 = nBsProfBefTax_y1 - nBsProf_y1
-        return math.trunc(nNonBsProf_y1)
+        return nNonBsProf_y1
 
     def NonBsProfLastQ(self, nBsProfBefTaxLastQ, nBsProfLastQ):
         if math.isnan(nBsProfBefTaxLastQ) or math.isnan(nBsProfLastQ):
             return math.nan
         nNonBsProfLastQ = nBsProfBefTaxLastQ - nBsProfLastQ
-        return math.trunc(nNonBsProfLastQ)
+        return nNonBsProfLastQ
 
     # 비영업이익 비율
     def NonBsRate_y1(self, nBsProf_y1, nNonBsProf_y1):

@@ -10,6 +10,7 @@ from CFnguideModel import CFnguideModel
 from CStockCustomModel import CStockCustomModel
 from CStockResultModel import  CStockResultModel
 from CKrxModel import CKrxModel
+from CStockInputModel import CStockInputModel
 
 
 if __name__ == '__main__':
@@ -20,14 +21,38 @@ if __name__ == '__main__':
     outDir = 'D:/DATA/STOCK_CRAWLING_DATA'
     print(' - START DATE TIME :: ', startDateTime.strftime('%Y-%m-%d %H:%M:%S'))
 
+
+    bCustomOption = False
+    inputModel = CStockInputModel()
+
     inputComps = []
     if len(sys.argv) == 1:
         print(' - Crawling all companies')
     else:
-        print(' - Crawling companies below :')
-        for i in range(1, len(sys.argv)):
-            print('     -> ', sys.argv[i])
-            inputComps.append(sys.argv[i])
+        sOption = sys.argv[1]
+        # CUSTOM MODE : 최종 분기 정보를 CUSTOM으로 업데이트 하기 위한 모드
+        if sOption.lower() == '--custom':
+            if len(sys.argv) != 3:
+                sys.exit(' Check Arguments : --custom path')
+
+            print(' - Custom Crawling Mode ')
+            print('   :: Input에 있는 항목만 UPDATE되며 나머지는 기존 Fnguide 정보 ')
+
+            bCustomOption = True
+            sInputPath = sys.argv[2]
+            if not inputModel.LoadLastQInputCsv(sInputPath):
+                sys.exit(' - Fail :: LoadLastQInputCsv' )
+
+            #Update Target
+            inputComps = inputModel.InputComps()
+            # sys.exit(' Temp Quit')
+
+        # Arguments
+        else:
+            print(' - Crawling companies below :')
+            for i in range(1, len(sys.argv)):
+                print('     -> ', sys.argv[i])
+                inputComps.append(sys.argv[i])
 
     ########## [ KRX 종목정보 크롤링 ] ##########
     krxModel = CKrxModel()
@@ -65,6 +90,12 @@ if __name__ == '__main__':
             print("             - Fail :: CrawlFinRate ")
 
         fnData = fnModel.Data()
+
+        ########## [ Check & Update Custom Input ] ##########
+        # Python object - Call by Ref
+        if bCustomOption:
+            if not inputModel.UpdateFnData(fnData):# Call by Ref
+                print("             - Fail :: UpdateFnData ")
 
         ########## [ Update Custom Data ] ##########
         customModel = CStockCustomModel('005930')

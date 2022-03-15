@@ -273,6 +273,11 @@ class CStockResultData:
             self.__sTagSRimExpRate80_y1,
             self.__sTagSRimExpRateAvg80,
 
+            self.__sTagSRimPrice80Consen,
+            self.__sTagSRimPrice80PredQ,
+            self.__sTagSRimPrice80PredY,
+            self.__sTagSRimPrice80_y1,
+
             self.__sTagNonBsRateLastQ,
             self.__sTagNonBsRate_y1,
             self.__sTagCfBsProfDiffLastQ,
@@ -308,6 +313,11 @@ class CStockResultData:
             self.__sTagSrimExpGrp,
             self.__sTagSrimExpGrp,
             self.__sTagSrimExpGrp,
+
+            self.__sTagSrimPriceGrp,
+            self.__sTagSrimPriceGrp,
+            self.__sTagSrimPriceGrp,
+            self.__sTagSrimPriceGrp,
 
             self.__sTagSafeIndGrp,
             self.__sTagSafeIndGrp,
@@ -363,7 +373,7 @@ class CStockResultData:
     __sTagCfInv_y1 = '투자CF[-Y1](억)'
     __sTagCfInvLastQ = '투자CF[Q](억)'
     __sTagCfFin_y1 = '재무CF[-Y1](억)'
-    __sTagCfFinLastQ = '재무CF[-Q](억)'
+    __sTagCfFinLastQ = '재무CF[Q](억)'
     __sTagNonBsProf_y1 = '비영업이익[-Y1](억)'
     __sTagNonBsProfLastQ = '비영업이익[Q](억)'
     __sTagBsProf_y1 = '영업이익[-Y1](억)'
@@ -455,6 +465,7 @@ class CStockResultData:
     # Group Column Names
     __sTagStockGrp = '종목'
     __sTagSrimExpGrp = '기대수익_SRIM'
+    __sTagSrimPriceGrp = '적정주가_SRIM'
     __sTagKPriceGrp = '적정주가_KPRICE'
     __sTagSafeIndGrp = '안전지표'
     __sTagSubIndGrp = '보조지표'
