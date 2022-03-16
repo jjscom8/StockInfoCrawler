@@ -902,19 +902,20 @@ class CStockCustomModel:
             return math.nan
 
         dRoePredY = math.nan
-        if self.HasTrend(dRoe_y1, dRoe_y2, dRoe_y3):
-            dRoePredY = dRoe_y1
-        else:
-            dTotalRoe = 0
-            weight = 0
-            for index, val in enumerate([dRoe_y3, dRoe_y2, dRoe_y1]):
-                dTotalRoe = dTotalRoe + val * (index + 1)
-                weight = weight + (index + 1)
+        # 실적이 갑자기 빵뜬 기업들에 대한 리스크가 크다
+        # if self.HasTrend(dRoe_y1, dRoe_y2, dRoe_y3):
+        #     dRoePredY = dRoe_y1
+        # else:
+        dTotalRoe = 0
+        weight = 0
+        for index, val in enumerate([dRoe_y3, dRoe_y2, dRoe_y1]):
+            dTotalRoe = dTotalRoe + val * (index + 1)
+            weight = weight + (index + 1)
 
-            if weight == 0:
-                return math.nan
+        if weight == 0:
+            return math.nan
 
-            dRoePredY = dTotalRoe / weight
+        dRoePredY = dTotalRoe / weight
 
         return round(dRoePredY,2)
 
@@ -954,19 +955,20 @@ class CStockCustomModel:
             return math.nan
 
         nEpsPredY = math.nan
-        if self.HasTrend(nEps_y1, nEps_y2, nEps_y3):
-            nEpsPredY = nEps_y3
-        else:
-            dTotalEps = 0
-            weight = 0
-            for index, val in enumerate([nEps_y3, nEps_y2, nEps_y1]):
-                dTotalEps = dTotalEps + val * (index + 1)
-                weight = weight + (index + 1)
+        # 실적이 갑자기 빵뜬 기업들에 대한 리스크가 크다
+        # if self.HasTrend(nEps_y1, nEps_y2, nEps_y3):
+        #     nEpsPredY = nEps_y3
+        # else:
+        dTotalEps = 0
+        weight = 0
+        for index, val in enumerate([nEps_y3, nEps_y2, nEps_y1]):
+            dTotalEps = dTotalEps + val * (index + 1)
+            weight = weight + (index + 1)
 
-            if weight == 0:
-                return math.nan
+        if weight == 0:
+            return math.nan
 
-            nEpsPredY = dTotalEps / weight
+        nEpsPredY = dTotalEps / weight
 
         return math.trunc(nEpsPredY)
 

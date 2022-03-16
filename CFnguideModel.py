@@ -515,6 +515,7 @@ class CFnguideModel:
 
             # Tag 이름으로 indexing
             profDf.set_index(profDf.columns[0], inplace=True)
+            profDfIndexes = profDf.index.tolist()
 
             # Column Name
             sProfDfCol_y1 = profDf.columns[2]
@@ -530,9 +531,19 @@ class CFnguideModel:
             self.__Data.SetBsProfLastQ(nBsProfLastQ)
             self.__Data.SetBsProfLastQ_y1(nBsProfLastQ_y1)
 
-            nDomNetProf_y1 = profDf.loc[self.__sTagDomNetProf, sProfDfCol_y1]
-            nDomNetProfLastQ = profDf.loc[self.__sTagDomNetProf, sProfDfColLastQ]
-            nDomNetProfLastQ_y1 = profDf.loc[self.__sTagDomNetProf, sProfDfColLastQ_y1]
+            nDomNetProf_y1 = math.nan
+            nDomNetProfLastQ = math.nan
+            nDomNetProfLastQ_y1 = math.nan
+
+            if self.__sTagDomNetProf in profDfIndexes:
+                nDomNetProf_y1 = profDf.loc[self.__sTagDomNetProf, sProfDfCol_y1]
+                nDomNetProfLastQ = profDf.loc[self.__sTagDomNetProf, sProfDfColLastQ]
+                nDomNetProfLastQ_y1 = profDf.loc[self.__sTagDomNetProf, sProfDfColLastQ_y1]
+            else:
+                nDomNetProf_y1 = profDf.loc[self.__sTagNetProf, sProfDfCol_y1]
+                nDomNetProfLastQ = profDf.loc[self.__sTagNetProf, sProfDfColLastQ]
+                nDomNetProfLastQ_y1 = profDf.loc[self.__sTagNetProf, sProfDfColLastQ_y1]
+
             self.__Data.SetDomNetProf_y1(nDomNetProf_y1)
             self.__Data.SetDomNetProfLastQ(nDomNetProfLastQ)
             self.__Data.SetDomNetProfLastQ_y1(nDomNetProfLastQ_y1)
@@ -592,6 +603,7 @@ class CFnguideModel:
 
             # Tag 이름으로 indexing
             finStatDf.set_index(finStatDf.columns[0], inplace=True)
+            finStatDfIndexes = finStatDf.index.tolist()
 
             # Column Name
             sFinStatCol_y1 = finStatDf.columns[2]
@@ -604,11 +616,18 @@ class CFnguideModel:
             nCapOrgLastQ = finStatDf.loc[self.__sTagCapOrg, sFinStatColLastQ]
             self.__Data.SetCapOrgLastQ(nCapOrgLastQ)
 
-            nDomCapLastQ = finStatDf.loc[self.__sTagDomCap, sFinStatColLastQ]
-            self.__Data.SetDomCapLastQ(nDomCapLastQ)
+            nDomCapLastQ = math.nan
+            nDomCap_y1 = math.nan
+            if self.__sTagDomCap in finStatDfIndexes:
+                nDomCapLastQ = finStatDf.loc[self.__sTagDomCap, sFinStatColLastQ]
+                nDomCap_y1 = finStatDf.loc[self.__sTagDomCap, sFinStatCol_y1]
+            else:
+                nDomCapLastQ = finStatDf.loc[self.__sTagCapTotal, sFinStatColLastQ]
+                nDomCap_y1 = finStatDf.loc[self.__sTagCapTotal, sFinStatCol_y1]
 
-            nDomCap_y1 = finStatDf.loc[self.__sTagDomCap, sFinStatCol_y1]
+            self.__Data.SetDomCapLastQ(nDomCapLastQ)
             self.__Data.SetDomCap_y1(nDomCap_y1)
+
 
             nAssetLastQ = finStatDf.loc[self.__sTagAsset, sFinStatColLastQ]
             self.__Data.SetAssetLastQ(nAssetLastQ)
@@ -728,6 +747,7 @@ class CFnguideModel:
     __sTagProfitTableMark = '영업이익'
     __sTagBsProf = '영업이익'
     __sTagDomNetProf = '지배주주순이익'
+    __sTagNetProf = '당기순이익'
     __sTagBsProfBefTax = '세전계속사업이익'
 
     # 현금흐름
