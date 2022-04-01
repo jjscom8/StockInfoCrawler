@@ -29,9 +29,6 @@ class CStockInputModel:
         if sLastQ:
             fnData.SetLastQ(sLastQ)
 
-        nCapTotalLastQ = self.__lastQInput.loc[sCompName,self.__sTagCapTotalLastQ]
-        if not math.isnan(nCapTotalLastQ):
-            fnData.SetCapTotalLastQ(nCapTotalLastQ)
 
         nAssetLastQ = self.__lastQInput.loc[sCompName,self.__sTagAssetLastQ]
         if not math.isnan(nAssetLastQ):
@@ -45,9 +42,28 @@ class CStockInputModel:
         if not math.isnan(nCapOrgLastQ):
             fnData.SetCapOrgLastQ(nCapOrgLastQ)
 
+        # 자본
+        nCapTotalLastQ = self.__lastQInput.loc[sCompName,self.__sTagCapTotalLastQ]
+        nOldCapTotalLastQ =  fnData.CapTotalLastQ()
+        if not math.isnan(nCapTotalLastQ):
+            fnData.SetCapTotalLastQ(nCapTotalLastQ)
+
+        # 매출
+        nSalesLastQ = self.__lastQInput.loc[sCompName,self.__sTagSalesLastQ]
+        if not math.isnan(nSalesLastQ):
+            fnData.SetSalesLastQ(nSalesLastQ)
+
+        nSalesLastQ_y1 = self.__lastQInput.loc[sCompName,self.__sTagSalesLastQ_y1]
+        if not math.isnan(nSalesLastQ_y1):
+            fnData.SetSalesLastQ_y1(nSalesLastQ_y1)
+
+        # 지배주주자본: 지배/비지배 지분율 반영
         nDomCapLastQ = self.__lastQInput.loc[sCompName,self.__sTagDomCapLastQ]
-        if not math.isnan(nDomCapLastQ):
-            fnData.SetDomCapLastQ(nDomCapLastQ)
+        if math.isnan(nDomCapLastQ):
+            domRatio = fnData.DomCapLastQ() / nOldCapTotalLastQ
+            nDomCapLastQ = domRatio* nCapTotalLastQ
+
+        fnData.SetDomCapLastQ(int(nDomCapLastQ))
 
 
         nBsProfLastQ = self.__lastQInput.loc[sCompName,self.__sTagBsProfLastQ]
@@ -58,9 +74,19 @@ class CStockInputModel:
         if not math.isnan(nBsProfLastQ_y1):
             fnData.SetBsProfLastQ_y1(nBsProfLastQ_y1)
 
+        # 당기순이익
+        nNetProfLastQ = self.__lastQInput.loc[sCompName,self.__sTagNetProfLastQ]
+        nOldNetProfLastQ = fnData.NetProfLastQ()
+        if not math.isnan(nNetProfLastQ):
+            fnData.SetNetProfLastQ(nNetProfLastQ)
+
+        # 지배순이익: 지배/비지배 지분율 반영
         nDomNetProfLastQ = self.__lastQInput.loc[sCompName,self.__sTagDomNetProfLastQ]
-        if not math.isnan(nDomNetProfLastQ):
-            fnData.SetDomNetProfLastQ(nDomNetProfLastQ)
+        if math.isnan(nDomNetProfLastQ):
+            domRatio = fnData.DomNetProfLastQ() / nOldNetProfLastQ
+            nDomNetProfLastQ = domRatio * nNetProfLastQ
+
+        fnData.SetDomNetProfLastQ(int(nDomNetProfLastQ))
 
         nDomNetProfLastQ_y1 = self.__lastQInput.loc[sCompName,self.__sTagDomNetProfLastQ_y1]
         if not math.isnan(nDomNetProfLastQ_y1):
@@ -89,13 +115,18 @@ class CStockInputModel:
     __sTagLastQ = '회계분기'
 
     __sTagCapTotalLastQ = '자본[Q](억)'
+    __sTagDomCapLastQ = '지배주주자본[Q](억)'
     __sTagAssetLastQ = '자산[Q](억)'
     __sTagDebtLastQ = '부채[Q](억)'
     __sTagCapOrgLastQ = '자본금[Q](억)'
-    __sTagDomCapLastQ = '지배주주자본[Q](억)'
+
+    __sTagSalesLastQ = '매출[Q](억)'
+    __sTagSalesLastQ_y1 = '매출[Q-Y1](억)'
 
     __sTagBsProfLastQ = '영업이익[Q](억)'
     __sTagBsProfLastQ_y1 = '영업이익[Q-Y1](억)'
+
+    __sTagNetProfLastQ = '당기순이익[Q](억)'
     __sTagDomNetProfLastQ = '지배순이익[Q](억)'
     __sTagDomNetProfLastQ_y1 = '지배순이익[Q-Y1](억)'
     __sTagBsProfBefTaxLastQ = '세전계속사업이익[Q](억)'

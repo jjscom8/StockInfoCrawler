@@ -1,4 +1,5 @@
-from CFnguideModel import CFnguideModel
+from CFnguideModel import CFnguideData
+from CKisRatingModel import  CKisRatingData
 import math
 import re
 
@@ -22,6 +23,9 @@ class CStockCustomData:
         # 비영업이익 비율
         self.__dNonBsRate_y1 = math.nan
         self.__dNonBsRateLastQ = math.nan
+
+        # 지배주주자본
+        self.__nDomCapPredQ = math.nan
 
         # ROE
         self.__dRoePredQ = math.nan
@@ -120,6 +124,20 @@ class CStockCustomData:
         self.__bPassFail = ''
         self.__sFailReason = ''
 
+        # 매출 증가율
+        self.__dSalesIncRate_y3_y2 = math.nan
+        self.__dSalesIncRate_y2_y1 = math.nan
+        self.__dSalesIncRate_lqy1_lq = math.nan
+        self.__dSalesIncRateAvg = math.nan
+        self.__sSalesIncRateTrend = ''
+
+        # 영익 증가율
+        self.__dBsProfIncRate_y3_y2 = math.nan
+        self.__dBsProfIncRate_y2_y1 = math.nan
+        self.__dBsProfIncRate_lqy1_lq = math.nan
+        self.__dBsProfIncRateAvg = math.nan
+        self.__sBsProfIncRateTrend = ''
+
 
     def SetBondBBB_5Rate(self, dBondBBB_5Rate):
         self.__dBondBBB_5Rate = dBondBBB_5Rate
@@ -133,6 +151,13 @@ class CStockCustomData:
 
     def DomNetProfPredQ(self):
         return self.__nDomNetProfPredQ
+
+    # 지배주주지분
+    def SetDomCapPredQ(self, nDomCapPredQ):
+        self.__nDomCapPredQ = nDomCapPredQ
+
+    def DomCapPredQ(self):
+        return self.__nDomCapPredQ
 
     # ROE
     def SetRoePredQ(self, dRoePredQ):
@@ -588,6 +613,73 @@ class CStockCustomData:
     def FailReason(self):
         return self.__sFailReason
 
+    # 매출 증가율
+    # Setter
+    def SetSalesIncRate_y3_y2(self, dRate):
+        self.__dSalesIncRate_y3_y2 = dRate
+
+    def SetSalesIncRate_y2_y1(self, dRate):
+        self.__dSalesIncRate_y2_y1 = dRate
+
+    def SetSalesIncRate_lqy1_lq(self, dRate):
+        self.__dSalesIncRate_lqy1_lq = dRate
+
+    def SetSalesIncRateAvg(self, dRate):
+        self.__dSalesIncRateAvg = dRate
+
+    def SetSalesIncRateTrend(self, sTrend):
+        self.__sSalesIncRateTrend = sTrend
+
+    # Getter
+    def SalesIncRate_y3_y2(self):
+        return self.__dSalesIncRate_y3_y2
+
+    def SalesIncRate_y2_y1(self):
+        return self.__dSalesIncRate_y2_y1
+
+    def SalesIncRate_lqy1_lq(self):
+        return self.__dSalesIncRate_lqy1_lq
+
+    def SalesIncRateAvg(self):
+        return self.__dSalesIncRateAvg
+
+    def SalesIncRateTrend(self):
+        return self.__sSalesIncRateTrend
+
+    # 영익 증가율
+    # Setter
+    def SetBsProfIncRate_y3_y2(self, dRate):
+        self.__dBsProfIncRate_y3_y2 = dRate
+
+    def SetBsProfIncRate_y2_y1(self, dRate):
+        self.__dBsProfIncRate_y2_y1 = dRate
+
+    def SetBsProfIncRate_lqy1_lq(self, dRate):
+        self.__dBsProfIncRate_lqy1_lq = dRate
+
+    def SetBsProfIncRateAvg(self, dRate):
+        self.__dBsProfIncRateAvg = dRate
+
+    def SetBsProfIncRateTrend(self, sTrend):
+        self.__sBsProfIncRateTrend = sTrend
+
+    # Getter
+    def BsProfIncRate_y3_y2(self):
+        return self.__dBsProfIncRate_y3_y2
+
+    def BsProfIncRate_y2_y1(self):
+        return self.__dBsProfIncRate_y2_y1
+
+    def BsProfIncRate_lqy1_lq(self):
+        return self.__dBsProfIncRate_lqy1_lq
+
+    def BsProfIncRateAvg(self):
+        return self.__dBsProfIncRateAvg
+
+    def BsProfIncRateTrend(self):
+        return self.__sBsProfIncRateTrend
+
+
 class CStockCustomModel:
 
     def __init__(self, stockCode ):
@@ -597,7 +689,7 @@ class CStockCustomModel:
     def Data(self):
         return self.__Data
 
-    def UpdateStockCustomData(self, fnData, kisData):
+    def UpdateStockCustomData(self, fnData : CFnguideData, kisData : CKisRatingData):
 
         if not fnData or not kisData :
             print(" - Fail :: Invalid Data ")
@@ -613,8 +705,18 @@ class CStockCustomModel:
                                                 fnData.DomNetProfLastQ_y1())
         self.__Data.SetDomNetProfPredQ(nDomNetProfPredQ)
         # 영업이익
-        nBsProfPredQ = self.BsProfPredQ(fnData.LastQ(), fnData.BsProf_y1(), fnData.BsProfLastQ(), fnData.BsProfLastQ_y1())
+        nBsProfPredQ = self.BsProfPredQ(fnData.LastQ(),
+                                        fnData.BsProf_y1(),
+                                        fnData.BsProfLastQ(),
+                                        fnData.BsProfLastQ_y1())
         self.__Data.SetBsProfPredQ(nBsProfPredQ)
+
+        # 지배주주지분
+        nDomCapPredQ = self.DomCapPredQ(fnData.LastQ(),
+                                        fnData.DomCap_y1(),
+                                        fnData.DomCapLastQ(),
+                                        nDomNetProfPredQ)
+        self.__Data.SetDomCapPredQ(nDomCapPredQ)
 
         # ROE
         dRoePredQ = self.RoePredQ(nDomNetProfPredQ, fnData.DomCapLastQ())
@@ -637,39 +739,39 @@ class CStockCustomModel:
         self.__Data.SetEpsBsProf_y1(nEpsBsProf_y1)
 
         # SRIM
-        nSRim80Consen = self.SRim(fnData.DomCapLastQ(), fnData.RoeConsen(),
+        nSRim80Consen = self.SRim(nDomCapPredQ, fnData.RoeConsen(),
                                   kisData.BondBBB_5Rate(), 0.8)
-        nSRim80PredQ = self.SRim(fnData.DomCapLastQ(), dRoePredQ,
+        nSRim80PredQ = self.SRim(nDomCapPredQ, dRoePredQ,
                                  kisData.BondBBB_5Rate(), 0.8)
-        nSRim80PredY = self.SRim(fnData.DomCapLastQ(), dRoePredY,
+        nSRim80PredY = self.SRim(nDomCapPredQ, dRoePredY,
                                  kisData.BondBBB_5Rate(), 0.8)
-        nSRim80_y1 = self.SRim(fnData.DomCapLastQ(), fnData.Roe_y1(),
+        nSRim80_y1 = self.SRim(nDomCapPredQ, fnData.Roe_y1(),
                                kisData.BondBBB_5Rate(), 0.8)
         self.__Data.SetSRim80Consen(nSRim80Consen)
         self.__Data.SetSRim80PredQ(nSRim80PredQ)
         self.__Data.SetSRim80PredY(nSRim80PredY)
         self.__Data.SetSRim80_y1(nSRim80_y1)
 
-        nSRim90Consen = self.SRim(fnData.DomCapLastQ(), fnData.RoeConsen(),
+        nSRim90Consen = self.SRim(nDomCapPredQ, fnData.RoeConsen(),
                                   kisData.BondBBB_5Rate(), 0.9)
-        nSRim90PredQ = self.SRim(fnData.DomCapLastQ(), dRoePredQ,
+        nSRim90PredQ = self.SRim(nDomCapPredQ, dRoePredQ,
                                  kisData.BondBBB_5Rate(), 0.9)
-        nSRim90PredY = self.SRim(fnData.DomCapLastQ(), dRoePredY,
+        nSRim90PredY = self.SRim(nDomCapPredQ, dRoePredY,
                                  kisData.BondBBB_5Rate(), 0.9)
-        nSRim90_y1 = self.SRim(fnData.DomCapLastQ(), fnData.Roe_y1(),
+        nSRim90_y1 = self.SRim(nDomCapPredQ, fnData.Roe_y1(),
                                kisData.BondBBB_5Rate(), 0.9)
         self.__Data.SetSRim90Consen(nSRim90Consen)
         self.__Data.SetSRim90PredQ(nSRim90PredQ)
         self.__Data.SetSRim90PredY(nSRim90PredY)
         self.__Data.SetSRim90_y1(nSRim90_y1)
 
-        nSRim100Consen = self.SRim(fnData.DomCapLastQ(), fnData.RoeConsen(),
+        nSRim100Consen = self.SRim(nDomCapPredQ, fnData.RoeConsen(),
                                    kisData.BondBBB_5Rate(), 1.0)
-        nSRim100PredQ = self.SRim(fnData.DomCapLastQ(), dRoePredQ,
+        nSRim100PredQ = self.SRim(nDomCapPredQ, dRoePredQ,
                                   kisData.BondBBB_5Rate(), 1.0)
-        nSRim100PredY = self.SRim(fnData.DomCapLastQ(), dRoePredY,
+        nSRim100PredY = self.SRim(nDomCapPredQ, dRoePredY,
                                   kisData.BondBBB_5Rate(), 1.0)
-        nSRim100_y1 = self.SRim(fnData.DomCapLastQ(), fnData.Roe_y1(),
+        nSRim100_y1 = self.SRim(nDomCapPredQ, fnData.Roe_y1(),
                                 kisData.BondBBB_5Rate(), 1.0)
         self.__Data.SetSRim100Consen(nSRim100Consen)
         self.__Data.SetSRim100PredQ(nSRim100PredQ)
@@ -818,15 +920,50 @@ class CStockCustomModel:
         else:
             self.__Data.SetPassFail('PASS')
 
+        # 매출증가율
+        dSalesIncRate_y3_y2 = self.ExpReturnRate(fnData.Sales_y2(), fnData.Sales_y3())
+        dSalesIncRate_y2_y1 = self.ExpReturnRate(fnData.Sales_y1(), fnData.Sales_y2())
+        dSalesIncRate_lqy1_lq = self.ExpReturnRate(fnData.SalesLastQ(), fnData.SalesLastQ_y1())
+
+        self.__Data.SetSalesIncRate_y3_y2(dSalesIncRate_y3_y2)
+        self.__Data.SetSalesIncRate_y2_y1(dSalesIncRate_y2_y1)
+        self.__Data.SetSalesIncRate_lqy1_lq(dSalesIncRate_lqy1_lq)
+
+        dSalesIncRateList = [dSalesIncRate_y3_y2, dSalesIncRate_y2_y1, dSalesIncRate_lqy1_lq]
+        dSalesIncRateAvg = self.Average(dSalesIncRateList)
+        self.__Data.SetSalesIncRateAvg(dSalesIncRateAvg)
+
+        dSalesList = [fnData.Sales_y3(), fnData.Sales_y2(), fnData.Sales_y1()]
+        sSalesIncRateTrend = self.TrendInfo(dSalesList)
+        self.__Data.SetSalesIncRateTrend(sSalesIncRateTrend)
+
+        # 영업이익 증가율
+        dBsProfIncRate_y3_y2 = self.ExpReturnRate(fnData.BsProf_y2(), fnData.BsProf_y3())
+        dBsProfIncRate_y2_y1 = self.ExpReturnRate(fnData.BsProf_y1(), fnData.BsProf_y2())
+        dBsProfIncRate_lqy1_lq = self.ExpReturnRate(fnData.BsProfLastQ(), fnData.BsProfLastQ_y1())
+
+        self.__Data.SetBsProfIncRate_y3_y2(dBsProfIncRate_y3_y2)
+        self.__Data.SetBsProfIncRate_y2_y1(dBsProfIncRate_y2_y1)
+        self.__Data.SetBsProfIncRate_lqy1_lq(dBsProfIncRate_lqy1_lq)
+
+        dBsProfIncRateList = [dBsProfIncRate_y3_y2, dBsProfIncRate_y2_y1, dBsProfIncRate_lqy1_lq]
+        dBsProfIncRateAvg = self.Average(dBsProfIncRateList)
+        self.__Data.SetBsProfIncRateAvg(dBsProfIncRateAvg)
+
+        dBsProfList = [fnData.BsProf_y3(), fnData.BsProf_y2(), fnData.BsProf_y1()]
+        sBsProfIncRateTrend = self.TrendInfo(dBsProfList)
+        self.__Data.SetBsProfIncRateTrend(sBsProfIncRateTrend)
+
+
         return True
 
 
     def DomNetProfPredQ(self, sLastQ, nDomNetProf_y1, nDomNetProfLastQ, nDomNetProfLastQ_y1):
-        if self.QuarterNum(sLastQ) == 4:
-            return nDomNetProfLastQ
-
         if math.isnan(nDomNetProf_y1) or math.isnan(nDomNetProfLastQ) or math.isnan(nDomNetProfLastQ_y1):
             return math.nan
+
+        if self.QuarterNum(sLastQ) == 4:
+            return nDomNetProfLastQ
 
         if nDomNetProfLastQ_y1 == 0 :
             return math.nan
@@ -838,11 +975,11 @@ class CStockCustomModel:
 
     # 영업이익
     def BsProfPredQ(self, sLastQ, nBsProf_y1, nBsProfLastQ, nBsProfLastQ_y1):
-        if self.QuarterNum(sLastQ) == 4:
-            return nBsProfLastQ
-
         if math.isnan(nBsProf_y1) or math.isnan(nBsProfLastQ) or math.isnan(nBsProfLastQ_y1):
             return math.nan
+
+        if self.QuarterNum(sLastQ) == 4:
+            return nBsProfLastQ
 
         if nBsProfLastQ_y1 == 0:
             return math.nan
@@ -850,6 +987,17 @@ class CStockCustomModel:
         dIncRate = (nBsProfLastQ - nBsProfLastQ_y1) / abs(nBsProfLastQ_y1)
         nBsProfPredQ = nBsProf_y1 + abs(nBsProf_y1)*dIncRate
         return math.trunc(nBsProfPredQ)
+
+    def DomCapPredQ(self, sLastQ, nDomCap_y1, nDomCapLastQ, nDomNetProfPredQ):
+        if math.isnan(nDomCap_y1) or math.isnan(nDomCapLastQ) or math.isnan(nDomNetProfPredQ):
+            return math.nan
+
+        if self.QuarterNum(sLastQ) == 4:
+            return nDomCapLastQ
+
+        nDomCapPredQ = nDomCap_y1 + nDomNetProfPredQ
+
+        return nDomCapPredQ
 
     # 비영업이익
     def NonBsProf_y1(self, nBsProfBefTax_y1, nBsProf_y1):
@@ -884,6 +1032,10 @@ class CStockCustomModel:
 
         dNonBsRateLastQ = nNonBsProfLastQ / nBsProfLastQ * 100
         return round(dNonBsRateLastQ,2)
+
+
+
+
 
     # ROE
     def RoePredQ(self, nDomNetProfPredQ, nDomCapLastQ):
@@ -993,15 +1145,15 @@ class CStockCustomModel:
         return math.trunc(nEpsBsProf)
 
     #SRIM
-    def SRim(self, nDomCapLastQ, dRoeRate, dBondRate, w):
-        if math.isnan(nDomCapLastQ) or math.isnan(dRoeRate) or math.isnan(dBondRate):
+    def SRim(self, nDomCap, dRoeRate, dBondRate, w):
+        if math.isnan(nDomCap) or math.isnan(dRoeRate) or math.isnan(dBondRate):
             return math.nan
 
-        if nDomCapLastQ < 0 :
+        if nDomCap < 0 :
             return math.nan
 
-        nSrim = nDomCapLastQ \
-                + (nDomCapLastQ * (dRoeRate - dBondRate)) \
+        nSrim = nDomCap \
+                + (nDomCap * (dRoeRate - dBondRate)) \
                 * w / (1 + dBondRate - w)
 
         return math.trunc(nSrim)
@@ -1040,6 +1192,38 @@ class CStockCustomModel:
             return True
 
         return False
+
+    def TrendInfo(self, dataList : []):
+        if len(dataList) == 0:
+            return math.nan
+
+        bInc = True
+        for i in range(len(dataList)-1):
+            if math.isnan(dataList[i]):
+                return ''
+
+            if i==0:
+                if dataList[i] <= dataList[i+1]:
+                    bInc = True
+                else:
+                    bInc = False
+            else:
+                if bInc:
+                    if dataList[i] <= dataList[i+1]:
+                        continue
+                    else:
+                        return ''
+                else:
+                    if dataList[i] > dataList[i+1]:
+                        continue
+                    else:
+                        return ''
+
+        if bInc:
+            return '증가추세'
+        else:
+            return '감소추세'
+
 
     def ExpReturnRate(self, nExpPrice, nLastPrice):
         if math.isnan(nExpPrice) or math.isnan(nLastPrice):

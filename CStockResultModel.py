@@ -12,7 +12,60 @@ class CStockResultData:
                 self.__sTagMarket,
                 self.__sTagIndustry,
                 self.__sTagLastQ,
-                self.__sBondBBB_5Rate,
+                self.__sTagLastPrice,
+
+
+                self.__sTagDomCapLastQ,
+                self.__sTagDomCap_y1,
+                self.__sTagDomCapPredQ,
+                self.__sTagCapOrgLastQ,
+                self.__sTagCapTotalLastQ,
+                self.__sTagAssetLastQ,
+                self.__sTagDebtLastQ,
+
+                self.__sTagSales_y3,
+                self.__sTagSales_y2,
+                self.__sTagSales_y1,
+                self.__sTagSalesLastQ,
+                self.__sTagSalesLastQ_y1,
+
+                self.__sTagBsProf_y3,
+                self.__sTagBsProf_y2,
+                self.__sTagBsProf_y1,
+                self.__sTagBsProfLastQ,
+                self.__sTagBsProfLastQ_y1,
+                self.__sTagBsProfPredQ,
+
+                self.__sTagNonBsProf_y1,
+                self.__sTagNonBsProfLastQ,
+                self.__sTagDomNetProf_y1,
+                self.__sTagDomNetProfLastQ,
+                self.__sTagDomNetProfLastQ_y1,
+                self.__sTagDomNetProfPredQ,
+
+                self.__sTagNetProfLastQ,
+                self.__sTagBsProfBefTax_y1,
+                self.__sTagBsProfBefTaxLastQ,
+
+                self.__sTagSalesIncRate_y3_y2,
+                self.__sTagSalesIncRate_y2_y1,
+                self.__sTagSalesIncRate_lqy1_lq,
+                self.__sTagSalesIncRateAvg,
+                self.__sTagSalesIncRateTrend,
+
+                self.__sTagBsProfIncRate_y3_y2,
+                self.__sTagBsProfIncRate_y2_y1,
+                self.__sTagBsProfIncRate_lqy1_lq,
+                self.__sTagBsProfIncRateAvg,
+                self.__sTagBsProfIncRateTrend,
+
+                self.__sTagCfBs_y1,
+                self.__sTagCfBsLastQ,
+                self.__sTagCfInv_y1,
+                self.__sTagCfInvLastQ,
+                self.__sTagCfFin_y1,
+                self.__sTagCfFinLastQ,
+
                 self.__sTagRoe_y1,
                 self.__sTagRoe_y2,
                 self.__sTagRoe_y3,
@@ -30,28 +83,13 @@ class CStockResultData:
                 self.__sTagEpsIncrRate,
                 # self.__sTagEpsBsProf_y1,
                 # self.__sTagEpsBsProfPredQ,
+
                 self.__sTagPer,
+                self.__sTagPegr,
                 self.__sTagIndusPer,
                 self.__sTagPbr,
                 self.__sTagDivIncome,
-                self.__sTagCfBs_y1,
-                self.__sTagCfBsLastQ,
-                self.__sTagCfInv_y1,
-                self.__sTagCfInvLastQ,
-                self.__sTagCfFin_y1,
-                self.__sTagCfFinLastQ,
-                self.__sTagNonBsProf_y1,
-                self.__sTagNonBsProfLastQ,
-                self.__sTagBsProf_y1,
-                self.__sTagBsProfLastQ,
-                self.__sTagBsProfLastQ_y1,
-                self.__sTagBsProfPredQ,
-                self.__sTagDomNetProf_y1,
-                self.__sTagDomNetProfLastQ,
-                self.__sTagDomNetProfLastQ_y1,
-                self.__sTagDomNetProfPredQ,
-                self.__sTagBsProfBefTax_y1,
-                self.__sTagBsProfBefTaxLastQ,
+
                 self.__sTagSRim80Consen,
                 self.__sTagSRim80PredQ,
                 self.__sTagSRim80PredY,
@@ -91,26 +129,23 @@ class CStockResultData:
                 self.__sTagSRimExpRate100PredY,
                 self.__sTagSRimExpRateAvg100,
                 self.__sTagSRimExpRate100_y1,
-                self.__sTagDomCapLastQ,
-                self.__sTagDomCap_y1,
-                self.__sTagCapOrgLastQ,
-                self.__sTagCapTotalLastQ,
-                self.__sTagAssetLastQ,
-                self.__sTagDebtLastQ,
-                self.__sTagLastPrice,
+
                 self.__sTagMarketCap,
                 self.__sTagStockCntOrd,
                 self.__sTagStockCntPref,
                 self.__sTagStockCntTot,
+
                 self.__sTagNetLoanRate,
                 self.__sTagInterCovRate,
+
                 self.__sTagNonBsRate_y1,
                 self.__sTagNonBsRateLastQ,
+
                 self.__sTagCfBsProfDiff_y1,
                 self.__sTagCfBsProfDiffLastQ,
                 self.__sTagCfPattern_y1,
                 self.__sTagCfPatternLastQ,
-                self.__sTagPegr,
+
                 self.__sTagCortaxCond,
                 # self.__sTagKPriceBsProf_y1,
                 # self.__sTagKPriceBsProfPredQ,
@@ -124,9 +159,12 @@ class CStockResultData:
                 self.__sTagKPriceNetProfExpRatePredQ,
                 self.__sTagKPriceNetProfExpRatePredY,
                 self.__sTagKPriceNetProfExpRateConsen,
+
                 self.__sTagPassFail,
-                self.__sTagFailReason
-        ])
+                self.__sTagFailReason,
+                self.__sBondBBB_5Rate,
+
+            ])
 
 
     def AppendData(self, stockCode : str, fnData: CFnguideData , customData: CStockCustomData):
@@ -166,6 +204,13 @@ class CStockResultData:
             self.__sTagCfFinLastQ : fnData.CfFinLastQ(),
             self.__sTagNonBsProf_y1 : customData.NonBsProf_y1(),
             self.__sTagNonBsProfLastQ : customData.NonBsProfLastQ(),
+            self.__sTagSales_y3: fnData.Sales_y3(),
+            self.__sTagSales_y2: fnData.Sales_y2(),
+            self.__sTagSales_y1: fnData.Sales_y1(),
+            self.__sTagSalesLastQ: fnData.SalesLastQ(),
+            self.__sTagSalesLastQ_y1: fnData.SalesLastQ_y1(),
+            self.__sTagBsProf_y3 : fnData.BsProf_y3(),
+            self.__sTagBsProf_y2 : fnData.BsProf_y2(),
             self.__sTagBsProf_y1 : fnData.BsProf_y1(),
             self.__sTagBsProfLastQ : fnData.BsProfLastQ(),
             self.__sTagBsProfLastQ_y1 : fnData.BsProfLastQ_y1(),
@@ -174,6 +219,7 @@ class CStockResultData:
             self.__sTagDomNetProfLastQ : fnData.DomNetProfLastQ(),
             self.__sTagDomNetProfLastQ_y1 : fnData.DomNetProfLastQ_y1(),
             self.__sTagDomNetProfPredQ : customData.DomNetProfPredQ(),
+            self.__sTagNetProfLastQ : fnData.NetProfLastQ(),
             self.__sTagBsProfBefTax_y1 : fnData.BsProfBefTax_y1(),
             self.__sTagBsProfBefTaxLastQ : fnData.BsProfBefTaxLastQ(),
             self.__sTagSRim80Consen : customData.SRim80Consen(),
@@ -217,6 +263,7 @@ class CStockResultData:
             self.__sTagSRimExpRate100_y1 : customData.SRimExpRate100_y1(),
             self.__sTagDomCapLastQ : fnData.DomCapLastQ(),
             self.__sTagDomCap_y1 : fnData.DomCap_y1(),
+            self.__sTagDomCapPredQ : customData.DomCapPredQ(),
             self.__sTagCapOrgLastQ : fnData.CapOrgLastQ(),
             self.__sTagCapTotalLastQ : fnData.CapTotalLastQ(),
             self.__sTagAssetLastQ : fnData.AssetLastQ(),
@@ -249,7 +296,19 @@ class CStockResultData:
             self.__sTagKPriceNetProfExpRatePredY : customData.KPriceNetProfExpRatePredY(),
             self.__sTagKPriceNetProfExpRateConsen : customData.KPriceNetProfExpRateConsen(),
             self.__sTagPassFail : customData.PassFail(),
-            self.__sTagFailReason : customData.FailReason()
+            self.__sTagFailReason : customData.FailReason(),
+
+            self.__sTagSalesIncRate_y3_y2 : customData.SalesIncRate_y3_y2(),
+            self.__sTagSalesIncRate_y2_y1 : customData.SalesIncRate_y2_y1(),
+            self.__sTagSalesIncRate_lqy1_lq: customData.SalesIncRate_lqy1_lq(),
+            self.__sTagSalesIncRateAvg: customData.SalesIncRateAvg(),
+            self.__sTagSalesIncRateTrend: customData.SalesIncRateTrend(),
+
+            self.__sTagBsProfIncRate_y3_y2: customData.BsProfIncRate_y3_y2(),
+            self.__sTagBsProfIncRate_y2_y1: customData.BsProfIncRate_y2_y1(),
+            self.__sTagBsProfIncRate_lqy1_lq: customData.BsProfIncRate_lqy1_lq(),
+            self.__sTagBsProfIncRateAvg: customData.BsProfIncRateAvg(),
+            self.__sTagBsProfIncRateTrend: customData.BsProfIncRateTrend()
         }
 
         self.__ResultDf = self.__ResultDf.append(dictData, ignore_index=True)
@@ -277,6 +336,14 @@ class CStockResultData:
             self.__sTagSRimPrice80PredQ,
             self.__sTagSRimPrice80PredY,
             self.__sTagSRimPrice80_y1,
+
+            self.__sTagSalesIncRateAvg,
+            self.__sTagSalesIncRate_lqy1_lq,
+            self.__sTagSalesIncRateTrend,
+
+            self.__sTagBsProfIncRateAvg,
+            self.__sTagBsProfIncRate_lqy1_lq,
+            self.__sTagBsProfIncRateTrend,
 
             self.__sTagNonBsRateLastQ,
             self.__sTagNonBsRate_y1,
@@ -318,6 +385,13 @@ class CStockResultData:
             self.__sTagSrimPriceGrp,
             self.__sTagSrimPriceGrp,
             self.__sTagSrimPriceGrp,
+
+            self.__sTagGrowthGrp,
+            self.__sTagGrowthGrp,
+            self.__sTagGrowthGrp,
+            self.__sTagGrowthGrp,
+            self.__sTagGrowthGrp,
+            self.__sTagGrowthGrp,
 
             self.__sTagSafeIndGrp,
             self.__sTagSafeIndGrp,
@@ -376,14 +450,11 @@ class CStockResultData:
     __sTagCfFinLastQ = '재무CF[Q](억)'
     __sTagNonBsProf_y1 = '비영업이익[-Y1](억)'
     __sTagNonBsProfLastQ = '비영업이익[Q](억)'
-    __sTagBsProf_y1 = '영업이익[-Y1](억)'
-    __sTagBsProfLastQ = '영업이익[Q](억)'
-    __sTagBsProfLastQ_y1 = '영업이익[Q-Y1](억)'
-    __sTagBsProfPredQ = '영업이익[Q+](억)'
     __sTagDomNetProf_y1 = '지배순이익[-Y1](억)'
     __sTagDomNetProfLastQ = '지배순이익[Q](억)'
     __sTagDomNetProfLastQ_y1 = '지배순이익[Q-Y1](억)'
     __sTagDomNetProfPredQ = '지배순이익[Q+](억)'
+    __sTagNetProfLastQ = '당기순이익[Q](억)'
     __sTagBsProfBefTax_y1 = '세전계속사업이익[-Y1](억)'
     __sTagBsProfBefTaxLastQ = '세전계속사업이익[Q](억)'
     __sTagSRim80Consen = 'SRIM_W80[C](억)'
@@ -427,6 +498,7 @@ class CStockResultData:
     __sTagSRimExpRateAvg100 = 'SRIM_EXP_AVG_W100'
     __sTagDomCapLastQ = '지배주주자본[Q](억)'
     __sTagDomCap_y1 = '지배주주자본[-Y1](억)'
+    __sTagDomCapPredQ = '지배주주자본[Q+](억)'
     __sTagCapOrgLastQ = '자본금[Q](억)'
     __sTagCapTotalLastQ = '자본[Q](억)'
     __sTagAssetLastQ = '자산[Q](억)'
@@ -462,11 +534,39 @@ class CStockResultData:
     __sTagPassFail = 'PASS/FAIL'
     __sTagFailReason = 'FAIL사유'
 
+    # Sales 성장지표
+    __sTagSales_y3 = '매출[-Y3](억)'
+    __sTagSales_y2 = '매출[-Y2](억)'
+    __sTagSales_y1 = '매출[-Y1](억)'
+    __sTagSalesLastQ = '매출[Q](억)'
+    __sTagSalesLastQ_y1 = '매출[Q-Y1](억)'
+
+    __sTagSalesIncRate_y3_y2 ='매출증가율[-Y3][-Y2](%)'
+    __sTagSalesIncRate_y2_y1 ='매출증가율[-Y2][-Y1](%)'
+    __sTagSalesIncRate_lqy1_lq ='매출증가율[Q-Y1][Q](%)'
+    __sTagSalesIncRateAvg ='매출증가율[AVG](%)'
+    __sTagSalesIncRateTrend ='매출증가추세'
+
+    # BsProf 성장지표
+    __sTagBsProf_y3 = '영업이익[-Y3](억)'
+    __sTagBsProf_y2 = '영업이익[-Y2](억)'
+    __sTagBsProf_y1 = '영업이익[-Y1](억)'
+    __sTagBsProfLastQ = '영업이익[Q](억)'
+    __sTagBsProfLastQ_y1 = '영업이익[Q-Y1](억)'
+    __sTagBsProfPredQ = '영업이익[Q+](억)'
+
+    __sTagBsProfIncRate_y3_y2 = '영익증가율[-Y3][-Y2](%)'
+    __sTagBsProfIncRate_y2_y1 = '영익증가율[-Y2][-Y1](%)'
+    __sTagBsProfIncRate_lqy1_lq = '영익증가율[Q-Y1][Q](%)'
+    __sTagBsProfIncRateAvg = '영익증가율[AVG](%)'
+    __sTagBsProfIncRateTrend = '영익증가추세'
+
     # Group Column Names
     __sTagStockGrp = '종목'
     __sTagSrimExpGrp = '기대수익_SRIM'
     __sTagSrimPriceGrp = '적정주가_SRIM'
     __sTagKPriceGrp = '적정주가_KPRICE'
+    __sTagGrowthGrp = '성장지표'
     __sTagSafeIndGrp = '안전지표'
     __sTagSubIndGrp = '보조지표'
     __sTagDebGrp = '부채항목'

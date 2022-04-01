@@ -35,12 +35,20 @@ class CFnguideData:
 
         ### Finance Statement ###
         self.__sLastQ = ""
+        self.__nSales_y3 = math.nan
+        self.__nSales_y2 = math.nan
+        self.__nSales_y1 = math.nan
+        self.__nSalesLastQ = math.nan
+        self.__nSalesLastQ_y1 = math.nan
+        self.__nBsProf_y3 = math.nan
+        self.__nBsProf_y2 = math.nan
         self.__nBsProf_y1 = math.nan
         self.__nBsProfLastQ = math.nan
         self.__nBsProfLastQ_y1 = math.nan
         self.__nDomNetProf_y1 = math.nan
         self.__nDomNetProfLastQ = math.nan
         self.__nDomNetProfLastQ_y1 = math.nan
+        self.__nNetProfLastQ = math.nan
         self.__nBsProfBefTax_y1 = math.nan
         self.__nBsProfBefTaxLastQ = math.nan
         self.__nCfBs_y1 = math.nan
@@ -190,6 +198,30 @@ class CFnguideData:
     def SetLastQ(self, sLastQ):
         self.__sLastQ = sLastQ
 
+    def SetSales_y3(self,nSales_y3):
+        self.__nSales_y3 = nSales_y3
+
+    def SetSales_y2(self,nSales_y2):
+        self.__nSales_y2 = nSales_y2
+
+    def SetSales_y1(self,nSales_y1):
+        self.__nSales_y1 = nSales_y1
+
+    def SetSalesLastQ(self,nSalesLastQ):
+        self.__nSalesLastQ = nSalesLastQ
+
+    def SetSalesLastQ_y1(self,nSalesLastQ_y1):
+        self.__nSalesLastQ_y1 = nSalesLastQ_y1
+
+    def SetSales_y1(self,nSales_y1):
+        self.__nSales_y1 = nSales_y1
+
+    def SetBsProf_y3(self,nBsProf_y3):
+        self.__nBsProf_y3 = nBsProf_y3
+
+    def SetBsProf_y2(self,nBsProf_y2):
+        self.__nBsProf_y2 = nBsProf_y2
+
     def SetBsProf_y1(self,nBsProf_y1):
         self.__nBsProf_y1 = nBsProf_y1
 
@@ -207,6 +239,9 @@ class CFnguideData:
 
     def SetDomNetProfLastQ_y1(self, nDomNetProfLastQ_y1):
         self.__nDomNetProfLastQ_y1 = nDomNetProfLastQ_y1
+
+    def SetNetProfLastQ(self, nNetProfLastQ):
+        self.__nNetProfLastQ = nNetProfLastQ
 
     def SetBsProfBefTax_y1(self, nBsProfBefTax_y1):
         self.__nBsProfBefTax_y1 = nBsProfBefTax_y1
@@ -254,6 +289,27 @@ class CFnguideData:
     def LastQ(self):
         return self.__sLastQ
 
+    def Sales_y3(self):
+        return self.__nSales_y3
+
+    def Sales_y2(self):
+        return self.__nSales_y2
+
+    def Sales_y1(self):
+        return self.__nSales_y1
+
+    def SalesLastQ(self):
+        return self.__nSalesLastQ
+
+    def SalesLastQ_y1(self):
+        return self.__nSalesLastQ_y1
+
+    def BsProf_y3(self):
+        return self.__nBsProf_y3
+
+    def BsProf_y2(self):
+        return self.__nBsProf_y2
+
     def BsProf_y1(self):
         return self.__nBsProf_y1
 
@@ -271,6 +327,9 @@ class CFnguideData:
 
     def DomNetProfLastQ_y1(self):
         return self.__nDomNetProfLastQ_y1
+
+    def NetProfLastQ(self):
+        return self.__nNetProfLastQ
 
     def BsProfBefTax_y1(self):
         return self.__nBsProfBefTax_y1
@@ -460,7 +519,7 @@ class CFnguideModel:
 
 
             sIndusPer = html.select_one('#corp_group2 > dl:nth-child(3) > dd').string
-            sIndusPer = sIndusPer.replace(',', '')
+            sIndusPer = sIndusPer.replace('-', '0')
             sIndusPer = sIndusPer.replace(',', '')
             dIndusPer = float(sIndusPer)
             self.__Data.SetIndusPer(dIndusPer)
@@ -518,18 +577,38 @@ class CFnguideModel:
             profDfIndexes = profDf.index.tolist()
 
             # Column Name
+            sProfDfCol_y3 = profDf.columns[0]
+            sProfDfCol_y2 = profDf.columns[1]
             sProfDfCol_y1 = profDf.columns[2]
             sProfDfColLastQ = profDf.columns[3]
             sProfDfColLastQ_y1 = profDf.columns[4]
             self.__Data.SetLastQ(sProfDfColLastQ)
 
             # Get/Set Data
+            nSales_y3 = profDf.loc[self.__sTagSales, sProfDfCol_y3]
+            nSales_y2 = profDf.loc[self.__sTagSales, sProfDfCol_y2]
+            nSales_y1 = profDf.loc[self.__sTagSales, sProfDfCol_y1]
+            nSalesLastQ = profDf.loc[self.__sTagSales, sProfDfColLastQ]
+            nSalesLastQ_y1 = profDf.loc[self.__sTagSales, sProfDfColLastQ_y1]
+            self.__Data.SetSales_y3(nSales_y3)
+            self.__Data.SetSales_y2(nSales_y2)
+            self.__Data.SetSales_y1(nSales_y1)
+            self.__Data.SetSalesLastQ(nSalesLastQ)
+            self.__Data.SetSalesLastQ_y1(nSalesLastQ_y1)
+
+            nBsProf_y3 = profDf.loc[self.__sTagBsProf, sProfDfCol_y3]
+            nBsProf_y2 = profDf.loc[self.__sTagBsProf, sProfDfCol_y2]
             nBsProf_y1 = profDf.loc[self.__sTagBsProf, sProfDfCol_y1]
             nBsProfLastQ = profDf.loc[self.__sTagBsProf, sProfDfColLastQ]
             nBsProfLastQ_y1 = profDf.loc[self.__sTagBsProf, sProfDfColLastQ_y1]
+            self.__Data.SetBsProf_y3(nBsProf_y3)
+            self.__Data.SetBsProf_y2(nBsProf_y2)
             self.__Data.SetBsProf_y1(nBsProf_y1)
             self.__Data.SetBsProfLastQ(nBsProfLastQ)
             self.__Data.SetBsProfLastQ_y1(nBsProfLastQ_y1)
+
+            nNetProfLastQ = profDf.loc[self.__sTagNetProf, sProfDfColLastQ]
+            self.__Data.SetNetProfLastQ(nNetProfLastQ)
 
             nDomNetProf_y1 = math.nan
             nDomNetProfLastQ = math.nan
@@ -745,6 +824,7 @@ class CFnguideModel:
 
     # 포괄손익계산서
     __sTagProfitTableMark = '영업이익'
+    __sTagSales = '매출액'
     __sTagBsProf = '영업이익'
     __sTagDomNetProf = '지배주주순이익'
     __sTagNetProf = '당기순이익'
