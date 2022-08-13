@@ -406,7 +406,7 @@ class CFnguideModel:
         try:
             # Get Request
             url = 'http://comp.fnguide.com/SVO2/ASP/SVD_Main.asp?pGB=1&gicode=A{}' \
-                  '&cID=&MenuYn=Y&ReportGB=&NewMenuID=101&stkGb=701'\
+                  '&cID=&MenuYn=Y&ReportGB=D&NewMenuID=101&stkGb=701'\
                 .format(self.__sStockCode)
             response = requests.get(url)
 
@@ -555,8 +555,10 @@ class CFnguideModel:
         try:
             # Get Request
             url = 'http://comp.fnguide.com/SVO2/ASP/SVD_Finance.asp?pGB=1&gicode=A{}' \
-                  '&cID=&MenuYn=Y&ReportGB=&NewMenuID=103&stkGb=701' \
+                  '&cID=&MenuYn=Y&ReportGB=D&NewMenuID=103&stkGb=701' \
                 .format(self.__sStockCode)
+            # ReportGB=D : 연결, ReportGB=B : 개별, ReportGB= : 디폴트
+            # 이거 디폴트로 해놓으면 가끔 개별로 열린다(DL이앤씨)
             response = requests.get(url)
 
             ########## [포괄손익계산서 테이블] ##########
@@ -734,7 +736,7 @@ class CFnguideModel:
         try:
             # Get Request
             url = 'http://comp.fnguide.com/SVO2/ASP/SVD_FinanceRatio.asp?pGB=1&gicode=A{}' \
-                  '&cID=&MenuYn=Y&ReportGB=&NewMenuID=104&stkGb=701' \
+                  '&cID=&MenuYn=Y&ReportGB=D&NewMenuID=104&stkGb=701' \
                 .format(self.__sStockCode)
             response = requests.get(url)
 

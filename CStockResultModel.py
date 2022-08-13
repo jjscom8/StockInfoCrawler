@@ -1,5 +1,6 @@
 from CFnguideModel import  CFnguideData
 from CStockCustomModel import  CStockCustomData
+from openpyxl import load_workbook
 import pandas as pd
 import os
 
@@ -313,6 +314,9 @@ class CStockResultData:
 
         self.__ResultDf = self.__ResultDf.append(dictData, ignore_index=True)
 
+    def ClearData(self):
+        self.__ResultDf.cle
+
     def ResultDf(self):
         return  self.__ResultDf
 
@@ -582,17 +586,30 @@ class CStockResultModel:
     def AppendData(self, stockCode : str, fnData: CFnguideData , customData: CStockCustomData):
         self.__Data.AppendData(stockCode, fnData, customData)
 
+    def ClearData(self):
+        self.__Data.de
+
     def ExportExcel(self, sOutPath, sSheetName):
         resDf = self.__Data.ResultDf()
 
         if not os.path.exists(sOutPath):
             with pd.ExcelWriter(sOutPath, mode='w', engine='openpyxl') as writer:
-                resDf.to_excel(writer, sheet_name=sSheetName)
+                resDf.to_excel(writer, sheet_name=sSheetName, index=False)
                 # writer.save()
         else:
-            with pd.ExcelWriter(sOutPath, mode='a', engine='openpyxl') as writer:
-                resDf.to_excel(writer, sheet_name=sSheetName)
-                # writer.save()
+            wb = load_workbook(sOutPath)
+            if sSheetName in wb.sheetnames:
+                with pd.ExcelWriter(sOutPath, mode = 'a', engine='openpyxl') as writer:
+                    writer.book = wb
+                    writer.sheets = dict( (ws.title,ws) for ws in wb.worksheets)
+                    resDf.to_excel(writer, sheet_name=sSheetName, header=False,
+                                   startrow=writer.sheets[sSheetName].max_row, index=False)
+                    # writer.save()
+            else:
+                with pd.ExcelWriter(sOutPath, mode='a', engine='openpyxl') as writer:
+                    resDf.to_excel(writer, sheet_name=sSheetName, index=False)
+
+                    # writer.save()
 
     def ExportSummaryExcel(self, sOutPath, sSheetName):
         resDf = self.__Data.ResultDf()
@@ -602,12 +619,25 @@ class CStockResultModel:
         if not os.path.exists(sOutPath):
             with pd.ExcelWriter(sOutPath, mode='w', engine='openpyxl') as writer:
                 summaryDf.to_excel(writer, sheet_name=sSheetName)
-        else:
-            with pd.ExcelWriter(sOutPath, mode='a', engine='openpyxl') as writer:
-                summaryDf.to_excel(writer, sheet_name=sSheetName)
-                sheet = writer.sheets[sSheetName]
                 # 멀티 컬럼으로 EXCEL Export시 헤더 아래 Empty row 삭제
+                sheet = writer.sheets[sSheetName]
                 sheet.delete_rows(3)
+        else:
+            wb = load_workbook(sOutPath)
+            if sSheetName in wb.sheetnames:
+                with pd.ExcelWriter(sOutPath, mode='a', engine='openpyxl') as writer:
+                    writer.book = wb
+                    writer.sheets = dict((ws.title, ws) for ws in wb.worksheets)
+                    # 멀티 컬럼 컬럼은 to_excel(index=False)를 지원하지 않는다
+                    summaryDf.to_excel(writer, sheet_name=sSheetName, header=False, #index=False
+                                       startrow=writer.sheets[sSheetName].max_row-1)
+                    # writer.save()
+            else:
+                with pd.ExcelWriter(sOutPath, mode='a', engine='openpyxl') as writer:
+                    summaryDf.to_excel(writer, sheet_name=sSheetName)
+                    # 멀티 컬럼으로 EXCEL Export시 헤더 아래 Empty row 삭제
+                    sheet = writer.sheets[sSheetName]
+                    sheet.delete_rows(3)
 
         # 위에서 engine을 openpyxl로 하게되면 아래 코드가 호환되지 않는다.
         # 그러나 append 모드로 열기위해서는 위 엔진을 사용해야한다.

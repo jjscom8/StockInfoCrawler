@@ -2,6 +2,7 @@ import pandas as pd
 import requests
 import os
 from io import BytesIO
+from openpyxl import load_workbook
 
 class CKrxData:
     def __init__(self):
@@ -77,15 +78,25 @@ class CKrxModel:
             return False
 
     def ExportExcel(self, sOutPath, sSheetName):
+
         resDf = self.__Data.CompDf()
         if not os.path.exists(sOutPath):
             with pd.ExcelWriter(sOutPath, mode='w', engine='openpyxl') as writer:
                 resDf.to_excel(writer, sheet_name=sSheetName)
                 # writer.save()
         else:
-            with pd.ExcelWriter(sOutPath, mode='a', engine='openpyxl') as writer:
-                resDf.to_excel(writer, sheet_name=sSheetName)
-                # writer.save()
+            wb = load_workbook(sOutPath, read_only=True)
+            if sSheetName in wb.sheetnames:
+                with pd.ExcelWriter(sOutPath, mode = 'a', engine='openpyxl') as writer:
+                    writer.book = wb
+                    writer.sheets = dict( (ws.title,ws) for ws in wb.worksheets)
+                    resDf.to_excel(writer, sheet_name=sSheetName, header=False,
+                                   startrow=writer.sheets[sSheetName].max_row, index=False)
+                    # writer.save()
+            else:
+                with pd.ExcelWriter(sOutPath, mode='a', engine='openpyxl') as writer:
+                    resDf.to_excel(writer, sheet_name=sSheetName, index=False)
+
 
     # Header
     __sTagName = '회사명'

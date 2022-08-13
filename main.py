@@ -21,6 +21,8 @@ if __name__ == '__main__':
     startDateTime = datetime.datetime.now()
     outDir = 'D:/DATA/STOCK_CRAWLING_DATA'
     print(' - START DATE TIME :: ', startDateTime.strftime('%Y-%m-%d %H:%M:%S'))
+    sResFileName = 'DEVS_' + startDateTime.strftime('%Y%m%d_%H%M%S') + '.xlsx'
+    sResFilePath = outDir + '/' + sResFileName
 
 
     bCustomOption = False
@@ -64,6 +66,8 @@ if __name__ == '__main__':
     krxData = krxModel.Data()
     krxCompDf = krxData.CompDf()
 
+    # Export Excel
+    krxModel.ExportExcel(sResFilePath, 'TARGET')
 
     ########## [ KIS 채권정보 크롤링 ] ##########
     kisModel = CKisRatingModel()
@@ -71,11 +75,13 @@ if __name__ == '__main__':
         print( " - Fail :: CrawlBondBBBRate ")
     kisData = kisModel.Data()
 
-    # Define Result
-    resModel = CStockResultModel()
+    # Define Result -> When all datas are appended
+    # resModel = CStockResultModel()
+
     ########## [ Fnguide 크롤링 & Update Custom Data ] ##########
     stockCodes = krxCompDf.index.to_list()
     for curStockCode in tqdm.tqdm(stockCodes):
+        resModel = CStockResultModel()
         ########## [ Fnguide 크롤링 ] ##########
         sCompName = krxCompDf.loc[curStockCode, krxModel.ColCompName()]
         sIndustry = krxCompDf.loc[curStockCode, krxModel.ColIndustry()]
@@ -107,15 +113,17 @@ if __name__ == '__main__':
         # Append To Result
         resModel.AppendData(curStockCode, fnData, customData)
 
+        # Export Excel
+        resModel.ExportExcel(sResFilePath, 'RAW')
+        resModel.ExportSummaryExcel(sResFilePath, 'SUMMARY')
+
         time.sleep(3)
 
-    # Export Excel
     sResFileName = 'DEVS_' + startDateTime.strftime('%Y%m%d_%H%M%S') + '.xlsx'
     sResFilePath = outDir + '/' + sResFileName
 
-    krxModel.ExportExcel(sResFilePath, 'TARGET')
-    resModel.ExportExcel(sResFilePath, 'RAW')
-    resModel.ExportSummaryExcel(sResFilePath, 'SUMMARY')
+    # resModel.ExportExcel(sResFilePath, 'RAW')
+    # resModel.ExportSummaryExcel(sResFilePath, 'SUMMARY')
 
 
     endDateTime = datetime.datetime.now()
