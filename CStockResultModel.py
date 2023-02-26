@@ -329,8 +329,9 @@ class CStockResultData:
             self.__sTagPassFail,
             self.__sTagFailReason,
             self.__sTagLastPrice,
+            self.__sTagMarketCap,
 
-            self.__sTagSRimExpRate80Consen,
+        self.__sTagSRimExpRate80Consen,
             self.__sTagSRimExpRate80PredQ,
             self.__sTagSRimExpRate80PredY,
             self.__sTagSRimExpRate80_y1,
@@ -371,6 +372,7 @@ class CStockResultData:
 
     def SummaryGroupCols(self):
         groupCols = [
+            self.__sTagStockGrp,
             self.__sTagStockGrp,
             self.__sTagStockGrp,
             self.__sTagStockGrp,

@@ -1153,8 +1153,8 @@ class CStockCustomModel:
             return math.nan
 
         nSrim = nDomCap \
-                + (nDomCap * (dRoeRate - dBondRate)) \
-                * w / (1 + dBondRate - w)
+                + (nDomCap * (dRoeRate/100 - dBondRate/100)) \
+                * w / (1 + dBondRate/100 - w)
 
         return math.trunc(nSrim)
 
@@ -1232,7 +1232,7 @@ class CStockCustomModel:
         if nLastPrice == 0:
             return math.nan
 
-        dExpReturnRate = (nExpPrice - nLastPrice) / nLastPrice * 100
+        dExpReturnRate = (nExpPrice - nLastPrice) / abs(nLastPrice) * 100
 
         return round(dExpReturnRate,2)
 

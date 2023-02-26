@@ -555,10 +555,12 @@ class CFnguideModel:
         try:
             # Get Request
             url = 'http://comp.fnguide.com/SVO2/ASP/SVD_Finance.asp?pGB=1&gicode=A{}' \
-                  '&cID=&MenuYn=Y&ReportGB=D&NewMenuID=103&stkGb=701' \
+                  '&cID=&MenuYn=Y&ReportGB=&NewMenuID=103&stkGb=701' \
                 .format(self.__sStockCode)
             # ReportGB=D : 연결, ReportGB=B : 개별, ReportGB= : 디폴트
-            # 이거 디폴트로 해놓으면 가끔 개별로 열린다(DL이앤씨)
+            # : 이거 디폴트로 해놓으면 가끔 개별로 열린다(DL이앤씨)
+            # : 개별만 있는 기업은 연결에 분기 반영이 안되는 문제가 있다
+            #   이런 기업들은 디폴트로 붙으면 개별로 열린다. 따라서, 디폴트로.
             response = requests.get(url)
 
             ########## [포괄손익계산서 테이블] ##########
