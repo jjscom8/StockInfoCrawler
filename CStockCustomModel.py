@@ -13,6 +13,9 @@ class CStockCustomData:
         # 지배주주순이익
         self.__nDomNetProfPredQ = math.nan
 
+        # 매출
+        self.__nSalesPredQ = math.nan
+
         # 영업이익
         self.__nBsProfPredQ = math.nan
 
@@ -129,14 +132,16 @@ class CStockCustomData:
         self.__dSalesIncRate_y2_y1 = math.nan
         self.__dSalesIncRate_lqy1_lq = math.nan
         self.__dSalesIncRateAvg = math.nan
-        self.__sSalesIncRateTrend = ''
+        self.__sSalesIncRateTrend_y3_y1 = ''
+        self.__sSalesIncRateTrend_y3_PredQ = ''
 
         # 영익 증가율
         self.__dBsProfIncRate_y3_y2 = math.nan
         self.__dBsProfIncRate_y2_y1 = math.nan
         self.__dBsProfIncRate_lqy1_lq = math.nan
         self.__dBsProfIncRateAvg = math.nan
-        self.__sBsProfIncRateTrend = ''
+        self.__sBsProfIncRateTrend_y3_y1 = ''
+        self.__sBsProfIncRateTrend_y3_PredQ = ''
 
 
     def SetBondBBB_5Rate(self, dBondBBB_5Rate):
@@ -450,6 +455,13 @@ class CStockCustomData:
     def SRimExpRateAvg100(self):
         return self.__dSRimExpRateAvg100
 
+    # 매출
+    def SetSalesPredQ(self, nSalesPredQ):
+        self.__nSalesPredQ= nSalesPredQ
+
+    def SalesPredQ(self):
+        return self.__nSalesPredQ
+
     # 영업이익
     def SetBsProfPredQ(self, nBsProfPredQ):
         self.__nBsProfPredQ = nBsProfPredQ
@@ -627,8 +639,11 @@ class CStockCustomData:
     def SetSalesIncRateAvg(self, dRate):
         self.__dSalesIncRateAvg = dRate
 
-    def SetSalesIncRateTrend(self, sTrend):
-        self.__sSalesIncRateTrend = sTrend
+    def SetSalesIncRateTrend_y3_y1(self, sTrend):
+        self.__sSalesIncRateTrend_y3_y1 = sTrend
+
+    def SetSalesIncRateTrend_y3_PredQ(self, sTrend):
+        self.__sSalesIncRateTrend_y3_PredQ = sTrend
 
     # Getter
     def SalesIncRate_y3_y2(self):
@@ -643,8 +658,11 @@ class CStockCustomData:
     def SalesIncRateAvg(self):
         return self.__dSalesIncRateAvg
 
-    def SalesIncRateTrend(self):
-        return self.__sSalesIncRateTrend
+    def SalesIncRateTrend_y3_y1(self):
+        return self.__sSalesIncRateTrend_y3_y1
+
+    def SalesIncRateTrend_y3_PredQ(self):
+        return self.__sSalesIncRateTrend_y3_PredQ
 
     # 영익 증가율
     # Setter
@@ -660,8 +678,11 @@ class CStockCustomData:
     def SetBsProfIncRateAvg(self, dRate):
         self.__dBsProfIncRateAvg = dRate
 
-    def SetBsProfIncRateTrend(self, sTrend):
-        self.__sBsProfIncRateTrend = sTrend
+    def SetBsProfIncRateTrend_y3_y1(self, sTrend):
+        self.__sBsProfIncRateTrend_y3_y1 = sTrend
+
+    def SetBsProfIncRateTrend_y3_PredQ(self, sTrend):
+        self.__sBsProfIncRateTrend_y3_PredQ= sTrend
 
     # Getter
     def BsProfIncRate_y3_y2(self):
@@ -676,8 +697,11 @@ class CStockCustomData:
     def BsProfIncRateAvg(self):
         return self.__dBsProfIncRateAvg
 
-    def BsProfIncRateTrend(self):
-        return self.__sBsProfIncRateTrend
+    def BsProfIncRateTrend_y3_y1(self):
+        return self.__sBsProfIncRateTrend_y3_y1
+
+    def BsProfIncRateTrend_y3_PredQ(self):
+        return self.__sBsProfIncRateTrend_y3_PredQ
 
 
 class CStockCustomModel:
@@ -704,11 +728,19 @@ class CStockCustomModel:
                                                 fnData.DomNetProfLastQ(),
                                                 fnData.DomNetProfLastQ_y1())
         self.__Data.SetDomNetProfPredQ(nDomNetProfPredQ)
+
+        # 매출
+        nSalesPredQ = self.EarningPredQ(fnData.LastQ(),
+                                        fnData.Sales_y1(),
+                                        fnData.SalesLastQ(),
+                                        fnData.SalesLastQ_y1())
+        self.__Data.SetSalesPredQ(nSalesPredQ)
+
         # 영업이익
-        nBsProfPredQ = self.BsProfPredQ(fnData.LastQ(),
-                                        fnData.BsProf_y1(),
-                                        fnData.BsProfLastQ(),
-                                        fnData.BsProfLastQ_y1())
+        nBsProfPredQ = self.EarningPredQ(fnData.LastQ(),
+                                         fnData.BsProf_y1(),
+                                         fnData.BsProfLastQ(),
+                                         fnData.BsProfLastQ_y1())
         self.__Data.SetBsProfPredQ(nBsProfPredQ)
 
         # 지배주주지분
@@ -933,9 +965,13 @@ class CStockCustomModel:
         dSalesIncRateAvg = self.Average(dSalesIncRateList)
         self.__Data.SetSalesIncRateAvg(dSalesIncRateAvg)
 
-        dSalesList = [fnData.Sales_y3(), fnData.Sales_y2(), fnData.Sales_y1()]
-        sSalesIncRateTrend = self.TrendInfo(dSalesList)
-        self.__Data.SetSalesIncRateTrend(sSalesIncRateTrend)
+        dSalesList_y3_y1 = [fnData.Sales_y3(), fnData.Sales_y2(), fnData.Sales_y1()]
+        sSalesIncRateTrend_y3_y1 = self.TrendInfo(dSalesList_y3_y1)
+        self.__Data.SetSalesIncRateTrend_y3_y1(sSalesIncRateTrend_y3_y1)
+
+        dSalesList_y3_PredQ = [fnData.Sales_y3(), fnData.Sales_y2(), fnData.Sales_y1(), nSalesPredQ]
+        sSalesIncRateTrend_y3_PredQ = self.TrendInfo(dSalesList_y3_PredQ)
+        self.__Data.SetSalesIncRateTrend_y3_PredQ(sSalesIncRateTrend_y3_PredQ)
 
         # 영업이익 증가율
         dBsProfIncRate_y3_y2 = self.ExpReturnRate(fnData.BsProf_y2(), fnData.BsProf_y3())
@@ -950,10 +986,13 @@ class CStockCustomModel:
         dBsProfIncRateAvg = self.Average(dBsProfIncRateList)
         self.__Data.SetBsProfIncRateAvg(dBsProfIncRateAvg)
 
-        dBsProfList = [fnData.BsProf_y3(), fnData.BsProf_y2(), fnData.BsProf_y1()]
-        sBsProfIncRateTrend = self.TrendInfo(dBsProfList)
-        self.__Data.SetBsProfIncRateTrend(sBsProfIncRateTrend)
+        dBsProfList_y3_y1 = [fnData.BsProf_y3(), fnData.BsProf_y2(), fnData.BsProf_y1()]
+        sBsProfIncRateTrend_y3_y1 = self.TrendInfo(dBsProfList_y3_y1)
+        self.__Data.SetBsProfIncRateTrend_y3_y1(sBsProfIncRateTrend_y3_y1)
 
+        dBsProfList_y3_PredQ = [fnData.BsProf_y3(), fnData.BsProf_y2(), fnData.BsProf_y1(), nBsProfPredQ ]
+        sBsProfIncRateTrend_y3_PredQ = self.TrendInfo(dBsProfList_y3_PredQ)
+        self.__Data.SetBsProfIncRateTrend_y3_PredQ(sBsProfIncRateTrend_y3_PredQ)
 
         return True
 
@@ -974,7 +1013,7 @@ class CStockCustomModel:
         return math.trunc(nDomNetProfPredQ)
 
     # 영업이익
-    def BsProfPredQ(self, sLastQ, nBsProf_y1, nBsProfLastQ, nBsProfLastQ_y1):
+    def EarningPredQ(self, sLastQ, nBsProf_y1, nBsProfLastQ, nBsProfLastQ_y1):
         if math.isnan(nBsProf_y1) or math.isnan(nBsProfLastQ) or math.isnan(nBsProfLastQ_y1):
             return math.nan
 
@@ -1197,32 +1236,17 @@ class CStockCustomModel:
         if len(dataList) == 0:
             return math.nan
 
-        bInc = True
+        sTrend = ''
         for i in range(len(dataList)-1):
             if math.isnan(dataList[i]):
                 return ''
 
-            if i==0:
-                if dataList[i] <= dataList[i+1]:
-                    bInc = True
-                else:
-                    bInc = False
+            if dataList[i] <= dataList[i+1]:
+                sTrend += '+'
             else:
-                if bInc:
-                    if dataList[i] <= dataList[i+1]:
-                        continue
-                    else:
-                        return ''
-                else:
-                    if dataList[i] > dataList[i+1]:
-                        continue
-                    else:
-                        return ''
+                sTrend += '-'
 
-        if bInc:
-            return '증가추세'
-        else:
-            return '감소추세'
+        return sTrend
 
 
     def ExpReturnRate(self, nExpPrice, nLastPrice):

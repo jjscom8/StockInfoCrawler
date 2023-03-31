@@ -29,6 +29,7 @@ class CStockResultData:
                 self.__sTagSales_y1,
                 self.__sTagSalesLastQ,
                 self.__sTagSalesLastQ_y1,
+                self.__sTagSalesPredQ,
 
                 self.__sTagBsProf_y3,
                 self.__sTagBsProf_y2,
@@ -52,13 +53,15 @@ class CStockResultData:
                 self.__sTagSalesIncRate_y2_y1,
                 self.__sTagSalesIncRate_lqy1_lq,
                 self.__sTagSalesIncRateAvg,
-                self.__sTagSalesIncRateTrend,
+                self.__sTagSalesIncRateTrend_y3_y1,
+                self.__sTagSalesIncRateTrend_y3_PredQ,
 
                 self.__sTagBsProfIncRate_y3_y2,
                 self.__sTagBsProfIncRate_y2_y1,
                 self.__sTagBsProfIncRate_lqy1_lq,
                 self.__sTagBsProfIncRateAvg,
-                self.__sTagBsProfIncRateTrend,
+                self.__sTagBsProfIncRateTrend_y3_y1,
+                self.__sTagBsProfIncRateTrend_y3_PredQ,
 
                 self.__sTagCfBs_y1,
                 self.__sTagCfBsLastQ,
@@ -210,6 +213,7 @@ class CStockResultData:
             self.__sTagSales_y1: fnData.Sales_y1(),
             self.__sTagSalesLastQ: fnData.SalesLastQ(),
             self.__sTagSalesLastQ_y1: fnData.SalesLastQ_y1(),
+            self.__sTagSalesPredQ: customData.SalesPredQ(),
             self.__sTagBsProf_y3 : fnData.BsProf_y3(),
             self.__sTagBsProf_y2 : fnData.BsProf_y2(),
             self.__sTagBsProf_y1 : fnData.BsProf_y1(),
@@ -303,13 +307,15 @@ class CStockResultData:
             self.__sTagSalesIncRate_y2_y1 : customData.SalesIncRate_y2_y1(),
             self.__sTagSalesIncRate_lqy1_lq: customData.SalesIncRate_lqy1_lq(),
             self.__sTagSalesIncRateAvg: customData.SalesIncRateAvg(),
-            self.__sTagSalesIncRateTrend: customData.SalesIncRateTrend(),
+            self.__sTagSalesIncRateTrend_y3_y1: customData.SalesIncRateTrend_y3_y1(),
+            self.__sTagSalesIncRateTrend_y3_PredQ: customData.SalesIncRateTrend_y3_PredQ(),
 
             self.__sTagBsProfIncRate_y3_y2: customData.BsProfIncRate_y3_y2(),
             self.__sTagBsProfIncRate_y2_y1: customData.BsProfIncRate_y2_y1(),
             self.__sTagBsProfIncRate_lqy1_lq: customData.BsProfIncRate_lqy1_lq(),
             self.__sTagBsProfIncRateAvg: customData.BsProfIncRateAvg(),
-            self.__sTagBsProfIncRateTrend: customData.BsProfIncRateTrend()
+            self.__sTagBsProfIncRateTrend_y3_y1: customData.BsProfIncRateTrend_y3_y1(),
+            self.__sTagBsProfIncRateTrend_y3_PredQ: customData.BsProfIncRateTrend_y3_PredQ()
         }
 
         self.__ResultDf = self.__ResultDf.append(dictData, ignore_index=True)
@@ -331,7 +337,7 @@ class CStockResultData:
             self.__sTagLastPrice,
             self.__sTagMarketCap,
 
-        self.__sTagSRimExpRate80Consen,
+            self.__sTagSRimExpRate80Consen,
             self.__sTagSRimExpRate80PredQ,
             self.__sTagSRimExpRate80PredY,
             self.__sTagSRimExpRate80_y1,
@@ -344,11 +350,13 @@ class CStockResultData:
 
             self.__sTagSalesIncRateAvg,
             self.__sTagSalesIncRate_lqy1_lq,
-            self.__sTagSalesIncRateTrend,
+            self.__sTagSalesIncRateTrend_y3_y1,
+            self.__sTagSalesIncRateTrend_y3_PredQ,
 
             self.__sTagBsProfIncRateAvg,
             self.__sTagBsProfIncRate_lqy1_lq,
-            self.__sTagBsProfIncRateTrend,
+            self.__sTagBsProfIncRateTrend_y3_y1,
+            self.__sTagBsProfIncRateTrend_y3_PredQ,
 
             self.__sTagNonBsRateLastQ,
             self.__sTagNonBsRate_y1,
@@ -392,6 +400,8 @@ class CStockResultData:
             self.__sTagSrimPriceGrp,
             self.__sTagSrimPriceGrp,
 
+            self.__sTagGrowthGrp,
+            self.__sTagGrowthGrp,
             self.__sTagGrowthGrp,
             self.__sTagGrowthGrp,
             self.__sTagGrowthGrp,
@@ -546,12 +556,14 @@ class CStockResultData:
     __sTagSales_y1 = '매출[-Y1](억)'
     __sTagSalesLastQ = '매출[Q](억)'
     __sTagSalesLastQ_y1 = '매출[Q-Y1](억)'
+    __sTagSalesPredQ = '매출[Q+](억)'
 
     __sTagSalesIncRate_y3_y2 ='매출증가율[-Y3][-Y2](%)'
     __sTagSalesIncRate_y2_y1 ='매출증가율[-Y2][-Y1](%)'
     __sTagSalesIncRate_lqy1_lq ='매출증가율[Q-Y1][Q](%)'
     __sTagSalesIncRateAvg ='매출증가율[AVG](%)'
-    __sTagSalesIncRateTrend ='매출증가추세'
+    __sTagSalesIncRateTrend_y3_y1 ='매출증가추세[-Y3][-Y1]'
+    __sTagSalesIncRateTrend_y3_PredQ = '매출증가추세[-Y3][Q+]'
 
     # BsProf 성장지표
     __sTagBsProf_y3 = '영업이익[-Y3](억)'
@@ -565,7 +577,8 @@ class CStockResultData:
     __sTagBsProfIncRate_y2_y1 = '영익증가율[-Y2][-Y1](%)'
     __sTagBsProfIncRate_lqy1_lq = '영익증가율[Q-Y1][Q](%)'
     __sTagBsProfIncRateAvg = '영익증가율[AVG](%)'
-    __sTagBsProfIncRateTrend = '영익증가추세'
+    __sTagBsProfIncRateTrend_y3_y1 = '영익증가추세[-Y3][-Y1]'
+    __sTagBsProfIncRateTrend_y3_PredQ = '영익증가추세[-Y3][Q+]'
 
     # Group Column Names
     __sTagStockGrp = '종목'
